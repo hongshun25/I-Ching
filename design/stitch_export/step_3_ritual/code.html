@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hant"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>儀式 - 深呼吸</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "primary": "#000000",
+                      "on-tertiary-fixed-variant": "#474745",
+                      "surface-dim": "#dbdad9",
+                      "primary-fixed": "#e5e2e1",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e4e2e2",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed": "#281800",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed-dim": "#c8c6c4",
+                      "surface-variant": "#e4e2e2",
+                      "tertiary-fixed": "#e4e2df",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-surface": "#303031",
+                      "on-secondary-fixed-variant": "#614000",
+                      "primary-container": "#1c1b1b",
+                      "on-secondary-container": "#795512",
+                      "on-tertiary-container": "#848481",
+                      "secondary": "#7c5715",
+                      "on-background": "#1b1c1c",
+                      "on-surface-variant": "#444748",
+                      "surface-tint": "#5f5e5e",
+                      "surface-bright": "#fbf9f8",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "surface": "#fbf9f8",
+                      "on-primary-fixed": "#1c1b1b",
+                      "on-primary-fixed-variant": "#474746",
+                      "outline": "#747878",
+                      "inverse-on-surface": "#f2f0f0",
+                      "secondary-container": "#ffcc7f",
+                      "on-primary-container": "#858383",
+                      "surface-container": "#efeded",
+                      "surface-container-high": "#e9e8e7",
+                      "tertiary": "#000000",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed-dim": "#f0be72",
+                      "secondary-fixed": "#ffddaf",
+                      "on-primary": "#ffffff",
+                      "tertiary-container": "#1b1c1a",
+                      "background": "#fbf9f8",
+                      "surface-container-low": "#f5f3f3",
+                      "outline-variant": "#c4c7c7",
+                      "on-surface": "#1b1c1c",
+                      "inverse-primary": "#c8c6c5",
+                      "on-tertiary-fixed": "#1b1c1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "stack-lg": "48px",
+                      "container-margin": "24px",
+                      "stack-md": "24px",
+                      "unit": "8px",
+                      "stack-sm": "12px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Noto Sans"
+                      ],
+                      "headline-xl": [
+                              "Noto Serif"
+                      ],
+                      "headline-lg-mobile": [
+                              "Noto Serif"
+                      ],
+                      "label-md": [
+                              "Noto Sans"
+                      ],
+                      "headline-md": [
+                              "Noto Serif"
+                      ],
+                      "caption": [
+                              "Noto Sans"
+                      ],
+                      "body-md": [
+                              "Noto Sans"
+                      ],
+                      "headline-lg": [
+                              "Noto Serif"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "500"
+                              }
+                      }
+              }
+      },
+          }
+        }
+    </script>
+<style>
+        @keyframes breath {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 0.9; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+        .animate-breath {
+            animation: breath 6s infinite ease-in-out;
+        }
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(40px) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
+        }
+        .orbit-particle {
+            animation: orbit 12s linear infinite;
+        }
+        
+        .ink-wash-circle {
+            background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(10px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col justify-between items-center px-container-margin py-stack-lg overflow-hidden select-none touch-none">
+<!-- Top Section: Guidance Text -->
+<header class="text-center mt-stack-lg z-10 w-full max-w-md mx-auto">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-wide mb-stack-sm opacity-90 transition-opacity duration-700" id="main-text">
+            請深呼吸，將注意力放回你的問題。
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant opacity-70">
+            長按螢幕，直到光圈合一。
+        </p>
+</header>
+<!-- Center Section: Immersive Interactive Area -->
+<main class="flex-grow flex items-center justify-center relative w-full h-full cursor-pointer" id="interactive-area">
+<!-- Background Ambient Blur -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-64 h-64 md:w-96 md:h-96 rounded-full ink-wash-circle opacity-50 transition-all duration-1000 ease-in-out" id="ambient-blur"></div>
+</div>
+<!-- Outer Breathing Circle -->
+<div class="absolute w-48 h-48 md:w-64 md:h-64 rounded-full border border-outline-variant/30 animate-breath transition-all duration-1000 ease-in-out" id="outer-circle"></div>
+<!-- Inner Focus Circle (The one that merges) -->
+<div class="w-16 h-16 md:w-24 md:h-24 rounded-full bg-primary/10 flex items-center justify-center backdrop-blur-sm border border-primary/20 transition-all duration-1000 ease-in-out" id="inner-circle">
+<span class="material-symbols-outlined text-primary/50 text-2xl" id="center-icon">
+                lens_blur
+            </span>
+</div>
+<!-- Orbital particles for a subtle meditative effect -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
+<div class="w-2 h-2 rounded-full bg-primary/30 orbit-particle"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary/20 orbit-particle" style="animation-delay: -4s;"></div>
+<div class="w-3 h-3 rounded-full bg-primary/10 orbit-particle" style="animation-delay: -8s;"></div>
+</div>
+</main>
+<!-- Bottom Section: Actions -->
+<footer class="w-full max-w-md mx-auto text-center pb-stack-md z-10">
+<button class="font-label-md text-label-md text-on-surface-variant/60 hover:text-primary transition-colors duration-300 py-unit px-gutter rounded-full border border-transparent hover:border-outline-variant/30">
+            略過儀式
+        </button>
+</footer>
+<script>
+        const interactiveArea = document.getElementById('interactive-area');
+        const outerCircle = document.getElementById('outer-circle');
+        const innerCircle = document.getElementById('inner-circle');
+        const mainText = document.getElementById('main-text');
+        const ambientBlur = document.getElementById('ambient-blur');
+        
+        let pressTimer;
+        let progress = 0;
+        let isPressing = false;
+
+        const startPress = () => {
+            isPressing = true;
+            outerCircle.classList.remove('animate-breath');
+            mainText.style.opacity = '0.3';
+            
+            // Start pulling the circles together
+            pressTimer = setInterval(() => {
+                progress += 1;
+                if (progress <= 100) {
+                    // Shrink outer circle
+                    const outerScale = 1 - (progress * 0.005);
+                    outerCircle.style.transform = `scale(${outerScale})`;
+                    outerCircle.style.borderColor = `rgba(0,0,0, ${0.1 + (progress * 0.005)})`;
+                    
+                    // Grow inner circle slightly and darken
+                    const innerScale = 1 + (progress * 0.002);
+                    innerCircle.style.transform = `scale(${innerScale})`;
+                    innerCircle.style.backgroundColor = `rgba(0,0,0, ${0.1 + (progress * 0.004)})`;
+                    
+                    // Condense ambient blur
+                    ambientBlur.style.transform = `scale(${1 - (progress * 0.003)})`;
+                    ambientBlur.style.opacity = `${0.5 + (progress * 0.005)}`;
+                } else {
+                    // Completion state
+                    clearInterval(pressTimer);
+                    completeRitual();
+                }
+            }, 30); // ~3 seconds to complete (100 * 30ms)
+        };
+
+        const endPress = () => {
+            if (!isPressing) return;
+            isPressing = false;
+            clearInterval(pressTimer);
+            
+            if (progress < 100) {
+                // Reset state smoothly
+                progress = 0;
+                outerCircle.classList.add('animate-breath');
+                outerCircle.style.transform = '';
+                outerCircle.style.borderColor = '';
+                
+                innerCircle.style.transform = '';
+                innerCircle.style.backgroundColor = '';
+                
+                ambientBlur.style.transform = '';
+                ambientBlur.style.opacity = '';
+                
+                mainText.style.opacity = '0.9';
+            }
+        };
+
+        const completeRitual = () => {
+            mainText.innerText = "心念已達。";
+            mainText.style.opacity = '1';
+            
+            // Final visual flourish
+            innerCircle.style.transform = 'scale(1.5)';
+            innerCircle.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            outerCircle.style.opacity = '0';
+            ambientBlur.style.opacity = '0';
+            
+            document.getElementById('center-icon').style.color = '#fff';
+            document.getElementById('center-icon').innerText = 'check';
+            
+            // In a real app, you would route to the next page here after a delay
+            setTimeout(() => {
+                console.log("Proceeding to divination result...");
+            }, 1500);
+        };
+
+        // Mouse events
+        interactiveArea.addEventListener('mousedown', startPress);
+        window.addEventListener('mouseup', endPress);
+        
+        // Touch events
+        interactiveArea.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent scrolling while pressing
+            startPress();
+        }, {passive: false});
+        window.addEventListener('touchend', endPress);
+    </script>
+</body></html>

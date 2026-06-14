@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Divination Result - I CHING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .ink-wash {
+            background-image: radial-gradient(circle at center, rgba(0,0,0,0.03) 0%, transparent 70%);
+        }
+        .hexagram-line {
+            height: 8px;
+            background-color: #000;
+            margin-bottom: 6px;
+            border-radius: 2px;
+            position: relative;
+        }
+        .hexagram-line.broken::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20%;
+            height: 100%;
+            background-color: #fbf9f8; /* background color to simulate break */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-lg antialiased min-h-screen pb-stack-lg md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md px-container-margin py-stack-md flex justify-between items-center transition-transform duration-200">
+<button aria-label="Menu" class="text-primary hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-widest text-center">I CHING</h1>
+<button aria-label="Settings" class="text-primary hover:opacity-70 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-[100px] px-container-margin max-w-[1200px] mx-auto md:grid md:grid-cols-12 md:gap-gutter">
+<!-- Left Column / Top Section: Question & Hexagram -->
+<section class="md:col-span-5 md:col-start-2 flex flex-col items-center md:items-start mb-stack-lg relative ink-wash p-stack-md rounded-DEFAULT">
+<!-- User Question Bubble -->
+<div class="bg-surface-container-high px-stack-md py-stack-sm rounded-full mb-stack-lg self-end md:self-start border border-outline-variant/30 shadow-sm">
+<p class="font-body-md text-on-surface-variant italic">"我目前在工作上最需要調整的是什麼？"</p>
+</div>
+<!-- Main Hexagram Visual -->
+<div class="flex flex-col items-center mb-stack-md w-full">
+<div class="w-24 mb-stack-sm flex flex-col justify-center items-stretch opacity-90 mix-blend-multiply">
+<!-- 謙卦 000 100 (上坤下艮) - Bottom to top in rendering, but visual is top down -->
+<!-- Top Trigram: Kun (Earth) - 3 broken lines -->
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+<!-- Bottom Trigram: Gen (Mountain) - 1 solid, 2 broken -->
+<div class="hexagram-line"></div>
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-unit">第十五卦｜地山謙</h2>
+<div class="flex gap-unit items-center">
+<span class="bg-surface text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full border border-outline-variant">上坤</span>
+<span class="bg-surface text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full border border-outline-variant">下艮</span>
+</div>
+</div>
+<!-- Insight -->
+<div class="text-center md:text-left">
+<p class="font-headline-md text-headline-md text-secondary leading-snug">現在不是急著證明自己的時候，而是先降低姿態、補足資訊。</p>
+</div>
+</section>
+<!-- Right Column / Bottom Section: Details & Actions -->
+<section class="md:col-span-5 md:col-start-7 flex flex-col gap-stack-md">
+<!-- Action Guides (Bento Style) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-unit">
+<div class="bg-surface p-stack-sm rounded-DEFAULT border border-outline-variant flex flex-col gap-unit">
+<div class="flex items-center gap-2 text-on-secondary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<h3 class="font-label-md text-label-md">適合做</h3>
+</div>
+<ul class="font-body-md text-on-surface-variant list-disc list-inside space-y-1">
+<li>先聽完對方需求</li>
+<li>拆解小步驟</li>
+<li>保留彈性</li>
+</ul>
+</div>
+<div class="bg-surface p-stack-sm rounded-DEFAULT border border-outline-variant flex flex-col gap-unit">
+<div class="flex items-center gap-2 text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<h3 class="font-label-md text-label-md">暫時避免</h3>
+</div>
+<ul class="font-body-md text-on-surface-variant list-disc list-inside space-y-1">
+<li>情緒化決定</li>
+<li>承諾過多</li>
+</ul>
+</div>
+</div>
+<!-- Blind Spot Card -->
+<div class="bg-surface-container-low p-stack-md rounded-lg border border-outline-variant/50 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-5 text-[80px]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">visibility_off</span>
+</div>
+<h3 class="font-label-md text-label-md text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">warning</span>
+                    盲點提醒
+                </h3>
+<p class="font-body-md text-on-surface-variant relative z-10">你可能低估了人際關係中的沉默訊號...</p>
+</div>
+<!-- Classical Text Accordion -->
+<details class="group bg-surface border border-outline-variant rounded-DEFAULT overflow-hidden">
+<summary class="flex justify-between items-center p-stack-sm cursor-pointer font-label-md text-label-md text-on-surface select-none hover:bg-surface-container-high transition-colors">
+                    古典卦象解釋
+                    <span class="material-symbols-outlined group-open:rotate-180 transition-transform duration-300">expand_more</span>
+</summary>
+<div class="p-stack-sm pt-0 font-body-md text-on-surface-variant border-t border-outline-variant/30 mt-2">
+<p class="mb-2">謙：亨，君子有終。</p>
+<p class="text-sm opacity-80">《彖》曰：謙，亨，天道下濟而光明，地道卑而上行。天道虧盈而益謙，地道變盈而流謙，鬼神害盈而福謙，人道惡盈而好謙。謙尊而光，卑而不可踰，君子之終也。</p>
+</div>
+</details>
+<!-- Reflection Notes Input -->
+<div class="flex flex-col gap-unit mt-stack-sm">
+<label class="font-label-md text-label-md text-primary" for="reflection">這個結果讓你想到什麼？</label>
+<textarea class="w-full bg-surface border-0 border-b border-outline-variant focus:border-primary focus:ring-0 font-body-md text-on-surface resize-none p-2 bg-transparent transition-colors" id="reflection" placeholder="寫下你的靈感或打算採取的行動..." rows="3"></textarea>
+</div>
+<!-- CTAs -->
+<div class="flex flex-col sm:flex-row gap-unit mt-stack-md">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-3 px-6 rounded-full hover:bg-primary/90 transition-colors flex justify-center items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">bookmark_add</span>
+                    儲存至紀錄
+                </button>
+<button class="flex-1 bg-transparent text-primary border border-outline font-label-md text-label-md py-3 px-6 rounded-full hover:bg-surface-container-high transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">ios_share</span>
+                    分享啟示
+                </button>
+</div>
+</section>
+</main>
+</body></html>

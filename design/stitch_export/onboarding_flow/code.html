@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>I CHING - Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #FBF9F6;
+        }
+        .carousel-container {
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .carousel-container::-webkit-scrollbar {
+            display: none;
+        }
+        .carousel-slide {
+            scroll-snap-align: center;
+        }
+        .ink-wash-image {
+            mix-blend-mode: multiply;
+            opacity: 0.8;
+            filter: grayscale(100%) contrast(1.2);
+        }
+        /* Custom dot indicators transition */
+        .dot-indicator {
+            transition: all 0.3s ease;
+        }
+        .dot-active {
+            width: 24px;
+            background-color: theme('colors.primary');
+        }
+        .dot-inactive {
+            width: 8px;
+            background-color: theme('colors.surface-dim');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg overflow-hidden">
+<!-- Content Canvas -->
+<main class="flex-grow flex flex-col relative z-10">
+<!-- Carousel Viewport -->
+<div class="flex-grow flex overflow-x-auto carousel-container w-full h-full pb-32" id="onboardingCarousel">
+<!-- Screen 1 -->
+<div class="carousel-slide min-w-full w-full flex flex-col items-center justify-center px-container-margin pt-12 pb-8 relative">
+<div class="w-64 h-64 mb-stack-lg relative">
+<!-- Abstract Ink Wash Representation -->
+<img alt="Abstract black ink wash painting on white paper, zen aesthetic, soft fluid brush strokes, elegant and minimal, creating a sense of calm and flow." class="w-full h-full object-cover rounded-full ink-wash-image absolute inset-0" data-alt="Abstract black ink wash painting on white paper, zen aesthetic, soft fluid brush strokes, elegant and minimal, creating a sense of calm and flow. The composition is unbalanced yet harmonious, leaving generous negative space. Soft lighting enhances the organic textures of the ink." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUDXoFmYjZI_kN37v4JTGwAhEmhDK0Tgl3PjyTWUKcyb2MgT0zbuxJS4k4GAwIvE2pgKYveynE4nMj52_z4ZIXTcCRbixpHS3Qf-Z6r7NI8FC8FSmiWbQ454J53sDGgkB7yX3RPwRogHNt7yQn_XZfbVSaiMPf7gQurbGihaBGC0uMyzTAcstAb86FFbrUcF34PkYa4aL67fDgza6RoXvNLLjhe1kwUYp_B6umEfExnAY1eYz_yI8ClP0e9eh0j4ebwmEq-WWD014"/>
+</div>
+<div class="text-center mt-auto mb-16">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-unit">每日靜心</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">每天用一卦，整理當下的心。</p>
+</div>
+</div>
+<!-- Screen 2 -->
+<div class="carousel-slide min-w-full w-full flex flex-col items-center justify-center px-container-margin pt-12 pb-8 relative">
+<div class="w-64 h-64 mb-stack-lg relative">
+<img alt="Minimalist zen ink drop spreading in water, high contrast black and white, delicate and intricate patterns, mindful aesthetic." class="w-full h-full object-cover rounded-full ink-wash-image absolute inset-0" data-alt="Minimalist zen ink drop spreading in water, high contrast black and white, delicate and intricate patterns, mindful aesthetic. The fluid dynamics of the ink create intricate, meditative shapes against a pure white background. The image evokes a deep sense of focus and transformation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAZm6BLqN5BnU0KanyD8xIbz7EhxDTmztATBigxkB7_QdJ1Xi44z1eLABUg3txCCKLf84bU_x6vwsuPOOSXKRdU23ZvJy_oHOuJMPsIATwase4xHvOIpEb0bCfRpqV0Nug_T9xm4ZmgmGAI1FXMktt_xSo-rhu_IV8do9JASV9LxAhMa0Bny5X7ukZL7nB0o19zMfXz_6ethU7Nh5c8hp73tJfA-cwweQwNi5UPLKPp7fVdsgFMlKhCrLqlAoba2J3OLf1_PXvKns"/>
+</div>
+<div class="text-center mt-auto mb-16">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-unit">專注提問</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">把模糊的不安，轉化成可以思考的問題。</p>
+</div>
+</div>
+<!-- Screen 3 -->
+<div class="carousel-slide min-w-full w-full flex flex-col items-center justify-center px-container-margin pt-12 pb-8 relative">
+<div class="w-64 h-64 mb-stack-lg relative">
+<img alt="Stack of ancient chinese calligraphy paper, textural and tactile, soft focus, zen minimalism, monochrome ink aesthetic." class="w-full h-full object-cover rounded-full ink-wash-image absolute inset-0" data-alt="Stack of ancient chinese calligraphy paper, textural and tactile, soft focus, zen minimalism, monochrome ink aesthetic. The layered rice paper shows subtle textures and slight wrinkles, illuminated by soft, diffused natural light. The aesthetic is serene, grounding, and deeply connected to traditional wisdom." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-LevgGYs-ttztpvbQcf8a3mkDhPSUt46yPfawmWTmxoojPUwi-rdIjs30GHK0FLYBR0eRLUWB9u3TQbvzS0-BN2PcVPKeb_KpcA1j6lXjADRLLFfFirWaFQQIFAmymPtbNkM3ERi4RknZp6eswW5zFvtiQh5eINHsX4aF2T11K4x9hCxCtYdrRk1DIEsS9Q7ML0RHWprMaADN1BVKQjIVTUcxMz6dqmltdHlx6RFKM46jBxlepH3oe65zdS1AcF3ReHtZ0WxICZY"/>
+</div>
+<div class="text-center mt-auto mb-16">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary mb-unit">保存與回看</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">記錄你的提問、選擇與後來的答案。</p>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full bg-gradient-to-t from-background via-background to-transparent pt-stack-lg pb-container-margin px-container-margin z-20">
+<!-- Indicators -->
+<div class="flex justify-center gap-2 mb-stack-md" id="carouselIndicators">
+<div class="h-2 rounded-full dot-indicator dot-active" data-index="0"></div>
+<div class="h-2 rounded-full dot-indicator dot-inactive" data-index="1"></div>
+<div class="h-2 rounded-full dot-indicator dot-inactive" data-index="2"></div>
+</div>
+<!-- CTAs -->
+<div class="flex flex-col gap-unit">
+<button class="w-full py-4 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:bg-primary/90 transition-colors">
+                    開始使用
+                </button>
+<button class="w-full py-4 bg-transparent border border-outline text-on-surface rounded-full font-label-md text-label-md hover:bg-surface-variant transition-colors">
+                    以本機模式使用
+                </button>
+</div>
+</div>
+</main>
+<!-- Suppressed BottomNavBar & TopAppBar as per "Semantic Shell" Mandate for Onboarding -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('onboardingCarousel');
+            const indicators = document.querySelectorAll('.dot-indicator');
+
+            carousel.addEventListener('scroll', () => {
+                const scrollLeft = carousel.scrollLeft;
+                const width = carousel.offsetWidth;
+                const activeIndex = Math.round(scrollLeft / width);
+
+                indicators.forEach((indicator, index) => {
+                    if (index === activeIndex) {
+                        indicator.classList.remove('dot-inactive');
+                        indicator.classList.add('dot-active');
+                    } else {
+                        indicator.classList.remove('dot-active');
+                        indicator.classList.add('dot-inactive');
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>每日一卦 - I CHING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&amp;family=Noto+Serif+TC:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "primary": "#F4EFE7", /* Adjusted for Dark Theme request */
+                    "on-tertiary-fixed-variant": "#474745",
+                    "surface-dim": "#1E1A17",
+                    "primary-fixed": "#e5e2e1",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#1E1A17", /* Adjusted for Dark Theme request */
+                    "on-error-container": "#93000a",
+                    "on-secondary-fixed": "#281800",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#c8c6c4",
+                    "surface-variant": "#1E1A17", /* Adjusted for Dark Theme request */
+                    "tertiary-fixed": "#e4e2df",
+                    "surface-container-lowest": "#12100E",
+                    "inverse-surface": "#F4EFE7",
+                    "on-secondary-fixed-variant": "#614000",
+                    "primary-container": "#1c1b1b",
+                    "on-secondary-container": "#795512",
+                    "on-tertiary-container": "#848481",
+                    "secondary": "#C6A15B", /* Adjusted for Dark Theme request */
+                    "on-background": "#F4EFE7", /* Adjusted for Dark Theme request */
+                    "on-surface-variant": "#B8B0A6", /* Adjusted for Dark Theme request */
+                    "surface-tint": "#5f5e5e",
+                    "surface-bright": "#fbf9f8",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "surface": "#1E1A17", /* Adjusted for Dark Theme request */
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-primary-fixed-variant": "#474746",
+                    "outline": "#747878",
+                    "inverse-on-surface": "#12100E",
+                    "secondary-container": "#2A231C", /* Adjusted for Dark Theme request */
+                    "on-primary-container": "#858383",
+                    "surface-container": "#1E1A17",
+                    "surface-container-high": "#241F1A",
+                    "tertiary": "#000000",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed-dim": "#f0be72",
+                    "secondary-fixed": "#ffddaf",
+                    "on-primary": "#12100E", /* Adjusted for Dark Theme request */
+                    "tertiary-container": "#1b1c1a",
+                    "background": "#12100E", /* Adjusted for Dark Theme request */
+                    "surface-container-low": "#161311",
+                    "outline-variant": "#3D352D", /* Adjusted for Dark Theme request */
+                    "on-surface": "#F4EFE7", /* Adjusted for Dark Theme request */
+                    "inverse-primary": "#c8c6c5",
+                    "on-tertiary-fixed": "#1b1c1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "stack-lg": "48px",
+                    "container-margin": "24px",
+                    "stack-md": "24px",
+                    "unit": "8px",
+                    "stack-sm": "12px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Noto Sans TC", "sans-serif"],
+                    "headline-xl": ["Noto Serif TC", "serif"],
+                    "headline-lg-mobile": ["Noto Serif TC", "serif"],
+                    "label-md": ["Noto Sans TC", "sans-serif"],
+                    "headline-md": ["Noto Serif TC", "serif"],
+                    "caption": ["Noto Sans TC", "sans-serif"],
+                    "body-md": ["Noto Sans TC", "sans-serif"],
+                    "headline-lg": ["Noto Serif TC", "serif"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Custom Ink Wash effects & Textures */
+        .ink-texture {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" opacity="0.03"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)"/></svg>');
+        }
+        
+        /* Hexagram lines */
+        .hex-line-solid {
+            width: 100%;
+            height: 12px;
+            background-color: #F4EFE7;
+            border-radius: 2px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .hex-line-broken {
+            width: 100%;
+            height: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .hex-line-broken::before,
+        .hex-line-broken::after {
+            content: '';
+            width: 45%;
+            height: 100%;
+            background-color: #F4EFE7;
+            border-radius: 2px;
+        }
+
+        .hex-line-solid:last-child,
+        .hex-line-broken:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Ambient glow for dark mode */
+        .ambient-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150vw;
+            height: 150vw;
+            background: radial-gradient(circle, rgba(198, 161, 91, 0.05) 0%, rgba(18, 16, 14, 0) 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased ink-texture relative min-h-screen pb-32">
+<!-- Ambient Dark Mode Glow -->
+<div class="ambient-glow"></div>
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-background/80 backdrop-blur-md sticky z-40">
+<div class="flex justify-between items-center w-full px-container-margin py-stack-md">
+<button class="text-primary hover:opacity-70 transition-opacity flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-widest">I CHING</h1>
+<button class="text-primary hover:opacity-70 transition-opacity flex items-center justify-center p-2 rounded-full hover:bg-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-[1200px] mx-auto px-container-margin md:px-stack-lg pt-stack-sm pb-stack-lg flex flex-col items-center">
+<!-- Date & Greeting -->
+<div class="text-center mb-stack-lg w-full flex flex-col items-center">
+<p class="font-label-md text-label-md text-secondary tracking-widest mb-unit uppercase">甲辰年 壬申月 丁卯日</p>
+<h2 class="font-headline-xl text-headline-xl text-primary mb-unit">今日一卦</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">寧靜致遠，順應天時。這是為您今日抽取的指引。</p>
+</div>
+<!-- The Bento Grid Container -->
+<div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-gutter md:gap-stack-md">
+<!-- Primary Hexagram Visual Card (Spans full width on mobile, half on desktop) -->
+<div class="md:col-span-5 bg-surface border border-outline-variant rounded-xl p-stack-md flex flex-col items-center justify-center relative overflow-hidden group">
+<!-- Subtle background symbol -->
+<span class="material-symbols-outlined absolute -right-12 -bottom-12 text-[200px] text-on-surface-variant opacity-5 select-none" style="font-variation-settings: 'FILL' 1;">water</span>
+<div class="relative z-10 flex flex-col items-center">
+<!-- Trigram Labels -->
+<div class="flex gap-unit mb-stack-md">
+<span class="bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full border border-outline-variant">上坎 (水)</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full border border-outline-variant">下坎 (水)</span>
+</div>
+<!-- Hexagram Drawing -->
+<div class="w-32 flex flex-col gap-2 mb-stack-md">
+<!-- Line 6 --> <div class="hex-line-broken"></div>
+<!-- Line 5 --> <div class="hex-line-solid"></div>
+<!-- Line 4 --> <div class="hex-line-broken"></div>
+<!-- Line 3 --> <div class="hex-line-broken"></div>
+<!-- Line 2 --> <div class="hex-line-solid"></div>
+<!-- Line 1 --> <div class="hex-line-broken"></div>
+</div>
+<h3 class="font-headline-xl text-headline-xl text-primary mb-2">坎為水</h3>
+<p class="font-body-lg text-body-lg text-secondary">第廿九卦</p>
+</div>
+</div>
+<!-- Insight Content Area -->
+<div class="md:col-span-7 flex flex-col gap-gutter md:gap-stack-md">
+<!-- Judgment Card -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-md h-full flex flex-col">
+<div class="flex items-center gap-2 mb-stack-sm text-secondary">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<h4 class="font-headline-md text-headline-md">卦辭</h4>
+</div>
+<p class="font-body-lg text-body-lg text-primary leading-relaxed border-l-2 border-secondary pl-4 mb-4">
+                        習坎，有孚，維心亨，行有尚。
+                    </p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-auto">
+                        重重險陷，只要內心誠信，就能通達；採取行動將會獲得獎賞。今日宜保持內心平靜，勇敢面對挑戰，不要被外在的困難所迷惑。
+                    </p>
+</div>
+<!-- Actionable Advice Row -->
+<div class="grid grid-cols-2 gap-gutter md:gap-stack-md">
+<!-- Do's -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-sm flex flex-col items-start">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-green-500/80" style="font-variation-settings: 'FILL' 0;">done</span>
+<span class="font-label-md text-label-md">宜</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">堅守信念</p>
+<p class="font-body-md text-body-md text-on-surface-variant">冷靜應對</p>
+</div>
+<!-- Don'ts -->
+<div class="bg-surface border border-outline-variant rounded-xl p-stack-sm flex flex-col items-start">
+<div class="flex items-center gap-2 mb-2 text-primary">
+<span class="material-symbols-outlined text-red-500/80" style="font-variation-settings: 'FILL' 0;">close</span>
+<span class="font-label-md text-label-md">忌</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">輕舉妄動</p>
+<p class="font-body-md text-body-md text-on-surface-variant">心生恐懼</p>
+</div>
+</div>
+</div>
+<!-- Deep Dive Card (Full Width Bottom) -->
+<div class="md:col-span-12 bg-surface border border-outline-variant rounded-xl p-stack-md mt-4">
+<div class="flex items-center justify-between mb-4 cursor-pointer group" onclick="this.parentElement.querySelector('.expand-content').classList.toggle('hidden'); this.querySelector('.chevron').classList.toggle('rotate-180');">
+<h4 class="font-headline-md text-headline-md text-primary group-hover:text-secondary transition-colors">深入解析</h4>
+<span class="material-symbols-outlined text-on-surface-variant chevron transition-transform duration-300" style="font-variation-settings: 'FILL' 0;">expand_more</span>
+</div>
+<div class="expand-content hidden">
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-4">
+                        坎卦代表水，水性向下流動，遇險則陷。然而，水也象徵著智慧與柔韌。在雙重困難之中，唯有保持內心的誠敬（有孚），才能像水一樣順應地勢，最終流出險境。
+                    </p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        這是一個需要極大耐心與毅力的時刻。與其強行突破，不如靜下心來，觀察局勢的發展。將當下的困境視為磨練心性的道場。
+                    </p>
+<button class="mt-stack-md w-full md:w-auto px-6 py-3 bg-secondary text-on-primary font-label-md text-label-md rounded-full hover:opacity-90 transition-opacity">
+                        儲存至紀錄
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-gutter py-unit pb-safe bg-surface border-t border-outline-variant rounded-t-lg">
+<!-- 今日 (Active) -->
+<a class="flex flex-col items-center justify-center text-secondary bg-secondary-container/30 rounded-xl px-4 py-1 scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">today</span>
+<span class="font-label-md text-label-md text-[10px]">今日</span>
+</a>
+<!-- 占卜 -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">auto_awesome</span>
+<span class="font-label-md text-label-md text-[10px]">占卜</span>
+</a>
+<!-- 紀錄 -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">history_edu</span>
+<span class="font-label-md text-label-md text-[10px]">紀錄</span>
+</a>
+<!-- 學習 -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">menu_book</span>
+<span class="font-label-md text-label-md text-[10px]">學習</span>
+</a>
+<!-- 我的 -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors px-4 py-1" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md text-[10px]">我的</span>
+</a>
+</nav>
+<!-- Support for safe area inset on mobile devices -->
+<style>
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+    </style>
+</body></html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Divination Method Selection - I CHING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .method-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .method-card:hover {
+            transform: translateY(-2px);
+            border-color: theme('colors.primary');
+        }
+        .method-card.selected {
+            border-color: theme('colors.primary');
+            background-color: theme('colors.surface-container');
+        }
+        .method-card.selected .check-icon {
+            opacity: 1;
+            color: theme('colors.secondary');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col items-center justify-start pt-stack-lg md:pt-[88px] px-container-margin md:px-0 bg-background antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Top Navigation Container (Suppressed nav elements for focused flow) -->
+<header class="w-full max-w-3xl mx-auto flex justify-start items-center mb-stack-lg">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors group flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">arrow_back</span>
+</button>
+<span class="font-label-md text-label-md text-on-surface-variant ml-2 tracking-widest">STEP 2 / 4</span>
+</header>
+<main class="w-full max-w-2xl mx-auto flex flex-col items-center flex-grow">
+<!-- Header Section -->
+<div class="text-center w-full mb-stack-lg flex flex-col items-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-xl md:text-headline-xl text-primary mb-stack-sm tracking-wide">選擇占法</h1>
+<div class="w-12 h-[1px] bg-outline-variant mt-2 mb-4"></div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto">請選擇最適合當下心境的卜筮方式。不同的方式將引導出不同的沉浸體驗與變爻機率。</p>
+</div>
+<!-- Selection Grid -->
+<div aria-labelledby="method-selection" class="w-full grid grid-cols-1 gap-4 mb-stack-lg" role="radiogroup">
+<!-- Method 1: Simple -->
+<label class="method-card relative flex flex-col sm:flex-row items-start sm:items-center p-6 bg-surface border border-outline-variant rounded-lg w-full group overflow-hidden">
+<input class="sr-only" name="divination_method" onchange="updateSelection(this)" type="radio" value="simple"/>
+<div class="flex-shrink-0 mr-6 mb-4 sm:mb-0 w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">bolt</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">簡易占法</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">適合快速反思，直接得出一卦，無變爻。</p>
+</div>
+<div class="absolute top-6 right-6 check-icon opacity-0 transition-opacity duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 400;">check_circle</span>
+</div>
+</label>
+<!-- Method 2: Three Coins (Default Selected) -->
+<label class="method-card selected relative flex flex-col sm:flex-row items-start sm:items-center p-6 bg-surface border border-primary rounded-lg w-full group overflow-hidden">
+<input checked="" class="sr-only" name="divination_method" onchange="updateSelection(this)" type="radio" value="coins"/>
+<div class="flex-shrink-0 mr-6 mb-4 sm:mb-0 w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">monetization_on</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">三枚銅錢</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">模擬傳統銅錢占法，六次投擲，可產生變爻，體現事物變動之機。</p>
+</div>
+<div class="absolute top-6 right-6 check-icon opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 400;">check_circle</span>
+</div>
+</label>
+<!-- Method 3: Yarrow Stalks -->
+<label class="method-card relative flex flex-col sm:flex-row items-start sm:items-center p-6 bg-surface border border-outline-variant rounded-lg w-full group overflow-hidden">
+<input class="sr-only" name="divination_method" onchange="updateSelection(this)" type="radio" value="yarrow"/>
+<div class="flex-shrink-0 mr-6 mb-4 sm:mb-0 w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">grass</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-headline-md text-headline-md text-primary mb-1">蓍草靈感模式</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">節奏較慢，十八變而成卦。適合重大決策前的深度提問與冥想沉澱。</p>
+</div>
+<div class="absolute top-6 right-6 check-icon opacity-0 transition-opacity duration-300">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1, 'wght' 400;">check_circle</span>
+</div>
+</label>
+</div>
+<!-- Action Area -->
+<div class="w-full flex justify-center pb-stack-lg mt-auto">
+<button class="bg-primary text-on-primary font-label-md text-label-md px-12 py-4 rounded-full hover:bg-primary/90 hover:scale-[0.98] transition-all duration-200 shadow-sm flex items-center gap-2">
+                開始靜心
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'wght' 300;">arrow_forward</span>
+</button>
+</div>
+</main>
+<script>
+        function updateSelection(selectedInput) {
+            const cards = document.querySelectorAll('.method-card');
+            cards.forEach(card => {
+                card.classList.remove('selected');
+                card.classList.remove('border-primary');
+                card.classList.add('border-outline-variant');
+                
+                const iconContainer = card.querySelector('.w-12');
+                iconContainer.classList.remove('text-primary');
+                iconContainer.classList.add('text-on-surface-variant');
+
+                const check = card.querySelector('.check-icon');
+                check.classList.remove('opacity-100');
+                check.classList.add('opacity-0');
+            });
+
+            const selectedCard = selectedInput.closest('.method-card');
+            selectedCard.classList.add('selected');
+            selectedCard.classList.remove('border-outline-variant');
+            selectedCard.classList.add('border-primary');
+
+            const selectedIconContainer = selectedCard.querySelector('.w-12');
+            selectedIconContainer.classList.remove('text-on-surface-variant');
+            selectedIconContainer.classList.add('text-primary');
+
+            const selectedCheck = selectedCard.querySelector('.check-icon');
+            selectedCheck.classList.remove('opacity-0');
+            selectedCheck.classList.add('opacity-100');
+        }
+    </script>
+</body></html>

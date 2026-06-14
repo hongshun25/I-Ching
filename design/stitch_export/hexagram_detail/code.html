@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>第十五卦｜謙 - I CHING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .hexagram-line {
+            height: 12px;
+            background-color: theme('colors.primary');
+            margin-bottom: 8px;
+            border-radius: 2px;
+        }
+        
+        .hexagram-line.broken {
+            background-color: transparent;
+            position: relative;
+        }
+        
+        .hexagram-line.broken::before,
+        .hexagram-line.broken::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 45%;
+            background-color: theme('colors.primary');
+            border-radius: 2px;
+        }
+        
+        .hexagram-line.broken::before { left: 0; }
+        .hexagram-line.broken::after { right: 0; }
+
+        .ink-wash-bg {
+            background-image: radial-gradient(circle at 50% 0%, theme('colors.surface-container-highest') 0%, transparent 70%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 bg-background/80 backdrop-blur-md w-full px-container-margin py-stack-md flex justify-between items-center transition-all duration-300 border-b border-surface-variant/50">
+<button aria-label="Go back" class="text-primary hover:opacity-70 transition-opacity p-2 -ml-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-widest uppercase">I CHING</h1>
+<button aria-label="Favorite" class="text-primary hover:opacity-70 transition-opacity p-2 -mr-2 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20">
+<span class="material-symbols-outlined" id="favoriteBtn" style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;">favorite_border</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center pb-32">
+<!-- Hero Section: Hexagram Visual & Title -->
+<section class="w-full max-w-3xl px-container-margin pt-stack-lg pb-stack-md flex flex-col items-center ink-wash-bg">
+<!-- Hexagram Icon -->
+<div aria-label="Hexagram 15: Modesty" class="w-32 h-40 flex flex-col justify-between mb-8 opacity-90">
+<!-- Top Trigram: Earth -->
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+<!-- Bottom Trigram: Mountain -->
+<div class="hexagram-line"></div>
+<div class="hexagram-line broken"></div>
+<div class="hexagram-line broken"></div>
+</div>
+<!-- Title & Tags -->
+<div class="text-center space-y-4">
+<div class="flex gap-2 justify-center mb-2">
+<span class="px-4 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30">地山謙</span>
+<span class="px-4 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md border border-outline-variant/30">吉卦</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-primary">第十五卦｜謙</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mx-auto mt-4">
+                    內高而外卑，象徵謙虛退讓，萬事皆吉。
+                </p>
+</div>
+</section>
+<!-- Content Sections -->
+<div class="w-full max-w-3xl px-container-margin space-y-stack-lg mt-stack-md">
+<!-- Theme & Scenarios Bento -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Theme -->
+<div class="bg-surface rounded-lg p-6 border border-outline-variant/50 flex flex-col">
+<div class="flex items-center gap-2 mb-4 text-secondary">
+<span class="material-symbols-outlined text-xl">psychology</span>
+<h3 class="font-headline-md text-headline-md">主旨核心</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface flex-grow leading-relaxed">
+                        謙虛、退讓、平衡。提醒我們在成就面前保持低調，不自滿。真正的力量來自於內在的充實與外在的柔順，如同高山隱於大地之下。
+                    </p>
+</div>
+<!-- Scenarios -->
+<div class="bg-surface rounded-lg p-6 border border-outline-variant/50 flex flex-col">
+<div class="flex items-center gap-2 mb-4 text-secondary">
+<span class="material-symbols-outlined text-xl">explore</span>
+<h3 class="font-headline-md text-headline-md">適宜情境</h3>
+</div>
+<ul class="space-y-3 font-body-md text-body-md text-on-surface">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary/50 text-sm mt-1">check_circle</span>
+<span>事業晉升時保持低調，避免招致嫉妒。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary/50 text-sm mt-1">check_circle</span>
+<span>人際衝突中主動退讓一步，海闊天空。</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-primary/50 text-sm mt-1">check_circle</span>
+<span>投資理財見好就收，不貪心妄進。</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Classical Text -->
+<section class="bg-surface-container-lowest rounded-lg p-8 border border-outline-variant/30 relative overflow-hidden">
+<!-- Decorative Element -->
+<div class="absolute -right-10 -top-10 text-primary-fixed-dim/20 text-[120px] font-headline-xl select-none pointer-events-none">謙</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-6 relative z-10">《易經》原文</h3>
+<div class="space-y-6 relative z-10">
+<div>
+<h4 class="font-label-md text-label-md text-secondary mb-2">卦辭</h4>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-background leading-loose tracking-wide">
+                            謙：亨，君子有終。
+                        </p>
+</div>
+<div class="border-t border-outline-variant/30 pt-6">
+<h4 class="font-label-md text-label-md text-secondary mb-2">彖傳</h4>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                            謙，亨。天道下濟而光明，地道卑而上行。天道虧盈而益謙，地道變盈而流謙，鬼神害盈而福謙，人道惡盈而好謙。謙尊而光，卑而不可逾，君子之終也。
+                        </p>
+</div>
+</div>
+</section>
+<!-- Modern Interpretation -->
+<section class="mb-stack-lg">
+<div class="flex items-center gap-3 mb-6 border-b border-primary/10 pb-4">
+<span class="material-symbols-outlined text-2xl text-primary">translate</span>
+<h3 class="font-headline-md text-headline-md text-primary">現代解析</h3>
+</div>
+<div class="prose prose-neutral max-w-none font-body-lg text-body-lg text-on-surface leading-relaxed space-y-4">
+<p>
+                        謙卦是《易經》六十四卦中唯一一個六爻皆吉的卦。它的結構是下艮（山）上坤（地），高山隱藏在平地之下，象徵著有實力而不張揚，有才華而不炫耀。
+                    </p>
+<p>
+                        在現代社會，競爭激烈，人們往往急於表現自我。謙卦提醒我們，過度的自我膨脹會引來反撲，而保持謙遜的態度，反而能獲得更多的支持與資源。這並非懦弱或自卑，而是一種深刻的自信與智慧。
+                    </p>
+<div class="p-6 bg-secondary-container/20 rounded-lg mt-6 border-l-4 border-secondary">
+<p class="font-body-md text-body-md text-on-surface-variant m-0 italic">
+                            「滿招損，謙受益。」在順境中不驕傲，在逆境中不氣餒，始終保持一顆平常心，這才是真正的「君子有終」。
+                        </p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Simple favorite button interaction
+        const favoriteBtn = document.getElementById('favoriteBtn');
+        let isFavorite = false;
+        
+        favoriteBtn.addEventListener('click', () => {
+            isFavorite = !isFavorite;
+            if (isFavorite) {
+                favoriteBtn.textContent = 'favorite';
+                favoriteBtn.style.fontVariationSettings = "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24";
+                favoriteBtn.classList.add('text-error');
+                favoriteBtn.classList.add('scale-110');
+            } else {
+                favoriteBtn.textContent = 'favorite_border';
+                favoriteBtn.style.fontVariationSettings = "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24";
+                favoriteBtn.classList.remove('text-error');
+                favoriteBtn.classList.remove('scale-110');
+            }
+            
+            // Add a subtle animation
+            favoriteBtn.classList.add('transition-transform', 'duration-200');
+            setTimeout(() => {
+                favoriteBtn.classList.remove('scale-110');
+            }, 200);
+        });
+    </script>
+</body></html>

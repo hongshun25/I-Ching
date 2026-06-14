@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>我的 - 設定</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar for web */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e4e2e2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c4c7c7; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-sans selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md transition-all duration-300">
+<!-- Mobile Header -->
+<div class="md:hidden flex justify-between items-center w-full px-container-margin py-stack-md">
+<button class="text-on-surface-variant hover:opacity-70 transition-opacity focus:outline-none">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-widest">
+                I CHING
+            </div>
+<button class="text-on-surface-variant hover:opacity-70 transition-opacity focus:outline-none">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<!-- Desktop Header -->
+<div class="hidden md:flex justify-between items-center w-full max-w-[1200px] mx-auto px-container-margin py-stack-md">
+<div class="font-headline-lg text-headline-lg text-primary tracking-widest cursor-pointer">
+                I CHING
+            </div>
+<nav class="flex gap-stack-md items-center">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform duration-200" data-icon="today">today</span>
+<span class="font-label-md text-label-md mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">今日</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform duration-200" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-label-md mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">占卜</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform duration-200" data-icon="history_edu">history_edu</span>
+<span class="font-label-md text-label-md mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">紀錄</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:-translate-y-0.5 transition-transform duration-200" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md mt-1 opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">學習</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md mt-1 absolute -bottom-4">我的</span>
+</a>
+</nav>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-[100px] pb-[120px] md:pb-[80px] px-container-margin w-full max-w-[800px] mx-auto">
+<!-- Page Title -->
+<div class="mb-stack-lg animate-fade-in-up" style="animation-duration: 0.6s; animation-fill-mode: both;">
+<h1 class="font-headline-xl text-headline-xl text-primary text-center md:text-left">我的</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 text-center md:text-left">管理您的個人檔案與應用程式設定</p>
+</div>
+<!-- Settings Groups -->
+<div class="space-y-stack-lg">
+<!-- Group 1: 個人資訊 -->
+<section class="animate-fade-in-up" style="animation-duration: 0.6s; animation-delay: 0.1s; animation-fill-mode: both;">
+<h2 class="font-label-md text-label-md text-outline mb-stack-sm tracking-widest pl-unit uppercase">個人資訊</h2>
+<div class="bg-surface rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm shadow-surface-container-low/50 transition-all hover:border-outline-variant/50">
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">account_circle</span>
+<span class="font-body-md text-body-md text-on-surface">我的帳號</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">password</span>
+<span class="font-body-md text-body-md text-on-surface">更改密碼</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Group 2: 外觀 -->
+<section class="animate-fade-in-up" style="animation-duration: 0.6s; animation-delay: 0.2s; animation-fill-mode: both;">
+<h2 class="font-label-md text-label-md text-outline mb-stack-sm tracking-widest pl-unit uppercase">外觀</h2>
+<div class="bg-surface rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm shadow-surface-container-low/50 transition-all hover:border-outline-variant/50">
+<!-- Toggle Item -->
+<div class="w-full flex items-center justify-between px-gutter py-4 bg-transparent group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">dark_mode</span>
+<span class="font-body-md text-body-md text-on-surface">深色模式</span>
+</div>
+<!-- Toggle Switch (Inactive) -->
+<button aria-checked="false" class="w-12 h-6 rounded-full bg-surface-container-high border border-outline-variant/30 relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-secondary/50" onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); this.classList.toggle('bg-secondary'); this.classList.toggle('bg-surface-container-high'); this.querySelector('div').classList.toggle('translate-x-6'); this.querySelector('div').classList.toggle('bg-on-secondary'); this.querySelector('div').classList.toggle('bg-surface');" role="switch">
+<div class="w-5 h-5 rounded-full bg-surface shadow-md absolute top-[1px] left-[1px] transition-transform duration-300 ease-in-out"></div>
+</button>
+</div>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">format_size</span>
+<span class="font-body-md text-body-md text-on-surface">字體大小</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption text-outline">適中</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</button>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<!-- Toggle Item -->
+<div class="w-full flex items-center justify-between px-gutter py-4 bg-transparent group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">animation</span>
+<span class="font-body-md text-body-md text-on-surface">減少動態效果</span>
+</div>
+<!-- Toggle Switch (Active state simulation for variety) -->
+<button aria-checked="true" class="w-12 h-6 rounded-full bg-secondary border border-transparent relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-secondary/50" onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); this.classList.toggle('bg-secondary'); this.classList.toggle('bg-surface-container-high'); this.classList.toggle('border-transparent'); this.classList.toggle('border-outline-variant/30'); this.querySelector('div').classList.toggle('translate-x-6'); this.querySelector('div').classList.toggle('bg-on-secondary'); this.querySelector('div').classList.toggle('bg-surface');" role="switch">
+<div class="w-5 h-5 rounded-full bg-on-secondary shadow-md absolute top-[1px] left-[1px] transition-transform duration-300 ease-in-out translate-x-6"></div>
+</button>
+</div>
+</div>
+</section>
+<!-- Group 3: 占卜偏好 -->
+<section class="animate-fade-in-up" style="animation-duration: 0.6s; animation-delay: 0.3s; animation-fill-mode: both;">
+<h2 class="font-label-md text-label-md text-outline mb-stack-sm tracking-widest pl-unit uppercase">占卜偏好</h2>
+<div class="bg-surface rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm shadow-surface-container-low/50 transition-all hover:border-outline-variant/50">
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">tune</span>
+<span class="font-body-md text-body-md text-on-surface">預設占法</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption text-outline">金錢卦</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</button>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<div class="w-full flex items-center justify-between px-gutter py-4 bg-transparent group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">save</span>
+<span class="font-body-md text-body-md text-on-surface">自動儲存</span>
+</div>
+<button aria-checked="true" class="w-12 h-6 rounded-full bg-secondary border border-transparent relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-secondary/50" onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); this.classList.toggle('bg-secondary'); this.classList.toggle('bg-surface-container-high'); this.classList.toggle('border-transparent'); this.classList.toggle('border-outline-variant/30'); this.querySelector('div').classList.toggle('translate-x-6'); this.querySelector('div').classList.toggle('bg-on-secondary'); this.querySelector('div').classList.toggle('bg-surface');" role="switch">
+<div class="w-5 h-5 rounded-full bg-on-secondary shadow-md absolute top-[1px] left-[1px] transition-transform duration-300 ease-in-out translate-x-6"></div>
+</button>
+</div>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<div class="w-full flex items-center justify-between px-gutter py-4 bg-transparent group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<div class="flex flex-col items-start">
+<span class="font-body-md text-body-md text-on-surface">每日提醒</span>
+<span class="font-caption text-caption text-outline">提醒您進行每日一占</span>
+</div>
+</div>
+<button aria-checked="false" class="w-12 h-6 rounded-full bg-surface-container-high border border-outline-variant/30 relative transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-secondary/50" onclick="this.setAttribute('aria-checked', this.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); this.classList.toggle('bg-secondary'); this.classList.toggle('bg-surface-container-high'); this.querySelector('div').classList.toggle('translate-x-6'); this.querySelector('div').classList.toggle('bg-on-secondary'); this.querySelector('div').classList.toggle('bg-surface');" role="switch">
+<div class="w-5 h-5 rounded-full bg-surface shadow-md absolute top-[1px] left-[1px] transition-transform duration-300 ease-in-out"></div>
+</button>
+</div>
+</div>
+</section>
+<!-- Group 4: 個人數據 -->
+<section class="animate-fade-in-up" style="animation-duration: 0.6s; animation-delay: 0.4s; animation-fill-mode: both;">
+<h2 class="font-label-md text-label-md text-outline mb-stack-sm tracking-widest pl-unit uppercase">個人數據</h2>
+<div class="bg-surface rounded-2xl border border-outline-variant/30 overflow-hidden shadow-sm shadow-surface-container-low/50 transition-all hover:border-outline-variant/50">
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">download</span>
+<span class="font-body-md text-body-md text-on-surface">匯出資料</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">delete</span>
+<span class="font-body-md text-body-md text-on-surface">刪除紀錄</span>
+</div>
+</button>
+<div class="h-px w-[calc(100%-2rem)] mx-auto bg-outline-variant/20"></div>
+<button class="w-full flex items-center justify-between px-gutter py-4 hover:bg-error-container/20 transition-colors group">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-error">person_remove</span>
+<span class="font-body-md text-body-md text-error">刪除帳號</span>
+</div>
+</button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-gutter py-unit pb-safe docked full-width rounded-t-lg bg-surface border-t border-outline-variant/50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] backdrop-blur-md">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors flex-1 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="today">today</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">今日</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors flex-1 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">占卜</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors flex-1 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">紀錄</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors flex-1 py-2" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">學習</span>
+</a>
+<!-- Active Item -->
+<a class="flex flex-col items-center justify-center text-secondary bg-secondary-container/30 rounded-xl px-4 py-2 flex-1 Active: scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md mt-1 text-[10px]">我的</span>
+</a>
+</nav>
+<!-- Simple CSS animation for entrance -->
+<style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation-name: fadeInUp;
+        }
+        
+        /* Safe area padding for mobile nav */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .pb-safe {
+                padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</body></html>

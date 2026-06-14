@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-TW"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Divination Records - Empty State</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#474745",
+                        "surface-dim": "#dbdad9",
+                        "primary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed": "#281800",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#c8c6c4",
+                        "surface-variant": "#e4e2e2",
+                        "tertiary-fixed": "#e4e2df",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303031",
+                        "on-secondary-fixed-variant": "#614000",
+                        "primary-container": "#1c1b1b",
+                        "on-secondary-container": "#795512",
+                        "on-tertiary-container": "#848481",
+                        "secondary": "#7c5715",
+                        "on-background": "#1b1c1c",
+                        "on-surface-variant": "#444748",
+                        "surface-tint": "#5f5e5e",
+                        "surface-bright": "#fbf9f8",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface": "#fbf9f8",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-primary-fixed-variant": "#474746",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f2f0f0",
+                        "secondary-container": "#ffcc7f",
+                        "on-primary-container": "#858383",
+                        "surface-container": "#efeded",
+                        "surface-container-high": "#e9e8e7",
+                        "tertiary": "#000000",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#f0be72",
+                        "secondary-fixed": "#ffddaf",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#1b1c1a",
+                        "background": "#fbf9f8",
+                        "surface-container-low": "#f5f3f3",
+                        "outline-variant": "#c4c7c7",
+                        "on-surface": "#1b1c1c",
+                        "inverse-primary": "#c8c6c5",
+                        "on-tertiary-fixed": "#1b1c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-lg": "48px",
+                        "container-margin": "24px",
+                        "stack-md": "24px",
+                        "unit": "8px",
+                        "stack-sm": "12px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Noto Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-lg-mobile": ["Noto Serif"],
+                        "label-md": ["Noto Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "caption": ["Noto Sans"],
+                        "body-md": ["Noto Sans"],
+                        "headline-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-lg antialiased">
+<!-- TopAppBar -->
+<header class="bg-background/80 backdrop-blur-md flex justify-between items-center w-full px-container-margin py-stack-md docked full-width top-0 z-40 sticky top-0">
+<button aria-label="Menu" class="text-primary hover:opacity-70 transition-opacity active:scale-95 transition-transform duration-200 p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-widest uppercase">
+            I CHING
+        </h1>
+<button aria-label="Settings" class="text-primary hover:opacity-70 transition-opacity active:scale-95 transition-transform duration-200 p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas - Empty State -->
+<main class="flex-grow flex flex-col items-center justify-center px-container-margin py-stack-lg w-full max-w-4xl mx-auto md:pb-stack-lg pb-[120px] relative overflow-hidden">
+<!-- Subtle Background Texture/Element (Minimalist Ink vibe) -->
+<div class="absolute inset-0 pointer-events-none opacity-5 flex items-center justify-center">
+<div class="w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-primary rounded-full blur-[100px] md:blur-[150px]"></div>
+</div>
+<div class="relative z-10 flex flex-col items-center text-center max-w-md w-full">
+<!-- Illustration Area -->
+<div class="w-64 h-64 mb-stack-md relative flex items-center justify-center">
+<!-- Abstract minimal ink wash representation using an image -->
+<div class="absolute inset-0 opacity-80 mix-blend-multiply">
+<img alt="Minimalist ink wash abstract art" class="w-full h-full object-contain grayscale opacity-60" data-alt="A highly abstract, minimalist ink wash painting on textured rice paper. The artwork features a single, delicate, light grey brush stroke that curves gently across the canvas, reminiscent of ancient East Asian calligraphy but extremely simplified. The background is a warm, creamy off-white, evoking a Zen-like emptiness and calm. The lighting is soft and even, highlighting the subtle texture of the paper and the fluidity of the diluted ink. The overall mood is quiet, meditative, and sophisticated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnxtgQ5gcjsnO7cudOL_ydOjHIix3asH2p3Nyu32ZVbbrBDqk0vm0Cb7-QBaedqal50Fhwt6WgQY2WVsC3Nr_DIsZ_E5_xZTFriKrdZCptPimE0SwObs1WOAFhobkgfQV3Xn5E_lzMbWKdCdh8JMaG3sCkiYR4sas9S5BdfBBr9v6xSFkXlMR2XpWT3M3TcxYaF5FdzTmd96gG8NPOzhjR27Hdt1AK-2-n4inl8x-iQ370r4SXHKU2hOUB09iU7_yQyI9d1YI5XTI"/>
+</div>
+<!-- Subtle Icon overlay for immediate context -->
+<span class="material-symbols-outlined text-[64px] text-primary/20 relative z-10 font-light" style="font-variation-settings: 'wght' 100;">
+                    history_edu
+                </span>
+</div>
+<!-- Message -->
+<h2 class="font-headline-md text-headline-md text-on-background mb-unit">
+                你的占卜紀錄會出現在這裡
+            </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-stack-lg max-w-[280px]">
+                靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。
+            </p>
+<!-- CTA -->
+<button class="bg-primary text-on-primary font-label-md text-label-md px-8 py-4 rounded-full hover:bg-primary/90 transition-all duration-300 active:scale-95 shadow-sm hover:shadow flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+                開始第一次占卜
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface border-t border-outline-variant fixed bottom-0 w-full z-50 flex justify-around items-center px-gutter py-unit pb-safe rounded-t-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 transition-transform duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="today">today</span>
+<span class="font-label-md text-[10px] tracking-wider">今日</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 transition-transform duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-md text-[10px] tracking-wider">占卜</span>
+</a>
+<!-- Active Tab: 紀錄 (Records) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-secondary bg-secondary-container/30 rounded-xl px-4 py-1 active:scale-90 transition-transform duration-150 w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="history_edu" data-weight="fill" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+<span class="font-label-md text-[10px] tracking-wider font-semibold">紀錄</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 transition-transform duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-[10px] tracking-wider">學習</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-90 transition-transform duration-150 w-16 group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform" data-icon="person">person</span>
+<span class="font-label-md text-[10px] tracking-wider">我的</span>
+</a>
+</nav>
+<!-- Add safe area padding for iOS -->
+<style>
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+    </style>
+</body></html>
