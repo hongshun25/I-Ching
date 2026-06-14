@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="space_unit">8dp</dimen>
+    <dimen name="space_gutter">16dp</dimen>
+    <dimen name="space_margin">24dp</dimen>
+    <dimen name="space_stack_lg">48dp</dimen>
+    <dimen name="corner_card">20dp</dimen>
+    <dimen name="corner_pill">999dp</dimen>
+</resources>

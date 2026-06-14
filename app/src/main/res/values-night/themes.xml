@@ -1,7 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.IChing" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">@color/ic_gold</item>
+        <item name="android:navigationBarColor">@color/ic_surface</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="colorPrimary">@color/ic_ink</item>
+        <item name="colorSecondary">@color/ic_gold</item>
+        <item name="colorSurface">@color/ic_surface</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 </resources>
