@@ -2,9 +2,9 @@
 
 ## Project Snapshot
 
-This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Material/AppCompat dependencies, XML resources, and programmatic Android views. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
+This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Navigation Component, Room, Material/AppCompat dependencies, XML resources, and programmatic Android views. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
 
-The current Beta implements a local high-fidelity flow based on the Stitch exports in `design/stitch_export/`: splash, onboarding, login/register shell, daily insight, three-step divination, divination result with original hexagram / changing lines / relating hexagram, searchable and filterable records, learning center, hexagram detail with six line texts, profile/settings, and dark-mode daily styling. Authentication is only a UI state; local mode is the real operating mode.
+The current Beta implements a local high-fidelity flow based on the Stitch exports in `design/stitch_export/`: splash, onboarding, local-mode entry, daily insight, three-step divination, divination result with original hexagram / changing lines / relating hexagram, searchable and filterable records, learning center, hexagram detail with six line texts, profile/settings, data export/delete controls, and dark-mode daily styling. Authentication is not implemented; local mode is the real operating mode.
 
 Core data is local-first and deterministic: `HexagramRepository` stores all 64 King Wen hexagrams with explicit upper/lower `Trigram`, bottom-to-top six-line patterns, judgments, six line texts, tags, summaries, and action hints. Hexagram lookup must use the explicit pattern map; do not reintroduce ordinal-bit or modulo fallback logic except the intentional invalid-input fallback to hexagram 15.
 
@@ -12,13 +12,14 @@ Core data is local-first and deterministic: `HexagramRepository` stores all 64 K
 
 - `app/` contains the Android app module.
 - `app/src/main/java/fcu/app/i_ching/` contains app code.
-- `app/src/main/java/fcu/app/i_ching/data/` contains local models, static hexagram data, casting and relating-hexagram logic, settings persistence, record persistence, and record filtering helpers.
-- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens and the shared programmatic UI helper `Ui`.
-- `app/src/main/res/layout/activity_main.xml` hosts the `FragmentContainerView`; most Beta screens are programmatic Java views.
+- `app/src/main/java/fcu/app/i_ching/data/` contains local models, static hexagram data, casting and relating-hexagram logic, settings persistence, Room record persistence, legacy record migration/export helpers, and record filtering helpers.
+- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, and the shared programmatic UI helper `Ui`.
+- `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; most Beta screens remain programmatic Java views while ViewBinding is enabled for future XML component work.
+- `app/src/main/res/navigation/main_graph.xml` defines the app navigation graph. Use simple Bundle/JSON arguments for now; Safe Args is not enabled.
 - `app/src/main/res/values/` and `app/src/main/res/values-night/` contain the current design tokens for colors, themes, and spacing.
 - `app/src/main/res/xml/backup_rules.xml` and `app/src/main/res/xml/data_extraction_rules.xml` define backup behavior. Divination records are excluded from cloud backup because questions and notes may be sensitive.
 - `app/src/test/java/` contains JVM tests for pure Java logic.
-- `app/src/androidTest/java/` contains instrumentation tests; currently only the generated app-context smoke test exists.
+- `app/src/androidTest/java/` contains instrumentation tests, including app-context and Room DAO coverage.
 - `design/stitch_export/` contains design references only. Treat these HTML files and screenshots as reference material, not production Android UI code.
 - `docs/` contains project documentation. Keep it updated when app architecture, behavior, test status, or known gaps change.
 
@@ -32,27 +33,41 @@ Use the Gradle wrapper from the repository root:
 - `./gradlew lintDebug` runs Android lint checks for the debug variant.
 - `./gradlew clean` removes generated build outputs when caches or stale artifacts interfere.
 
-Current known verification state after the local Beta core implementation:
+Current known verification state after the local Beta stabilization work:
 
-- `./gradlew assembleDebug` passes.
 - `./gradlew testDebugUnitTest` passes.
 - `./gradlew lintDebug` passes.
-- `./gradlew connectedDebugAndroidTest` builds the test APK but cannot run without an attached device or emulator.
+- `./gradlew assembleDebug` passes.
+- `./gradlew connectedDebugAndroidTest` builds the app/test APK but cannot run without an attached device or emulator; the current environment reports `No connected devices!`.
 
 ## Coding Style & Naming Conventions
 
-The app is Java-based and targets Java 11. Follow standard Android Java formatting with 4-space indentation, braces on the same line, and clear class names in `UpperCamelCase`. Methods and fields should use `lowerCamelCase`. Resource names should use lowercase snake case, for example `activity_main.xml`, `ic_launcher_foreground.xml`, and `backup_rules.xml`. Keep package names under `fcu.app.i_ching` unless the app namespace changes deliberately.
+The app is Java-based and targets Java 11. Follow standard Android Java formatting with 4-space indentation, braces on the same line, and clear class names in `UpperCamelCase`. Methods and fields should use `lowerCamelCase`. Resource names should use lowercase snake case, for example `activity_main.xml`, `main_graph.xml`, `ic_launcher_foreground.xml`, and `backup_rules.xml`. Keep package names under `fcu.app.i_ching` unless the app namespace changes deliberately.
 
 Prefer existing local patterns before adding new ones:
 
 - Add pure app logic under `data/`.
-- Add screens under `ui/` as Fragments.
-- Reuse `Ui` for shared visual primitives unless replacing the programmatic UI approach with XML/Compose is an explicit project decision.
+- Add screens and screen-level ViewModels under `ui/`.
+- Route screens through `MainActivity` helpers backed by `NavController`; do not add new manual Fragment transactions.
+- Reuse `Ui` for shared visual primitives until a screen or component is deliberately migrated to XML. New substantial screens should prefer XML/ViewBinding where practical.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
 - Keep divination consistency in the data layer: derive `Hexagram` and `relatingHexagram` from the same line values / changing-line helpers in `HexagramRepository`.
 - Keep JSON persistence backward-compatible. New fields such as `relatingHexagramNumber` should be optional on read and derived from `lineValues` when old records do not contain them.
+- Use `RecordRepository` as the UI entry point for records. `LocalRecordStore` is retained for legacy parsing/static filtering helpers, not new UI persistence.
 - Keep record search/filter logic in `LocalRecordStore` or another data helper; UI should not duplicate matching rules for question, note, hexagram name, full name, or tags.
+- Settings and favorites are still in `SettingsStore` / `SharedPreferences`; do not move them to Room unless that migration is explicitly scoped.
+
+## Room & Local Data Guidelines
+
+- Room database name: `i_ching_records.db`.
+- Room schema v1 table: `divination_records`.
+- DAO list queries should default to `createdAt DESC`.
+- Preserve record fields: `id`, `question`, `hexagramNumber`, `relatingHexagramNumber`, `method`, `lineValues`, `changingLines`, `createdAt`, `note`.
+- Store `lineValues` and `changingLines` through `RecordTypeConverters` as JSON strings.
+- `RecordRepository.migrateFromLegacyPrefsIfNeeded()` imports old `i_ching_records.records` JSON once and writes a migration flag; do not delete legacy SharedPreferences during migration.
+- Export must use Storage Access Framework from UI; do not request broad storage permissions for JSON/text export.
+- Keep `i_ching_records.xml` and `i_ching_records.db`/WAL/SHM excluded from cloud backup unless a future privacy review deliberately changes the backup model.
 
 ## Testing Guidelines
 
@@ -62,11 +77,16 @@ Current JVM test coverage includes:
 
 - `IChingLogicTest` covers casting line-value buckets, known hexagram pattern mappings, 64-pattern uniqueness, simple-cast consistency, changing-line flips, and relating hexagrams.
 - `DivinationPersistenceTest` covers `DivinationResult` / `DivinationRecord` JSON round trips, backward-compatible old JSON fallback, relating-hexagram derivation from old `lineValues`, and record mutation helpers.
+- `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting, and legacy JSON parser behavior.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
 - `LocalRecordStoreFilterTest` covers record search by question, note, hexagram, and tag, plus method and changing-line filters.
-- `ExampleInstrumentedTest` only checks app package context.
 
-Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, and UI workflows.
+Current instrumentation coverage includes:
+
+- `ExampleInstrumentedTest` checks app package context.
+- `RecordDaoInstrumentedTest` checks Room DAO insert/update/delete-all behavior with an in-memory database.
+
+Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, export formatting, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, local-mode entry, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, SAF export, delete-all, and UI workflows.
 
 ## Documentation Guidelines
 
@@ -80,8 +100,8 @@ Documentation should explicitly distinguish between implemented Beta behavior, d
 
 ## Commit & Pull Request Guidelines
 
-The existing history uses short, imperative commit messages such as `init commit` and `Add stitch design docs`. Keep commits focused and use concise subjects that describe the change. Pull requests should include a brief summary, testing performed, linked issues when applicable, and screenshots or screen recordings for visible UI changes. Mention any Gradle, SDK, resource, or persistence changes that affect contributors or release builds.
+The existing history uses short, imperative commit messages such as `init commit` and `Add stitch design docs`. Keep commits focused and use concise subjects that describe the change. Pull requests should include a brief summary, testing performed, linked issues when applicable, and screenshots or screen recordings for visible UI changes. Mention any Gradle, SDK, resource, navigation, Room schema, backup-rule, or persistence changes that affect contributors or release builds.
 
 ## Security & Configuration Tips
 
-Do not commit local machine configuration such as `local.properties` contents or signing secrets. Keep dependency versions centralized in `gradle/libs.versions.toml`, and prefer repository-wide Gradle settings over per-developer overrides. The current app stores settings, favorites, and divination records in app-private `SharedPreferences`; this is suitable for local Beta behavior but not a replacement for encrypted storage, account sync, user-controlled export/delete flows, or privacy controls in a production app. Keep `i_ching_records.xml` excluded from cloud backup unless a future privacy review deliberately changes the backup model.
+Do not commit local machine configuration such as `local.properties` contents or signing secrets. Keep dependency versions centralized in `gradle/libs.versions.toml`, and prefer repository-wide Gradle settings over per-developer overrides. The current app stores settings and favorites in app-private `SharedPreferences`, and divination records in app-private Room. This is suitable for local Beta behavior but not a replacement for encrypted storage, account sync, privacy policy work, or production data governance. Keep record storage excluded from cloud backup unless a future privacy review deliberately changes the backup model.

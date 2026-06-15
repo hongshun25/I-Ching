@@ -1,12 +1,10 @@
 package fcu.app.i_ching.ui;
 
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,54 +16,32 @@ import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
 
 public class AuthFragment extends Fragment {
-    private boolean registerMode;
-    private LinearLayout form;
-
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        MainActivity activity = (MainActivity) requireActivity();
         LinearLayout content = Ui.column(requireContext());
         content.setGravity(Gravity.CENTER_HORIZONTAL);
         content.setPadding(Ui.dp(requireContext(), 24), Ui.dp(requireContext(), 72), Ui.dp(requireContext(), 24), Ui.dp(requireContext(), 24));
-        TextView title = Ui.text(requireContext(), "I CHING", 40, android.graphics.Typeface.BOLD, R.color.ic_ink, true);
+
+        TextView title = Ui.text(requireContext(), "本機模式", 40, android.graphics.Typeface.BOLD, R.color.ic_ink, true);
         title.setGravity(Gravity.CENTER);
-        title.setLetterSpacing(0.14f);
-        TextView subtitle = Ui.text(requireContext(), "古老智慧 現代心境", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
+        TextView subtitle = Ui.text(requireContext(), "不建立帳號，資料只保存在這台裝置。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
         subtitle.setGravity(Gravity.CENTER);
         content.addView(title, new LinearLayout.LayoutParams(-1, -2));
-        Ui.addWithMargins(content, subtitle, -1, -2, 0, 4, 0, 36);
-        form = Ui.card(requireContext());
-        content.addView(form, new LinearLayout.LayoutParams(-1, -2));
-        Button local = Ui.pill(requireContext(), "暫不登入，以本機模式使用", false);
-        local.setOnClickListener(v -> ((MainActivity) requireActivity()).enterLocalMode());
-        Ui.addWithMargins(content, local, -1, Ui.dp(requireContext(), 48), 0, 32, 0, 0);
-        rebuildForm();
+        Ui.addWithMargins(content, subtitle, -1, -2, 0, 8, 0, 32);
+
+        LinearLayout card = Ui.card(requireContext());
+        card.addView(Ui.text(requireContext(), "目前內測版未啟用登入、同步或雲端備份。占卜問題、筆記與紀錄會寫入此裝置的本機資料庫；之後可在「我的」匯出 JSON 或純文字，也可以刪除全部紀錄。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
+        Ui.addWithMargins(content, card, -1, -2, 0, 0, 0, 28);
+
+        Button enter = Ui.pill(requireContext(), "進入本機模式", true);
+        enter.setContentDescription("進入本機模式");
+        enter.setOnClickListener(v -> activity.enterLocalMode());
+        content.addView(enter, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
+
+        Button learn = Ui.pill(requireContext(), "先看看每日靜心", false);
+        learn.setOnClickListener(v -> activity.enterLocalMode());
+        Ui.addWithMargins(content, learn, -1, Ui.dp(requireContext(), 52), 0, 12, 0, 0);
         return Ui.scrollPage(requireContext(), content, false);
-    }
-
-    private void rebuildForm() {
-        form.removeAllViews();
-        LinearLayout tabs = Ui.row(requireContext());
-        tabs.setGravity(Gravity.CENTER);
-        Button login = Ui.pill(requireContext(), "登入", !registerMode);
-        Button register = Ui.pill(requireContext(), "註冊", registerMode);
-        login.setOnClickListener(v -> { registerMode = false; rebuildForm(); });
-        register.setOnClickListener(v -> { registerMode = true; rebuildForm(); });
-        tabs.addView(login, new LinearLayout.LayoutParams(0, Ui.dp(requireContext(), 44), 1));
-        tabs.addView(register, new LinearLayout.LayoutParams(0, Ui.dp(requireContext(), 44), 1));
-        form.addView(tabs);
-        addInput("電子郵件", "輸入您的電子郵件", InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        addInput("密碼", registerMode ? "設定密碼" : "輸入您的密碼", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        if (registerMode) addInput("確認密碼", "再次輸入密碼", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        Button done = Ui.pill(requireContext(), registerMode ? "註冊" : "登入", true);
-        done.setOnClickListener(v -> ((MainActivity) requireActivity()).enterLocalMode());
-        Ui.addWithMargins(form, done, -1, Ui.dp(requireContext(), 48), 0, 20, 0, 0);
-    }
-
-    private void addInput(String label, String hint, int inputType) {
-        TextView l = Ui.text(requireContext(), label, 14, android.graphics.Typeface.BOLD, R.color.ic_ink, false);
-        EditText input = Ui.bottomInput(requireContext(), hint, 1);
-        input.setInputType(inputType);
-        Ui.addWithMargins(form, l, -1, -2, 0, 18, 0, 4);
-        form.addView(input, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 50)));
     }
 }

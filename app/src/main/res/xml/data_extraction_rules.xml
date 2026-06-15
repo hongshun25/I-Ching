@@ -3,9 +3,13 @@
     <cloud-backup>
         <!-- Questions and notes can be sensitive, so records stay local in cloud backup. -->
         <exclude domain="sharedpref" path="i_ching_records.xml" />
+        <exclude domain="database" path="i_ching_records.db" />
+        <exclude domain="database" path="i_ching_records.db-wal" />
+        <exclude domain="database" path="i_ching_records.db-shm" />
     </cloud-backup>
     <device-transfer>
         <!-- Keep local settings and records eligible for direct device-to-device moves. -->
         <include domain="sharedpref" path="." />
+        <include domain="database" path="." />
     </device-transfer>
 </data-extraction-rules>

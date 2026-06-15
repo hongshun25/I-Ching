@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="fcu.app.i_ching.ui.SplashFragment"
+        android:label="Splash" />
+
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="fcu.app.i_ching.ui.OnboardingFragment"
+        android:label="Onboarding" />
+
+    <fragment
+        android:id="@+id/authFragment"
+        android:name="fcu.app.i_ching.ui.AuthFragment"
+        android:label="Local Entry" />
+
+    <fragment
+        android:id="@+id/dailyFragment"
+        android:name="fcu.app.i_ching.ui.DailyFragment"
+        android:label="Daily" />
+
+    <fragment
+        android:id="@+id/questionFragment"
+        android:name="fcu.app.i_ching.ui.QuestionFragment"
+        android:label="Question" />
+
+    <fragment
+        android:id="@+id/methodFragment"
+        android:name="fcu.app.i_ching.ui.MethodFragment"
+        android:label="Method" />
+
+    <fragment
+        android:id="@+id/ritualFragment"
+        android:name="fcu.app.i_ching.ui.RitualFragment"
+        android:label="Ritual" />
+
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="fcu.app.i_ching.ui.ResultFragment"
+        android:label="Result" />
+
+    <fragment
+        android:id="@+id/recordsFragment"
+        android:name="fcu.app.i_ching.ui.RecordsFragment"
+        android:label="Records" />
+
+    <fragment
+        android:id="@+id/learnCenterFragment"
+        android:name="fcu.app.i_ching.ui.LearnCenterFragment"
+        android:label="Learn" />
+
+    <fragment
+        android:id="@+id/hexagramDetailFragment"
+        android:name="fcu.app.i_ching.ui.HexagramDetailFragment"
+        android:label="Hexagram Detail" />
+
+    <fragment
+        android:id="@+id/profileSettingsFragment"
+        android:name="fcu.app.i_ching.ui.ProfileSettingsFragment"
+        android:label="Profile" />
+</navigation>

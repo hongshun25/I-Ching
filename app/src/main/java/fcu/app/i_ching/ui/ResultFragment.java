@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.json.JSONException;
 
@@ -23,18 +24,18 @@ import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.DivinationResult;
 import fcu.app.i_ching.data.HexagramLine;
-import fcu.app.i_ching.data.LocalRecordStore;
 
 public class ResultFragment extends Fragment {
-    private static final String ARG_RESULT_JSON = "resultJson";
+    private static final String ARG_RESULT_JSON = MainActivity.ARG_RESULT_JSON;
     private static final String ARG_RECORD_ID = "recordId";
     private static final String STATE_RECORD_ID = "recordId";
     private static final String STATE_NOTE = "note";
-    private static final long NO_RECORD_ID = -1L;
+    public static final long NO_RECORD_ID = -1L;
 
     private DivinationResult result;
     private long savedRecordId = NO_RECORD_ID;
     private EditText noteInput;
+    private ResultViewModel viewModel;
 
     public static ResultFragment newInstance(DivinationResult value) {
         Bundle args = new Bundle();
@@ -49,8 +50,9 @@ public class ResultFragment extends Fragment {
         result = readResult();
         savedRecordId = readRecordId(savedInstanceState);
         MainActivity activity = (MainActivity) requireActivity();
-        LocalRecordStore recordStore = new LocalRecordStore(requireContext());
-        DivinationRecord existingRecord = ensureAutoSaved(recordStore, activity);
+        viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
+        DivinationRecord existingRecord = viewModel.ensureAutoSaved(result, activity.settings().isAutoSave());
+        if (existingRecord != null) rememberRecordId(existingRecord.id);
 
         LinearLayout content = Ui.column(requireContext());
         LinearLayout questionBubble = Ui.card(requireContext());
@@ -97,7 +99,7 @@ public class ResultFragment extends Fragment {
         content.addView(noteInput, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 96)));
         Button save = Ui.pill(requireContext(), savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記", true);
         save.setContentDescription("儲存占卜結果筆記至紀錄");
-        save.setOnClickListener(v -> saveNote(recordStore, activity));
+        save.setOnClickListener(v -> saveNote(activity));
         Button share = Ui.pill(requireContext(), "分享啟示", false); share.setOnClickListener(v -> shareResult());
         Ui.addWithMargins(content, save, -1, Ui.dp(requireContext(), 52), 0, 22, 0, 10); content.addView(share, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
         return Ui.scrollPage(requireContext(), content, false);
@@ -130,31 +132,9 @@ public class ResultFragment extends Fragment {
         return args == null ? NO_RECORD_ID : args.getLong(ARG_RECORD_ID, NO_RECORD_ID);
     }
 
-    private DivinationRecord ensureAutoSaved(LocalRecordStore recordStore, MainActivity activity) {
-        DivinationRecord existing = savedRecordId == NO_RECORD_ID ? null : recordStore.find(savedRecordId);
-        if (existing == null) existing = recordStore.find(result.createdAt);
-        if (existing != null) {
-            rememberRecordId(existing.id);
-            return existing;
-        }
-        if (!activity.settings().isAutoSave()) return null;
-        DivinationRecord record = DivinationRecord.fromResult(result, "");
-        recordStore.add(record);
+    private void saveNote(MainActivity activity) {
+        DivinationRecord record = viewModel.saveNote(result, savedRecordId, noteInput.getText().toString());
         rememberRecordId(record.id);
-        return record;
-    }
-
-    private void saveNote(LocalRecordStore recordStore, MainActivity activity) {
-        DivinationRecord existing = savedRecordId == NO_RECORD_ID ? null : recordStore.find(savedRecordId);
-        if (existing == null) existing = recordStore.find(result.createdAt);
-        if (existing == null) {
-            DivinationRecord record = DivinationRecord.fromResult(result, noteInput.getText().toString());
-            recordStore.add(record);
-            rememberRecordId(record.id);
-        } else {
-            recordStore.updateNote(existing.id, noteInput.getText().toString());
-            rememberRecordId(existing.id);
-        }
         Toast.makeText(requireContext(), "已儲存至紀錄", Toast.LENGTH_SHORT).show();
         activity.showRecords();
     }

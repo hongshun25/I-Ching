@@ -31,6 +31,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -38,10 +42,17 @@ dependencies {
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.fragment
+    implementation libs.lifecycle.livedata
+    implementation libs.lifecycle.viewmodel
     implementation libs.material
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     implementation libs.recyclerview
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
     testImplementation libs.junit
     testImplementation libs.json
     androidTestImplementation libs.espresso.core
     androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.room.testing
 }

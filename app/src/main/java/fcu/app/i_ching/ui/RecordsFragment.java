@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,53 +44,54 @@ public class RecordsFragment extends Fragment {
     private EditText searchInput;
     private LinearLayout listContainer;
     private List<DivinationRecord> allRecords = new ArrayList<>();
+    private RecordsViewModel viewModel;
 
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
+        viewModel = new ViewModelProvider(this).get(RecordsViewModel.class);
         methodChips.clear();
         changeChips.clear();
         if (savedInstanceState != null) {
             activeMethod = savedInstanceState.getString(STATE_METHOD, METHOD_ALL);
             activeChangeFilter = changeFilterFromName(savedInstanceState.getString(STATE_CHANGE_FILTER));
         }
+
         LinearLayout content = Ui.column(requireContext());
-        LocalRecordStore recordStore = new LocalRecordStore(requireContext());
-        allRecords = recordStore.all();
-        if (allRecords.isEmpty()) {
-            addEmptyState(content, activity);
-        } else {
-            content.addView(Ui.text(requireContext(), "占卜紀錄", 36, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
-            searchInput = Ui.bottomInput(requireContext(), "搜尋問題、筆記、卦名或標籤...", 1);
-            searchInput.setContentDescription("搜尋占卜紀錄");
-            if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
-            searchInput.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) { renderList(activity, recordStore); }
-                @Override public void afterTextChanged(Editable s) {}
-            });
-            Ui.addWithMargins(content, searchInput, -1, Ui.dp(requireContext(), 54), 0, 18, 0, 12);
+        content.addView(Ui.text(requireContext(), "占卜紀錄", 36, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
+        searchInput = Ui.bottomInput(requireContext(), "搜尋問題、筆記、卦名或標籤...", 1);
+        searchInput.setContentDescription("搜尋占卜紀錄");
+        if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
+        searchInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { renderList(activity); }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+        Ui.addWithMargins(content, searchInput, -1, Ui.dp(requireContext(), 54), 0, 18, 0, 12);
 
-            LinearLayout methodRow = Ui.row(requireContext());
-            methodRow.setGravity(Gravity.START);
-            addMethodChip(methodRow, "全部占法", METHOD_ALL, activity, recordStore);
-            addMethodChip(methodRow, DivinationMethod.COINS.label, DivinationMethod.COINS.name(), activity, recordStore);
-            addMethodChip(methodRow, DivinationMethod.YARROW.label, DivinationMethod.YARROW.name(), activity, recordStore);
-            addMethodChip(methodRow, DivinationMethod.SIMPLE.label, DivinationMethod.SIMPLE.name(), activity, recordStore);
-            content.addView(Ui.horizontalChips(requireContext(), methodRow));
+        LinearLayout methodRow = Ui.row(requireContext());
+        methodRow.setGravity(Gravity.START);
+        addMethodChip(methodRow, "全部占法", METHOD_ALL, activity);
+        addMethodChip(methodRow, DivinationMethod.COINS.label, DivinationMethod.COINS.name(), activity);
+        addMethodChip(methodRow, DivinationMethod.YARROW.label, DivinationMethod.YARROW.name(), activity);
+        addMethodChip(methodRow, DivinationMethod.SIMPLE.label, DivinationMethod.SIMPLE.name(), activity);
+        content.addView(Ui.horizontalChips(requireContext(), methodRow));
 
-            LinearLayout changeRow = Ui.row(requireContext());
-            changeRow.setGravity(Gravity.START);
-            addChangeChip(changeRow, LocalRecordStore.ChangeFilter.ALL, activity, recordStore);
-            addChangeChip(changeRow, LocalRecordStore.ChangeFilter.WITH_CHANGES, activity, recordStore);
-            addChangeChip(changeRow, LocalRecordStore.ChangeFilter.WITHOUT_CHANGES, activity, recordStore);
-            Ui.addWithMargins(content, Ui.horizontalChips(requireContext(), changeRow), -1, -2, 0, 8, 0, 0);
+        LinearLayout changeRow = Ui.row(requireContext());
+        changeRow.setGravity(Gravity.START);
+        addChangeChip(changeRow, LocalRecordStore.ChangeFilter.ALL, activity);
+        addChangeChip(changeRow, LocalRecordStore.ChangeFilter.WITH_CHANGES, activity);
+        addChangeChip(changeRow, LocalRecordStore.ChangeFilter.WITHOUT_CHANGES, activity);
+        Ui.addWithMargins(content, Ui.horizontalChips(requireContext(), changeRow), -1, -2, 0, 8, 0, 0);
 
-            listContainer = Ui.column(requireContext());
-            content.addView(listContainer, new LinearLayout.LayoutParams(-1, -2));
-            updateChipStyles();
-            renderList(activity, recordStore);
-        }
+        listContainer = Ui.column(requireContext());
+        content.addView(listContainer, new LinearLayout.LayoutParams(-1, -2));
+        updateChipStyles();
+        viewModel.records().observe(getViewLifecycleOwner(), records -> {
+            allRecords = records == null ? new ArrayList<>() : records;
+            renderList(activity);
+        });
+        renderList(activity);
         return Ui.pageWithChrome(activity, content, "紀錄");
     }
 
@@ -101,36 +103,43 @@ public class RecordsFragment extends Fragment {
         if (searchInput != null) outState.putString(STATE_QUERY, searchInput.getText().toString());
     }
 
-    private void addEmptyState(LinearLayout content, MainActivity activity) {
-        content.setGravity(Gravity.CENTER_HORIZONTAL);
-        TextView art = Ui.text(requireContext(), "↺", 96, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false); art.setGravity(Gravity.CENTER);
-        TextView title = Ui.text(requireContext(), "你的占卜紀錄會出現在這裡", 24, android.graphics.Typeface.NORMAL, R.color.ic_ink, true); title.setGravity(Gravity.CENTER);
-        TextView body = Ui.text(requireContext(), "靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false); body.setGravity(Gravity.CENTER);
-        Button start = Ui.pill(requireContext(), "✦ 開始第一次占卜", true); start.setOnClickListener(v -> activity.showQuestion());
-        content.addView(art, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 180))); content.addView(title); Ui.addWithMargins(content, body, -1, -2, 0, 8, 0, 28); content.addView(start, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
+    private void addEmptyState(LinearLayout parent, MainActivity activity) {
+        parent.setGravity(Gravity.CENTER_HORIZONTAL);
+        TextView art = Ui.text(requireContext(), "↺", 76, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false);
+        art.setGravity(Gravity.CENTER);
+        TextView title = Ui.text(requireContext(), "你的占卜紀錄會出現在這裡", 22, android.graphics.Typeface.NORMAL, R.color.ic_ink, true);
+        title.setGravity(Gravity.CENTER);
+        TextView body = Ui.text(requireContext(), "靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
+        body.setGravity(Gravity.CENTER);
+        Button start = Ui.pill(requireContext(), "✦ 開始第一次占卜", true);
+        start.setOnClickListener(v -> activity.showQuestion());
+        parent.addView(art, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 140)));
+        parent.addView(title);
+        Ui.addWithMargins(parent, body, -1, -2, 0, 8, 0, 28);
+        parent.addView(start, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
     }
 
-    private void addMethodChip(LinearLayout row, String label, String methodName, MainActivity activity, LocalRecordStore recordStore) {
+    private void addMethodChip(LinearLayout row, String label, String methodName, MainActivity activity) {
         TextView chip = Ui.chip(requireContext(), label);
         chip.setContentDescription("篩選" + label + "紀錄");
         chip.setTag(methodName);
         chip.setOnClickListener(v -> {
             activeMethod = methodName;
             updateChipStyles();
-            renderList(activity, recordStore);
+            renderList(activity);
         });
         methodChips.add(chip);
         Ui.addWithMargins(row, chip, -2, -2, 0, 0, 8, 0);
     }
 
-    private void addChangeChip(LinearLayout row, LocalRecordStore.ChangeFilter filter, MainActivity activity, LocalRecordStore recordStore) {
+    private void addChangeChip(LinearLayout row, LocalRecordStore.ChangeFilter filter, MainActivity activity) {
         TextView chip = Ui.chip(requireContext(), filter.label);
         chip.setContentDescription("篩選" + filter.label + "紀錄");
         chip.setTag(filter);
         chip.setOnClickListener(v -> {
             activeChangeFilter = filter;
             updateChipStyles();
-            renderList(activity, recordStore);
+            renderList(activity);
         });
         changeChips.add(chip);
         Ui.addWithMargins(row, chip, -2, -2, 0, 0, 8, 0);
@@ -153,9 +162,14 @@ public class RecordsFragment extends Fragment {
         chip.setSelected(selected);
     }
 
-    private void renderList(MainActivity activity, LocalRecordStore recordStore) {
+    private void renderList(MainActivity activity) {
         if (listContainer == null || searchInput == null) return;
         listContainer.removeAllViews();
+        listContainer.setGravity(Gravity.NO_GRAVITY);
+        if (allRecords.isEmpty()) {
+            addEmptyState(listContainer, activity);
+            return;
+        }
         List<DivinationRecord> records = LocalRecordStore.filter(
                 allRecords,
                 searchInput.getText().toString(),
@@ -168,10 +182,10 @@ public class RecordsFragment extends Fragment {
             Ui.addWithMargins(listContainer, empty, -1, -2, 0, 28, 0, 0);
             return;
         }
-        for (DivinationRecord record : records) addRecordCard(activity, recordStore, listContainer, record);
+        for (DivinationRecord record : records) addRecordCard(activity, listContainer, record);
     }
 
-    private void addRecordCard(MainActivity activity, LocalRecordStore recordStore, LinearLayout parent, DivinationRecord record) {
+    private void addRecordCard(MainActivity activity, LinearLayout parent, DivinationRecord record) {
         Hexagram hex = HexagramRepository.get(record.hexagramNumber);
         Hexagram relating = HexagramRepository.get(record.relatingHexagramNumber);
         LinearLayout card = Ui.card(requireContext());
@@ -184,10 +198,10 @@ public class RecordsFragment extends Fragment {
         LinearLayout actions = Ui.row(requireContext());
         Button edit = Ui.pill(requireContext(), "編輯筆記", false);
         edit.setContentDescription("編輯第" + hex.number + "卦紀錄筆記");
-        edit.setOnClickListener(v -> showEditDialog(recordStore, record));
+        edit.setOnClickListener(v -> showEditDialog(record));
         Button delete = Ui.pill(requireContext(), "刪除", false);
         delete.setContentDescription("刪除第" + hex.number + "卦紀錄");
-        delete.setOnClickListener(v -> confirmDelete(recordStore, record));
+        delete.setOnClickListener(v -> confirmDelete(record));
         Ui.addWithMargins(actions, edit, 0, Ui.dp(requireContext(), 46), 0, 16, 6, 0);
         LinearLayout.LayoutParams editParams = (LinearLayout.LayoutParams) edit.getLayoutParams();
         editParams.weight = 1;
@@ -231,7 +245,7 @@ public class RecordsFragment extends Fragment {
         }
     }
 
-    private void showEditDialog(LocalRecordStore recordStore, DivinationRecord record) {
+    private void showEditDialog(DivinationRecord record) {
         EditText input = Ui.bottomInput(requireContext(), "補充這次占卜的反思...", 4);
         input.setText(record.note == null ? "" : record.note);
         input.setSelection(input.getText().length());
@@ -241,31 +255,21 @@ public class RecordsFragment extends Fragment {
                 .setView(input)
                 .setNegativeButton("取消", null)
                 .setPositiveButton("儲存", (dialog, which) -> {
-                    recordStore.updateNote(record.id, input.getText().toString());
+                    viewModel.updateNote(record.id, input.getText().toString());
                     Toast.makeText(requireContext(), "筆記已更新", Toast.LENGTH_SHORT).show();
-                    refresh();
                 })
                 .show();
     }
 
-    private void confirmDelete(LocalRecordStore recordStore, DivinationRecord record) {
+    private void confirmDelete(DivinationRecord record) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("刪除紀錄？")
                 .setMessage("這筆占卜紀錄將從本機移除。")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("刪除", (dialog, which) -> {
-                    recordStore.delete(record.id);
+                    viewModel.delete(record.id);
                     Toast.makeText(requireContext(), "紀錄已刪除", Toast.LENGTH_SHORT).show();
-                    refresh();
                 })
                 .show();
     }
-
-    private void refresh() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new RecordsFragment())
-                .commit();
-    }
-
 }

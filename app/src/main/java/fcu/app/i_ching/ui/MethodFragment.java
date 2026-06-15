@@ -19,9 +19,11 @@ import fcu.app.i_ching.data.DivinationMethod;
 public class MethodFragment extends Fragment {
     private DivinationMethod selected = DivinationMethod.COINS;
     private LinearLayout methods;
+    private String question;
 
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        question = getArguments() == null ? null : getArguments().getString(MainActivity.ARG_QUESTION);
         LinearLayout content = Ui.column(requireContext());
         content.setGravity(Gravity.CENTER_HORIZONTAL);
         TextView step = Ui.text(requireContext(), "STEP 2 / 4", 14, android.graphics.Typeface.BOLD, R.color.ic_text_muted, false);
@@ -29,7 +31,7 @@ public class MethodFragment extends Fragment {
         TextView body = Ui.text(requireContext(), "請選擇最適合當下心境的卜筮方式。不同的方式將引導出不同的沉浸體驗與變爻機率。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false); body.setGravity(Gravity.CENTER);
         content.addView(step); Ui.addWithMargins(content, title, -1, -2, 0, 24, 0, 8); content.addView(body);
         methods = Ui.column(requireContext()); Ui.addWithMargins(content, methods, -1, -2, 0, 30, 0, 22); rebuild();
-        Button next = Ui.pill(requireContext(), "開始靜心 →", true); next.setOnClickListener(v -> ((MainActivity) requireActivity()).showRitual(selected));
+        Button next = Ui.pill(requireContext(), "開始靜心 →", true); next.setOnClickListener(v -> ((MainActivity) requireActivity()).showRitual(question, selected));
         content.addView(next, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
         return Ui.scrollPage(requireContext(), content, false);
     }

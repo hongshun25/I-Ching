@@ -29,7 +29,7 @@ public class HexagramDetailFragment extends Fragment {
         Hexagram hex = HexagramRepository.get(number);
         FrameLayout frame = new FrameLayout(requireContext()); frame.setBackgroundColor(Ui.color(requireContext(), R.color.ic_background));
         LinearLayout page = Ui.column(requireContext());
-        page.addView(Ui.topBar(requireContext(), "←", v -> requireActivity().getOnBackPressedDispatcher().onBackPressed(), activity.settings().isFavorite(number) ? "♥" : "♡", v -> { activity.settings().toggleFavorite(number); refresh(number); }), new LinearLayout.LayoutParams(-1, -2));
+        page.addView(Ui.topBar(requireContext(), "←", v -> requireActivity().getOnBackPressedDispatcher().onBackPressed(), activity.settings().isFavorite(number) ? "♥" : "♡", v -> { boolean favorite = activity.settings().toggleFavorite(number); ((TextView) v).setText(favorite ? "♥" : "♡"); }), new LinearLayout.LayoutParams(-1, -2));
         LinearLayout content = Ui.column(requireContext()); content.setGravity(Gravity.CENTER_HORIZONTAL);
         content.addView(Ui.hexagramView(requireContext(), hex, 130, 12, false));
         content.addView(Ui.chipsRow(requireContext(), hex.fullName, hex.tags.contains("吉卦") ? "吉卦" : hex.tags.get(0)));
@@ -46,12 +46,6 @@ public class HexagramDetailFragment extends Fragment {
         return frame;
     }
 
-    private void refresh(int number) {
-        getParentFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, HexagramDetailFragment.newInstance(number))
-                .commit();
-    }
 
     private void addSection(LinearLayout content, String title, String body) {
         LinearLayout section = Ui.card(requireContext());
