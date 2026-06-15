@@ -183,6 +183,25 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     @Test
+    public void methodSelectionShowsExplicitSelectedState() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showMethod("測試占法選擇狀態");
+            });
+            waitFor(withId(R.id.method_simple_card));
+
+            onView(withId(R.id.method_simple_card)).perform(scrollTo(), click());
+
+            waitFor(withId(R.id.method_simple_status));
+            onView(withId(R.id.method_simple_status)).check(matches(isDisplayed()));
+            onView(withId(R.id.method_simple_card)).check(matches(withContentDescription("簡易占法，已選擇")));
+        }
+    }
+
+    @Test
     public void learnCenterFavoriteAndProfileDarkModePersist() {
         SettingsStore settings = new SettingsStore(context);
         settings.setOnboardingComplete(true);
@@ -201,6 +220,26 @@ public class StableBetaWorkflowInstrumentedTest {
             waitFor(withId(R.id.profile_dark_mode_switch));
             onView(withId(R.id.profile_dark_mode_switch)).perform(scrollTo(), click());
             waitForCondition(() -> new SettingsStore(context).isDarkMode());
+        }
+    }
+
+    @Test
+    public void learnCenterSearchOpensRecyclerViewDetail() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showLearnCenter();
+            });
+            waitFor(withId(R.id.learn_search_input));
+
+            onView(withId(R.id.learn_search_input)).perform(replaceText("謙"));
+            closeSoftKeyboard();
+            waitFor(withText("謙"));
+            onView(withText("謙")).perform(scrollTo(), click());
+
+            waitFor(withText("第15卦｜謙"));
         }
     }
 

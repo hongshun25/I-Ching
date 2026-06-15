@@ -61,6 +61,59 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="IChingPageTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="IChingBodyText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/ic_text_muted</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="IChingCard">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">@dimen/card_padding</item>
+    </style>
+
+    <style name="IChingInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@drawable/bg_input_underline</item>
+        <item name="android:gravity">top|start</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="android:textColorHint">@color/ic_outline_strong</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="IChingPrimaryButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/control_height</item>
+        <item name="android:background">@drawable/bg_pill_primary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/ic_background</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="IChingSecondaryButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/control_height</item>
+        <item name="android:background">@drawable/bg_pill_secondary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="ResultCard">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

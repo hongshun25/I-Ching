@@ -1,14 +1,13 @@
 package fcu.app.i_ching.ui;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,9 +16,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
@@ -29,7 +34,6 @@ import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.data.LocalRecordStore;
 import fcu.app.i_ching.databinding.FragmentRecordsBinding;
-import fcu.app.i_ching.databinding.IncludeEmptyStateBinding;
 import fcu.app.i_ching.databinding.ItemRecordBinding;
 import fcu.app.i_ching.ui.presentation.RecordCardPresentation;
 
@@ -46,10 +50,12 @@ public class RecordsFragment extends Fragment {
     private List<DivinationRecord> allRecords = new ArrayList<>();
     private RecordsViewModel viewModel;
     private FragmentRecordsBinding binding;
+    private RecordsAdapter adapter;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
         viewModel = new ViewModelProvider(this).get(RecordsViewModel.class);
         binding = FragmentRecordsBinding.inflate(inflater, container, false);
@@ -60,6 +66,7 @@ public class RecordsFragment extends Fragment {
             activeChangeFilter = changeFilterFromName(savedInstanceState.getString(STATE_CHANGE_FILTER));
         }
 
+        setupList(activity);
         setupSearch(activity, savedInstanceState);
         setupFilterChips(activity);
         updateChipStyles();
@@ -87,6 +94,7 @@ public class RecordsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        adapter = null;
         methodChips.clear();
         changeChips.clear();
     }
@@ -97,6 +105,27 @@ public class RecordsFragment extends Fragment {
         outState.putString(STATE_METHOD, activeMethod);
         outState.putString(STATE_CHANGE_FILTER, activeChangeFilter.name());
         if (binding != null) outState.putString(STATE_QUERY, binding.recordsSearchInput.getText().toString());
+    }
+
+    private void setupList(MainActivity activity) {
+        adapter = new RecordsAdapter(new RecordsAdapter.Callbacks() {
+            @Override public void open(DivinationRecord record) {
+                activity.showHexagramDetail(record.hexagramNumber);
+            }
+
+            @Override public void edit(DivinationRecord record) {
+                showEditDialog(record);
+            }
+
+            @Override public void delete(DivinationRecord record) {
+                confirmDelete(record);
+            }
+        });
+        binding.recordsList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recordsList.addItemDecoration(new VerticalSpacingDecoration(Ui.dp(requireContext(), 14)));
+        binding.recordsList.setAdapter(adapter);
+        binding.recordsList.setHasFixedSize(false);
+        binding.recordsEmptyState.emptyStateAction.setOnClickListener(v -> activity.showQuestion());
     }
 
     private void setupSearch(MainActivity activity, @Nullable Bundle savedInstanceState) {
@@ -159,12 +188,12 @@ public class RecordsFragment extends Fragment {
     }
 
     private void renderList(MainActivity activity) {
-        if (binding == null) return;
-        LinearLayout listContainer = binding.recordsList;
-        listContainer.removeAllViews();
-        listContainer.setGravity(Gravity.NO_GRAVITY);
+        if (binding == null || adapter == null) return;
+        binding.recordsEmptyState.getRoot().setVisibility(allRecords.isEmpty() ? View.VISIBLE : View.GONE);
         if (allRecords.isEmpty()) {
-            addEmptyState(listContainer, activity);
+            binding.recordsNoResults.setVisibility(View.GONE);
+            binding.recordsList.setVisibility(View.GONE);
+            adapter.submitList(new ArrayList<>());
             return;
         }
         List<DivinationRecord> records = LocalRecordStore.filter(
@@ -173,41 +202,9 @@ public class RecordsFragment extends Fragment {
                 activeMethod(),
                 activeChangeFilter
         );
-        if (records.isEmpty()) {
-            TextView empty = Ui.text(requireContext(), getString(R.string.records_no_results), 16,
-                    android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
-            empty.setId(R.id.records_no_results);
-            empty.setGravity(Gravity.CENTER);
-            Ui.addWithMargins(listContainer, empty, -1, -2, 0, 28, 0, 0);
-            return;
-        }
-        for (DivinationRecord record : records) addRecordCard(activity, listContainer, record);
-    }
-
-    private void addEmptyState(LinearLayout parent, MainActivity activity) {
-        parent.setGravity(Gravity.CENTER_HORIZONTAL);
-        IncludeEmptyStateBinding empty = IncludeEmptyStateBinding.inflate(getLayoutInflater(), parent, false);
-        empty.emptyStateAction.setOnClickListener(v -> activity.showQuestion());
-        parent.addView(empty.getRoot(), new LinearLayout.LayoutParams(-1, -2));
-    }
-
-    private void addRecordCard(MainActivity activity, LinearLayout parent, DivinationRecord record) {
-        Hexagram hex = HexagramRepository.get(record.hexagramNumber);
-        RecordCardPresentation presentation = RecordCardPresentation.from(record);
-        ItemRecordBinding item = ItemRecordBinding.inflate(getLayoutInflater(), parent, false);
-        item.recordItemTitle.setText(presentation.titleText);
-        item.recordItemRelation.setText(presentation.relationText);
-        item.recordItemChanging.setText(presentation.changingText);
-        item.recordItemQuestion.setText(presentation.questionText);
-        item.recordItemMeta.setText(presentation.metaText);
-        item.recordItemNote.setText(presentation.noteText);
-        item.recordItemNote.setVisibility(presentation.hasNote() ? View.VISIBLE : View.GONE);
-        item.recordItemEdit.setContentDescription(presentation.editContentDescription);
-        item.recordItemEdit.setOnClickListener(v -> showEditDialog(record));
-        item.recordItemDelete.setContentDescription(presentation.deleteContentDescription);
-        item.recordItemDelete.setOnClickListener(v -> confirmDelete(record));
-        item.getRoot().setOnClickListener(v -> activity.showHexagramDetail(hex.number));
-        Ui.addWithMargins(parent, item.getRoot(), -1, -2, 0, 14, 0, 0);
+        binding.recordsNoResults.setVisibility(records.isEmpty() ? View.VISIBLE : View.GONE);
+        binding.recordsList.setVisibility(records.isEmpty() ? View.GONE : View.VISIBLE);
+        adapter.submitList(records);
     }
 
     private DivinationMethod activeMethod() {
@@ -235,9 +232,7 @@ public class RecordsFragment extends Fragment {
                 .setTitle("編輯筆記")
                 .setView(input)
                 .setNegativeButton("取消", null)
-                .setPositiveButton("儲存", (dialog, which) -> {
-                    viewModel.updateNote(record.id, input.getText().toString());
-                })
+                .setPositiveButton("儲存", (dialog, which) -> viewModel.updateNote(record.id, input.getText().toString()))
                 .show();
     }
 
@@ -246,9 +241,90 @@ public class RecordsFragment extends Fragment {
                 .setTitle("刪除紀錄？")
                 .setMessage("這筆占卜紀錄將從本機移除。")
                 .setNegativeButton("取消", null)
-                .setPositiveButton("刪除", (dialog, which) -> {
-                    viewModel.delete(record.id);
-                })
+                .setPositiveButton("刪除", (dialog, which) -> viewModel.delete(record.id))
                 .show();
+    }
+
+    private static final class RecordsAdapter extends ListAdapter<DivinationRecord, RecordsAdapter.Holder> {
+        private final Callbacks callbacks;
+
+        RecordsAdapter(Callbacks callbacks) {
+            super(new DiffUtil.ItemCallback<DivinationRecord>() {
+                @Override public boolean areItemsTheSame(@NonNull DivinationRecord oldItem, @NonNull DivinationRecord newItem) {
+                    return oldItem.id == newItem.id;
+                }
+
+                @Override public boolean areContentsTheSame(@NonNull DivinationRecord oldItem, @NonNull DivinationRecord newItem) {
+                    return oldItem.id == newItem.id
+                            && oldItem.hexagramNumber == newItem.hexagramNumber
+                            && oldItem.relatingHexagramNumber == newItem.relatingHexagramNumber
+                            && Objects.equals(oldItem.method, newItem.method)
+                            && oldItem.createdAt == newItem.createdAt
+                            && Objects.equals(oldItem.question, newItem.question)
+                            && Objects.equals(oldItem.note, newItem.note)
+                            && Arrays.equals(oldItem.lineValues, newItem.lineValues)
+                            && Objects.equals(oldItem.changingLines, newItem.changingLines);
+                }
+            });
+            this.callbacks = callbacks;
+            setHasStableIds(true);
+        }
+
+        @Override public long getItemId(int position) { return getItem(position).id; }
+
+        @NonNull
+        @Override
+        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new Holder(ItemRecordBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
+            DivinationRecord record = getItem(position);
+            Hexagram hex = HexagramRepository.get(record.hexagramNumber);
+            RecordCardPresentation presentation = RecordCardPresentation.from(record);
+            holder.binding.recordItemTitle.setText(presentation.titleText);
+            holder.binding.recordItemRelation.setText(presentation.relationText);
+            holder.binding.recordItemChanging.setText(presentation.changingText);
+            holder.binding.recordItemQuestion.setText(presentation.questionText);
+            holder.binding.recordItemMeta.setText(presentation.metaText);
+            holder.binding.recordItemNote.setText(presentation.noteText);
+            holder.binding.recordItemNote.setVisibility(presentation.hasNote() ? View.VISIBLE : View.GONE);
+            holder.binding.recordItemEdit.setContentDescription(presentation.editContentDescription);
+            holder.binding.recordItemEdit.setOnClickListener(v -> callbacks.edit(record));
+            holder.binding.recordItemDelete.setContentDescription(presentation.deleteContentDescription);
+            holder.binding.recordItemDelete.setOnClickListener(v -> callbacks.delete(record));
+            holder.itemView.setOnClickListener(v -> callbacks.open(record));
+            holder.itemView.setContentDescription(hex.fullName + "，" + presentation.questionText);
+        }
+
+        interface Callbacks {
+            void open(DivinationRecord record);
+            void edit(DivinationRecord record);
+            void delete(DivinationRecord record);
+        }
+
+        static final class Holder extends RecyclerView.ViewHolder {
+            final ItemRecordBinding binding;
+
+            Holder(ItemRecordBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+        }
+    }
+
+    private static final class VerticalSpacingDecoration extends RecyclerView.ItemDecoration {
+        private final int top;
+
+        VerticalSpacingDecoration(int top) {
+            this.top = top;
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            outRect.top = top;
+        }
     }
 }

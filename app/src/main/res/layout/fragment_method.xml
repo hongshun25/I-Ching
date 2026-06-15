@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/method_step"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        style="@style/IChingPageTitle"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="@string/method_title"
+        android:textSize="34sp" />
+
+    <TextView
+        style="@style/IChingBodyText"
+        android:gravity="center"
+        android:text="@string/method_body" />
+
+    <LinearLayout
+        android:id="@id/method_simple_card"
+        style="@style/IChingCard"
+        android:layout_marginTop="30dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@id/method_simple_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/method_selected"
+            android:textColor="@color/ic_gold"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="簡易占法"
+            android:textColor="@color/ic_ink"
+            android:textSize="24sp" />
+
+        <TextView
+            style="@style/IChingBodyText"
+            android:layout_marginTop="6dp"
+            android:text="適合快速反思，直接得出一卦，無變爻。" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/method_coins_card"
+        style="@style/IChingCard"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@id/method_coins_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/method_selected"
+            android:textColor="@color/ic_gold"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="三枚銅錢"
+            android:textColor="@color/ic_ink"
+            android:textSize="24sp" />
+
+        <TextView
+            style="@style/IChingBodyText"
+            android:layout_marginTop="6dp"
+            android:text="模擬傳統銅錢占法，六次投擲，可產生變爻，體現事物變動之機。" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/method_yarrow_card"
+        style="@style/IChingCard"
+        android:layout_marginTop="12dp"
+        android:clickable="true"
+        android:focusable="true">
+
+        <TextView
+            android:id="@id/method_yarrow_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/method_selected"
+            android:textColor="@color/ic_gold"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="蓍草靈感模式"
+            android:textColor="@color/ic_ink"
+            android:textSize="24sp" />
+
+        <TextView
+            style="@style/IChingBodyText"
+            android:layout_marginTop="6dp"
+            android:text="節奏較慢，十八變而成卦。適合重大決策前的深度提問與冥想沉澱。" />
+    </LinearLayout>
+
+    <Button
+        android:id="@id/method_next_button"
+        style="@style/IChingPrimaryButton"
+        android:layout_marginTop="10dp"
+        android:text="@string/method_next" />
+</LinearLayout>

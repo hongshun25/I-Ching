@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/question_step"
+        android:textColor="@color/ic_gold"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        style="@style/IChingPageTitle"
+        android:gravity="center"
+        android:text="@string/question_title"
+        android:textSize="36sp" />
+
+    <TextView
+        style="@style/IChingBodyText"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center"
+        android:text="@string/question_body"
+        android:textSize="18sp" />
+
+    <LinearLayout style="@style/IChingCard">
+
+        <EditText
+            android:id="@id/question_input"
+            style="@style/IChingInput"
+            android:layout_height="170dp"
+            android:hint="@string/question_hint"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLength="120"
+            android:minLines="5" />
+
+        <TextView
+            android:id="@id/question_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="0 / 120"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/question_presets_label"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@id/question_presets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@id/question_next_button"
+        style="@style/IChingPrimaryButton"
+        android:layout_marginTop="36dp"
+        android:text="@string/question_next" />
+</LinearLayout>

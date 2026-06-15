@@ -6,4 +6,7 @@
     <dimen name="space_stack_lg">48dp</dimen>
     <dimen name="corner_card">20dp</dimen>
     <dimen name="corner_pill">999dp</dimen>
+    <dimen name="control_height">52dp</dimen>
+    <dimen name="touch_target">48dp</dimen>
+    <dimen name="card_padding">22dp</dimen>
 </resources>

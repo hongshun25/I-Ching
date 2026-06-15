@@ -3,26 +3,31 @@ package fcu.app.i_ching.ui;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.ListAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.data.SettingsStore;
-import fcu.app.i_ching.ui.presentation.FavoriteHexagramPresentation;
+import fcu.app.i_ching.databinding.FragmentLearnCenterBinding;
+import fcu.app.i_ching.databinding.ItemHexagramBinding;
+import fcu.app.i_ching.ui.presentation.HexagramListItemPresentation;
 
 public class LearnCenterFragment extends Fragment {
     private static final String STATE_FILTER = "filter";
@@ -30,119 +35,184 @@ public class LearnCenterFragment extends Fragment {
 
     private final List<TextView> filterChips = new ArrayList<>();
     private String activeFilter = HexagramRepository.FILTER_ALL;
-    private EditText searchInput;
-    private LinearLayout listContainer;
+    private FragmentLearnCenterBinding binding;
+    private HexagramAdapter adapter;
 
-    @Nullable @Override
-    public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
+        binding = FragmentLearnCenterBinding.inflate(inflater, container, false);
         filterChips.clear();
         if (savedInstanceState != null) {
             activeFilter = savedInstanceState.getString(STATE_FILTER, HexagramRepository.FILTER_ALL);
         }
-        LinearLayout content = Ui.column(requireContext());
-        content.addView(Ui.text(requireContext(), "六十四卦", 38, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
-        content.addView(Ui.text(requireContext(), "探索易經六十四卦的深層智慧，每一卦皆象徵自然與人生的變化規律。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        searchInput = Ui.bottomInput(requireContext(), "搜尋卦名或關鍵字...", 1);
-        if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
-        searchInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { renderList(activity); }
-            @Override public void afterTextChanged(Editable s) {}
-        });
-        Ui.addWithMargins(content, searchInput, -1, Ui.dp(requireContext(), 54), 0, 24, 0, 14);
-        LinearLayout filters = Ui.row(requireContext());
-        filters.setGravity(Gravity.START);
-        addFilterChip(filters, HexagramRepository.FILTER_ALL, activity);
-        addFilterChip(filters, HexagramRepository.FILTER_UPPER_CANON, activity);
-        addFilterChip(filters, HexagramRepository.FILTER_LOWER_CANON, activity);
-        addFilterChip(filters, HexagramRepository.FILTER_FAVORITES, activity);
-        content.addView(Ui.horizontalChips(requireContext(), filters));
-        listContainer = Ui.column(requireContext());
-        content.addView(listContainer, new LinearLayout.LayoutParams(-1, -2));
+        setupList(activity);
+        setupSearch(savedInstanceState);
+        setupFilterChips(activity);
         updateChipStyles();
         renderList(activity);
-        return Ui.pageWithChrome(activity, content, "學習");
+        return Ui.pageWithChrome(activity, binding.getRoot(), "學習");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        adapter = null;
+        filterChips.clear();
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_FILTER, activeFilter);
-        if (searchInput != null) outState.putString(STATE_QUERY, searchInput.getText().toString());
+        if (binding != null) outState.putString(STATE_QUERY, binding.learnSearchInput.getText().toString());
     }
 
-    private void addFilterChip(LinearLayout filters, String label, MainActivity activity) {
-        TextView chip = Ui.chip(requireContext(), label);
+    private void setupList(MainActivity activity) {
+        adapter = new HexagramAdapter(activity.settings(), new HexagramAdapter.Callbacks() {
+            @Override public void open(Hexagram hexagram) { activity.showHexagramDetail(hexagram.number); }
+            @Override public void favoriteChanged(Hexagram hexagram, boolean favorite) {
+                if (HexagramRepository.FILTER_FAVORITES.equals(activeFilter)) {
+                    renderList(activity);
+                } else {
+                    int position = adapter.currentIndexOf(hexagram.number);
+                    if (position != RecyclerView.NO_POSITION) adapter.notifyItemChanged(position);
+                }
+            }
+        });
+        binding.learnList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.learnList.setAdapter(adapter);
+        binding.learnList.setHasFixedSize(false);
+    }
+
+    private void setupSearch(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            binding.learnSearchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
+        }
+        binding.learnSearchInput.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                renderList((MainActivity) requireActivity());
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void setupFilterChips(MainActivity activity) {
+        bindFilterChip(binding.learnFilterAllChip, HexagramRepository.FILTER_ALL, activity);
+        bindFilterChip(binding.learnFilterUpperChip, HexagramRepository.FILTER_UPPER_CANON, activity);
+        bindFilterChip(binding.learnFilterLowerChip, HexagramRepository.FILTER_LOWER_CANON, activity);
+        bindFilterChip(binding.learnFilterFavoritesChip, HexagramRepository.FILTER_FAVORITES, activity);
+    }
+
+    private void bindFilterChip(TextView chip, String label, MainActivity activity) {
         chip.setContentDescription("篩選" + label);
+        chip.setTag(label);
         chip.setOnClickListener(v -> {
             activeFilter = label;
             updateChipStyles();
             renderList(activity);
         });
         filterChips.add(chip);
-        Ui.addWithMargins(filters, chip, -2, -2, 0, 0, 8, 0);
     }
 
     private void updateChipStyles() {
         for (TextView chip : filterChips) {
-            boolean selected = activeFilter.contentEquals(chip.getText());
+            boolean selected = activeFilter.equals(chip.getTag());
             chip.setTextColor(Ui.color(requireContext(), selected ? R.color.ic_background : R.color.ic_text_muted));
-            chip.setBackground(selected
-                    ? Ui.bg(requireContext(), R.color.ic_ink, 999)
-                    : Ui.strokeBg(requireContext(), R.color.ic_surface_container_low, R.color.ic_outline, 999));
+            chip.setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip);
             chip.setSelected(selected);
         }
     }
 
     private void renderList(MainActivity activity) {
-        if (listContainer == null || searchInput == null) return;
-        listContainer.removeAllViews();
+        if (binding == null || adapter == null) return;
         List<Hexagram> hexagrams = HexagramRepository.filter(
-                searchInput.getText().toString(),
+                binding.learnSearchInput.getText().toString(),
                 activeFilter,
                 activity.settings().favoriteHexagrams()
         );
-        if (hexagrams.isEmpty()) {
-            TextView empty = Ui.text(requireContext(), "沒有符合的卦象", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
-            empty.setGravity(Gravity.CENTER);
-            Ui.addWithMargins(listContainer, empty, -1, -2, 0, 28, 0, 0);
-            return;
+        binding.learnNoResults.setVisibility(hexagrams.isEmpty() ? View.VISIBLE : View.GONE);
+        binding.learnList.setVisibility(hexagrams.isEmpty() ? View.GONE : View.VISIBLE);
+        adapter.submitList(hexagrams);
+    }
+
+    private static final class HexagramAdapter extends ListAdapter<Hexagram, HexagramAdapter.Holder> {
+        private final SettingsStore settings;
+        private final Callbacks callbacks;
+
+        HexagramAdapter(SettingsStore settings, Callbacks callbacks) {
+            super(new DiffUtil.ItemCallback<Hexagram>() {
+                @Override public boolean areItemsTheSame(@NonNull Hexagram oldItem, @NonNull Hexagram newItem) {
+                    return oldItem.number == newItem.number;
+                }
+
+                @Override public boolean areContentsTheSame(@NonNull Hexagram oldItem, @NonNull Hexagram newItem) {
+                    return oldItem.number == newItem.number
+                            && Objects.equals(oldItem.name, newItem.name)
+                            && Objects.equals(oldItem.fullName, newItem.fullName)
+                            && Objects.equals(oldItem.upper, newItem.upper)
+                            && Objects.equals(oldItem.lower, newItem.lower)
+                            && Objects.equals(oldItem.summary, newItem.summary)
+                            && Objects.equals(oldItem.tags, newItem.tags);
+                }
+            });
+            this.settings = settings;
+            this.callbacks = callbacks;
+            setHasStableIds(true);
         }
-        for (Hexagram hex : hexagrams) addHexagramCard(activity, listContainer, hex);
-    }
 
-    private void addHexagramCard(MainActivity activity, LinearLayout parent, Hexagram hex) {
-        SettingsStore settings = activity.settings();
-        LinearLayout card = Ui.card(requireContext());
-        LinearLayout row = Ui.row(requireContext());
-        row.addView(Ui.hexagramView(requireContext(), hex, 34, 4, false), new LinearLayout.LayoutParams(Ui.dp(requireContext(), 46), -2));
-        LinearLayout texts = Ui.column(requireContext());
-        texts.addView(Ui.text(requireContext(), "第" + hex.number + "卦", 12, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        texts.addView(Ui.text(requireContext(), hex.name, 24, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
-        texts.addView(Ui.text(requireContext(), "上" + hex.upper + "　下" + hex.lower, 12, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        row.addView(texts, new LinearLayout.LayoutParams(0, -2, 1));
-        boolean favorite = settings.isFavorite(hex.number);
-        FavoriteHexagramPresentation favoritePresentation = FavoriteHexagramPresentation.from(hex.number, favorite);
-        TextView fav = Ui.text(requireContext(), favoritePresentation.symbol, 26, android.graphics.Typeface.NORMAL, favorite ? R.color.ic_gold : R.color.ic_outline_strong, false);
-        fav.setGravity(Gravity.CENTER);
-        fav.setContentDescription(favoritePresentation.contentDescription);
-        fav.setOnClickListener(v -> {
-            boolean on = settings.toggleFavorite(hex.number);
-            if (HexagramRepository.FILTER_FAVORITES.equals(activeFilter)) {
-                renderList(activity);
-            } else {
-                FavoriteHexagramPresentation updated = FavoriteHexagramPresentation.from(hex.number, on);
-                fav.setText(updated.symbol);
-                fav.setTextColor(Ui.color(requireContext(), on ? R.color.ic_gold : R.color.ic_outline_strong));
-                fav.setContentDescription(updated.contentDescription);
+        @Override public long getItemId(int position) { return getItem(position).number; }
+
+        @NonNull
+        @Override
+        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new Holder(ItemHexagramBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
+            Hexagram hexagram = getItem(position);
+            boolean favorite = settings.isFavorite(hexagram.number);
+            HexagramListItemPresentation presentation = HexagramListItemPresentation.from(hexagram, favorite);
+            holder.binding.hexagramItemHexagram.configure(hexagram, 34, 4, false);
+            holder.binding.hexagramItemNumber.setText(presentation.numberText);
+            holder.binding.hexagramItemName.setText(presentation.nameText);
+            holder.binding.hexagramItemTrigrams.setText(presentation.trigramsText);
+            holder.binding.hexagramItemTags.setText(presentation.tagsText);
+            holder.binding.hexagramItemFavorite.setText(presentation.favoriteSymbol);
+            holder.binding.hexagramItemFavorite.setTextColor(Ui.color(holder.itemView.getContext(),
+                    favorite ? R.color.ic_gold : R.color.ic_outline_strong));
+            holder.binding.hexagramItemFavorite.setContentDescription(presentation.favoriteContentDescription);
+            holder.binding.hexagramItemFavorite.setOnClickListener(v -> {
+                boolean on = settings.toggleFavorite(hexagram.number);
+                callbacks.favoriteChanged(hexagram, on);
+            });
+            holder.itemView.setOnClickListener(v -> callbacks.open(hexagram));
+        }
+
+        int currentIndexOf(int number) {
+            for (int i = 0; i < getItemCount(); i++) {
+                if (getItem(i).number == number) return i;
             }
-        });
-        row.addView(fav, new LinearLayout.LayoutParams(Ui.dp(requireContext(), 48), Ui.dp(requireContext(), 48)));
-        card.addView(row);
-        card.addView(Ui.chipsRow(requireContext(), hex.tags.toArray(new String[0])));
-        card.setOnClickListener(v -> activity.showHexagramDetail(hex.number));
-        Ui.addWithMargins(parent, card, -1, -2, 0, 14, 0, 0);
-    }
+            return RecyclerView.NO_POSITION;
+        }
 
+        interface Callbacks {
+            void open(Hexagram hexagram);
+            void favoriteChanged(Hexagram hexagram, boolean favorite);
+        }
+
+        static final class Holder extends RecyclerView.ViewHolder {
+            final ItemHexagramBinding binding;
+
+            Holder(ItemHexagramBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+        }
+    }
 }

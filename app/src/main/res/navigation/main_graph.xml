@@ -32,17 +32,40 @@
     <fragment
         android:id="@+id/methodFragment"
         android:name="fcu.app.i_ching.ui.MethodFragment"
-        android:label="Method" />
+        android:label="Method">
+        <argument
+            android:name="question"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/ritualFragment"
         android:name="fcu.app.i_ching.ui.RitualFragment"
-        android:label="Ritual" />
+        android:label="Ritual">
+        <argument
+            android:name="question"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="method"
+            android:defaultValue="COINS"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/resultFragment"
         android:name="fcu.app.i_ching.ui.ResultFragment"
-        android:label="Result" />
+        android:label="Result">
+        <argument
+            android:name="resultJson"
+            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="recordId"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/recordsFragment"
@@ -57,7 +80,12 @@
     <fragment
         android:id="@+id/hexagramDetailFragment"
         android:name="fcu.app.i_ching.ui.HexagramDetailFragment"
-        android:label="Hexagram Detail" />
+        android:label="Hexagram Detail">
+        <argument
+            android:name="number"
+            android:defaultValue="15"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileSettingsFragment"

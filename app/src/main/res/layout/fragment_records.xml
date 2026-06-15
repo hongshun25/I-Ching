@@ -90,9 +90,25 @@
         </LinearLayout>
     </HorizontalScrollView>
 
-    <LinearLayout
+    <TextView
+        android:id="@id/records_no_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="@string/records_no_results"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <include
+        android:id="@id/records_empty_state"
+        layout="@layout/include_empty_state"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@id/records_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:nestedScrollingEnabled="false" />
 </LinearLayout>

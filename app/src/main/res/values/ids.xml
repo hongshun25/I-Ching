@@ -68,4 +68,46 @@
     <item name="result_avoid_items" type="id" />
     <item name="result_classical_text" type="id" />
     <item name="result_share_preview" type="id" />
+    <item name="daily_greeting" type="id" />
+    <item name="daily_card" type="id" />
+    <item name="daily_chips" type="id" />
+    <item name="daily_hexagram" type="id" />
+    <item name="daily_title" type="id" />
+    <item name="daily_judgment" type="id" />
+    <item name="daily_summary" type="id" />
+    <item name="daily_reflection_input" type="id" />
+    <item name="daily_cast_button" type="id" />
+    <item name="daily_records_button" type="id" />
+    <item name="daily_learn_button" type="id" />
+    <item name="question_count" type="id" />
+    <item name="question_presets" type="id" />
+    <item name="method_next_button" type="id" />
+    <item name="method_simple_status" type="id" />
+    <item name="method_coins_status" type="id" />
+    <item name="method_yarrow_status" type="id" />
+    <item name="ritual_header" type="id" />
+    <item name="ritual_progress" type="id" />
+    <item name="ritual_focus" type="id" />
+    <item name="learn_search_input" type="id" />
+    <item name="learn_filter_all_chip" type="id" />
+    <item name="learn_filter_upper_chip" type="id" />
+    <item name="learn_filter_lower_chip" type="id" />
+    <item name="learn_filter_favorites_chip" type="id" />
+    <item name="learn_list" type="id" />
+    <item name="learn_no_results" type="id" />
+    <item name="hexagram_item_hexagram" type="id" />
+    <item name="hexagram_item_number" type="id" />
+    <item name="hexagram_item_name" type="id" />
+    <item name="hexagram_item_trigrams" type="id" />
+    <item name="hexagram_item_tags" type="id" />
+    <item name="hexagram_item_favorite" type="id" />
+    <item name="hex_detail_top_bar" type="id" />
+    <item name="hex_detail_hexagram" type="id" />
+    <item name="hex_detail_chips" type="id" />
+    <item name="hex_detail_title" type="id" />
+    <item name="hex_detail_summary" type="id" />
+    <item name="hex_detail_sections" type="id" />
+    <item name="detail_section_title" type="id" />
+    <item name="detail_section_body" type="id" />
+    <item name="records_empty_state" type="id" />
 </resources>

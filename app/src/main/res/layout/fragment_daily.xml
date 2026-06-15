@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@id/daily_greeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@id/daily_card"
+        style="@style/IChingCard"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:id="@id/daily_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal" />
+
+        <fcu.app.i_ching.ui.HexagramView
+            android:id="@id/daily_hexagram"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@id/daily_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:textColor="@color/ic_ink"
+            android:textSize="26sp" />
+
+        <TextView
+            android:id="@id/daily_judgment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:textColor="@color/ic_gold"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@id/daily_summary"
+            style="@style/IChingBodyText"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/daily_reflection_input"
+        android:text="@string/daily_reflection_label"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@id/daily_reflection_input"
+        style="@style/IChingInput"
+        android:layout_height="96dp"
+        android:hint="@string/daily_reflection_hint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:minLines="3" />
+
+    <Button
+        android:id="@id/daily_cast_button"
+        style="@style/IChingPrimaryButton"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/daily_cast" />
+
+    <Button
+        android:id="@id/daily_records_button"
+        style="@style/IChingSecondaryButton"
+        android:layout_marginBottom="10dp"
+        android:text="@string/daily_records" />
+
+    <Button
+        android:id="@id/daily_learn_button"
+        style="@style/IChingSecondaryButton"
+        android:text="@string/daily_learn" />
+</LinearLayout>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/IChingPageTitle"
+        android:text="@string/learn_title"
+        android:textSize="38sp" />
+
+    <TextView
+        style="@style/IChingBodyText"
+        android:text="@string/learn_body" />
+
+    <EditText
+        android:id="@id/learn_search_input"
+        style="@style/IChingInput"
+        android:layout_height="54dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="14dp"
+        android:hint="@string/learn_search_hint"
+        android:inputType="text"
+        android:minLines="1" />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@id/learn_filter_all_chip"
+                style="@style/RecordsFilterChip"
+                android:text="全部" />
+
+            <TextView
+                android:id="@id/learn_filter_upper_chip"
+                style="@style/RecordsFilterChip"
+                android:text="上經" />
+
+            <TextView
+                android:id="@id/learn_filter_lower_chip"
+                style="@style/RecordsFilterChip"
+                android:text="下經" />
+
+            <TextView
+                android:id="@id/learn_filter_favorites_chip"
+                style="@style/RecordsFilterChip"
+                android:text="我的收藏" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@id/learn_no_results"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center"
+        android:text="@string/learn_no_results"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@id/learn_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false" />
+</LinearLayout>
