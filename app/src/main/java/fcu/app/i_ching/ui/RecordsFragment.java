@@ -3,7 +3,6 @@ package fcu.app.i_ching.ui;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import fcu.app.i_ching.MainActivity;
@@ -30,6 +28,7 @@ import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.data.LocalRecordStore;
+import fcu.app.i_ching.ui.presentation.RecordCardPresentation;
 
 public class RecordsFragment extends Fragment {
     private static final String STATE_QUERY = "query";
@@ -61,7 +60,6 @@ public class RecordsFragment extends Fragment {
         content.addView(Ui.text(requireContext(), "占卜紀錄", 36, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
         searchInput = Ui.bottomInput(requireContext(), "搜尋問題、筆記、卦名或標籤...", 1);
         searchInput.setId(R.id.records_search_input);
-        searchInput.setContentDescription("搜尋占卜紀錄");
         if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -200,20 +198,20 @@ public class RecordsFragment extends Fragment {
 
     private void addRecordCard(MainActivity activity, LinearLayout parent, DivinationRecord record) {
         Hexagram hex = HexagramRepository.get(record.hexagramNumber);
-        Hexagram relating = HexagramRepository.get(record.relatingHexagramNumber);
+        RecordCardPresentation presentation = RecordCardPresentation.from(record);
         LinearLayout card = Ui.card(requireContext());
-        card.addView(Ui.text(requireContext(), "第" + hex.number + "卦｜" + hex.fullName, 22, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
-        card.addView(Ui.text(requireContext(), relationText(hex, relating), 15, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
-        card.addView(Ui.text(requireContext(), changingText(record), 13, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false));
-        card.addView(Ui.text(requireContext(), record.question, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        card.addView(Ui.text(requireContext(), record.method.label + " · " + DateFormat.format("yyyy/MM/dd HH:mm", new Date(record.createdAt)), 12, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false));
-        if (record.note != null && !record.note.isEmpty()) card.addView(Ui.text(requireContext(), record.note, 15, android.graphics.Typeface.NORMAL, R.color.ic_gold, false));
+        card.addView(Ui.text(requireContext(), presentation.titleText, 22, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
+        card.addView(Ui.text(requireContext(), presentation.relationText, 15, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
+        card.addView(Ui.text(requireContext(), presentation.changingText, 13, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false));
+        card.addView(Ui.text(requireContext(), presentation.questionText, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
+        card.addView(Ui.text(requireContext(), presentation.metaText, 12, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, false));
+        if (presentation.hasNote()) card.addView(Ui.text(requireContext(), presentation.noteText, 15, android.graphics.Typeface.NORMAL, R.color.ic_gold, false));
         LinearLayout actions = Ui.row(requireContext());
         Button edit = Ui.pill(requireContext(), "編輯筆記", false);
-        edit.setContentDescription("編輯第" + hex.number + "卦紀錄筆記");
+        edit.setContentDescription(presentation.editContentDescription);
         edit.setOnClickListener(v -> showEditDialog(record));
         Button delete = Ui.pill(requireContext(), "刪除", false);
-        delete.setContentDescription("刪除第" + hex.number + "卦紀錄");
+        delete.setContentDescription(presentation.deleteContentDescription);
         delete.setOnClickListener(v -> confirmDelete(record));
         Ui.addWithMargins(actions, edit, 0, Ui.dp(requireContext(), 46), 0, 16, 6, 0);
         LinearLayout.LayoutParams editParams = (LinearLayout.LayoutParams) edit.getLayoutParams();
@@ -235,21 +233,6 @@ public class RecordsFragment extends Fragment {
         }
     }
 
-    private String relationText(Hexagram hex, Hexagram relating) {
-        if (hex.number == relating.number) return "本卦即之卦｜第" + relating.number + "卦 " + relating.fullName;
-        return "本卦 → 之卦｜第" + hex.number + "卦 " + hex.name + " → 第" + relating.number + "卦 " + relating.name;
-    }
-
-    private String changingText(DivinationRecord record) {
-        if (record.changingLines.isEmpty()) return "無變爻";
-        StringBuilder builder = new StringBuilder("變爻 ");
-        for (int i = 0; i < record.changingLines.size(); i++) {
-            if (i > 0) builder.append("、");
-            builder.append(record.changingLines.get(i));
-        }
-        return builder.toString();
-    }
-
     private LocalRecordStore.ChangeFilter changeFilterFromName(String name) {
         try {
             return name == null ? LocalRecordStore.ChangeFilter.ALL : LocalRecordStore.ChangeFilter.valueOf(name);
@@ -262,7 +245,6 @@ public class RecordsFragment extends Fragment {
         EditText input = Ui.bottomInput(requireContext(), "補充這次占卜的反思...", 4);
         input.setText(record.note == null ? "" : record.note);
         input.setSelection(input.getText().length());
-        input.setContentDescription("編輯占卜紀錄筆記");
         new AlertDialog.Builder(requireContext())
                 .setTitle("編輯筆記")
                 .setView(input)

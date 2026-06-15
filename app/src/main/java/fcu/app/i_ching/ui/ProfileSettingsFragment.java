@@ -119,6 +119,7 @@ public class ProfileSettingsFragment extends Fragment {
     private void addRow(LinearLayout parent, String label, String value, Toggle toggle) {
         LinearLayout row = Ui.row(requireContext());
         row.setPadding(0, Ui.dp(requireContext(), 8), 0, Ui.dp(requireContext(), 8));
+        row.setMinimumHeight(Ui.dp(requireContext(), 48));
         TextView l = Ui.text(requireContext(), label, 16, android.graphics.Typeface.NORMAL, R.color.ic_ink, false);
         row.addView(l, new LinearLayout.LayoutParams(0, -2, 1));
         if (toggle == null) {
@@ -127,6 +128,11 @@ public class ProfileSettingsFragment extends Fragment {
             Switch sw = new Switch(requireContext());
             sw.setId(toggleId(label));
             sw.setTag(label);
+            sw.setContentDescription(label);
+            sw.setMinWidth(Ui.dp(requireContext(), 48));
+            sw.setMinimumWidth(Ui.dp(requireContext(), 48));
+            sw.setMinHeight(Ui.dp(requireContext(), 48));
+            sw.setMinimumHeight(Ui.dp(requireContext(), 48));
             sw.setOnCheckedChangeListener((buttonView, isChecked) -> toggle.changed(isChecked));
             row.addView(sw);
         }
@@ -137,6 +143,7 @@ public class ProfileSettingsFragment extends Fragment {
         LinearLayout row = Ui.row(requireContext());
         row.setId(actionId(label));
         row.setPadding(0, Ui.dp(requireContext(), 10), 0, Ui.dp(requireContext(), 10));
+        row.setMinimumHeight(Ui.dp(requireContext(), 48));
         row.setClickable(true);
         row.setFocusable(true);
         row.setContentDescription(label + "，" + value);

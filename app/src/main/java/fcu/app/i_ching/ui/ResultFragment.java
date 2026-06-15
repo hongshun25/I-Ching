@@ -20,7 +20,7 @@ import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationResult;
-import fcu.app.i_ching.data.HexagramLine;
+import fcu.app.i_ching.ui.presentation.ResultPresentation;
 
 public class ResultFragment extends Fragment {
     private static final String STATE_RECORD_ID = "recordId";
@@ -32,6 +32,7 @@ public class ResultFragment extends Fragment {
     private EditText noteInput;
     private Button saveButton;
     private ResultViewModel viewModel;
+    private ResultPresentation presentation;
 
     public static ResultFragment newInstance(DivinationResult value) {
         ResultFragment fragment = new ResultFragment();
@@ -42,27 +43,26 @@ public class ResultFragment extends Fragment {
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         result = readResult();
+        presentation = ResultPresentation.from(result);
         savedRecordId = readRecordId(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
 
         LinearLayout content = Ui.column(requireContext());
         LinearLayout questionBubble = Ui.card(requireContext());
-        TextView q = Ui.text(requireContext(), "“" + result.question + "”", 16, android.graphics.Typeface.ITALIC, R.color.ic_text_muted, false); q.setGravity(Gravity.CENTER); questionBubble.addView(q);
+        TextView q = Ui.text(requireContext(), presentation.questionText, 16, android.graphics.Typeface.ITALIC, R.color.ic_text_muted, false); q.setGravity(Gravity.CENTER); questionBubble.addView(q);
         content.addView(questionBubble, new LinearLayout.LayoutParams(-1, -2));
         LinearLayout hero = Ui.card(requireContext()); hero.setGravity(Gravity.CENTER_HORIZONTAL);
         hero.addView(Ui.hexagramView(requireContext(), result.hexagram, 96, 8, false));
-        TextView title = Ui.text(requireContext(), "第" + result.hexagram.number + "卦｜" + result.hexagram.fullName, 36, android.graphics.Typeface.BOLD, R.color.ic_ink, true); title.setGravity(Gravity.CENTER);
-        TextView tags = Ui.text(requireContext(), "上" + result.hexagram.upper + "　下" + result.hexagram.lower + "　" + result.method.label, 14, android.graphics.Typeface.BOLD, R.color.ic_text_muted, false); tags.setGravity(Gravity.CENTER);
+        TextView title = Ui.text(requireContext(), presentation.titleText, 36, android.graphics.Typeface.BOLD, R.color.ic_ink, true); title.setGravity(Gravity.CENTER);
+        TextView tags = Ui.text(requireContext(), presentation.tagText, 14, android.graphics.Typeface.BOLD, R.color.ic_text_muted, false); tags.setGravity(Gravity.CENTER);
         TextView insight = Ui.text(requireContext(), result.hexagram.summary, 22, android.graphics.Typeface.NORMAL, R.color.ic_gold, true); insight.setGravity(Gravity.CENTER);
         Ui.addWithMargins(hero, title, -1, -2, 0, 18, 0, 4); hero.addView(tags); Ui.addWithMargins(hero, insight, -1, -2, 0, 18, 0, 0);
         Ui.addWithMargins(content, hero, -1, -2, 0, 18, 0, 18);
         LinearLayout relating = Ui.card(requireContext());
         relating.addView(Ui.text(requireContext(), "本卦與之卦", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true));
-        relating.addView(Ui.text(requireContext(), "本卦 第" + result.hexagram.number + "卦｜" + result.hexagram.fullName
-                + "  →  之卦 第" + result.relatingHexagramNumber + "卦｜" + result.relatingHexagram.fullName,
-                16, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
-        Ui.addWithMargins(relating, Ui.text(requireContext(), changingSummary(), 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 8, 0, 0);
-        String changedLines = changedLineText();
+        relating.addView(Ui.text(requireContext(), presentation.relationText, 16, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
+        Ui.addWithMargins(relating, Ui.text(requireContext(), presentation.changingSummary, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 8, 0, 0);
+        String changedLines = presentation.changedLineText;
         if (!changedLines.isEmpty()) {
             Ui.addWithMargins(relating, Ui.text(requireContext(), changedLines, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 10, 0, 0);
         }
@@ -76,12 +76,12 @@ public class ResultFragment extends Fragment {
         LinearLayout classical = Ui.card(requireContext()); classical.addView(Ui.text(requireContext(), "古典卦象解釋", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true)); classical.addView(Ui.text(requireContext(), result.hexagram.judgment + "\n\n" + result.hexagram.classicalText, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false)); Ui.addWithMargins(content, classical, -1, -2, 0, 16, 0, 0);
         LinearLayout sharePreview = Ui.card(requireContext());
         sharePreview.addView(Ui.text(requireContext(), "可分享文字", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true));
-        sharePreview.addView(Ui.text(requireContext(), shareText(), 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
+        sharePreview.addView(Ui.text(requireContext(), presentation.shareText, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         Ui.addWithMargins(content, sharePreview, -1, -2, 0, 16, 0, 0);
         TextView noteLabel = Ui.text(requireContext(), "這個結果讓你想到什麼？", 14, android.graphics.Typeface.BOLD, R.color.ic_ink, false); Ui.addWithMargins(content, noteLabel, -1, -2, 0, 20, 0, 4);
         noteInput = Ui.bottomInput(requireContext(), "寫下你的靈感或打算採取的行動...", 3);
         noteInput.setId(R.id.result_note_input);
-        noteInput.setContentDescription("占卜結果筆記");
+        noteLabel.setLabelFor(R.id.result_note_input);
         String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
         if (restoredNote != null) {
             noteInput.setText(restoredNote);
@@ -156,54 +156,10 @@ public class ResultFragment extends Fragment {
         NavigationArgs.putRecordId(getArguments(), recordId);
     }
 
-    private String changingSummary() {
-        if (result.changingLines.isEmpty()) return "本次無變爻，之卦與本卦相同。";
-        StringBuilder builder = new StringBuilder("變爻：");
-        for (int i = 0; i < result.changingLines.size(); i++) {
-            if (i > 0) builder.append("、");
-            builder.append(positionName(result.changingLines.get(i)));
-        }
-        return builder.toString();
-    }
-
-    private String changedLineText() {
-        if (result.changingLines.isEmpty()) return "";
-        StringBuilder builder = new StringBuilder();
-        for (Integer position : result.changingLines) {
-            if (position == null || position < 1 || position > result.hexagram.lineTexts.size()) continue;
-            HexagramLine line = result.hexagram.lineTexts.get(position - 1);
-            if (builder.length() > 0) builder.append("\n\n");
-            builder.append(line.label).append("：").append(line.text).append("\n").append(line.modernHint);
-        }
-        return builder.toString();
-    }
-
-    private String shareText() {
-        return "《易經占卜》\n"
-                + "問題：" + result.question + "\n"
-                + "占法：" + result.method.label + "\n"
-                + "本卦：第" + result.hexagram.number + "卦｜" + result.hexagram.fullName + "\n"
-                + changingSummary() + "\n"
-                + "之卦：第" + result.relatingHexagramNumber + "卦｜" + result.relatingHexagram.fullName + "\n"
-                + "啟示：" + result.hexagram.summary;
-    }
-
     private void shareResult() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, shareText());
+        intent.putExtra(Intent.EXTRA_TEXT, presentation.shareText);
         startActivity(Intent.createChooser(intent, "分享啟示"));
-    }
-
-    private String positionName(int position) {
-        switch (position) {
-            case 1: return "初爻";
-            case 2: return "二爻";
-            case 3: return "三爻";
-            case 4: return "四爻";
-            case 5: return "五爻";
-            case 6: return "上爻";
-            default: return "第" + position + "爻";
-        }
     }
 }

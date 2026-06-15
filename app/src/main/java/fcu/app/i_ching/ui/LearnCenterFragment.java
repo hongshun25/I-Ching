@@ -22,6 +22,7 @@ import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.data.SettingsStore;
+import fcu.app.i_ching.ui.presentation.FavoriteHexagramPresentation;
 
 public class LearnCenterFragment extends Fragment {
     private static final String STATE_FILTER = "filter";
@@ -43,7 +44,6 @@ public class LearnCenterFragment extends Fragment {
         content.addView(Ui.text(requireContext(), "六十四卦", 38, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
         content.addView(Ui.text(requireContext(), "探索易經六十四卦的深層智慧，每一卦皆象徵自然與人生的變化規律。", 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         searchInput = Ui.bottomInput(requireContext(), "搜尋卦名或關鍵字...", 1);
-        searchInput.setContentDescription("搜尋六十四卦");
         if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
         searchInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -123,17 +123,19 @@ public class LearnCenterFragment extends Fragment {
         texts.addView(Ui.text(requireContext(), "上" + hex.upper + "　下" + hex.lower, 12, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         row.addView(texts, new LinearLayout.LayoutParams(0, -2, 1));
         boolean favorite = settings.isFavorite(hex.number);
-        TextView fav = Ui.text(requireContext(), favorite ? "♥" : "♡", 26, android.graphics.Typeface.NORMAL, favorite ? R.color.ic_gold : R.color.ic_outline_strong, false);
+        FavoriteHexagramPresentation favoritePresentation = FavoriteHexagramPresentation.from(hex.number, favorite);
+        TextView fav = Ui.text(requireContext(), favoritePresentation.symbol, 26, android.graphics.Typeface.NORMAL, favorite ? R.color.ic_gold : R.color.ic_outline_strong, false);
         fav.setGravity(Gravity.CENTER);
-        updateFavoriteDescription(fav, hex.number, favorite);
+        fav.setContentDescription(favoritePresentation.contentDescription);
         fav.setOnClickListener(v -> {
             boolean on = settings.toggleFavorite(hex.number);
             if (HexagramRepository.FILTER_FAVORITES.equals(activeFilter)) {
                 renderList(activity);
             } else {
-                fav.setText(on ? "♥" : "♡");
+                FavoriteHexagramPresentation updated = FavoriteHexagramPresentation.from(hex.number, on);
+                fav.setText(updated.symbol);
                 fav.setTextColor(Ui.color(requireContext(), on ? R.color.ic_gold : R.color.ic_outline_strong));
-                updateFavoriteDescription(fav, hex.number, on);
+                fav.setContentDescription(updated.contentDescription);
             }
         });
         row.addView(fav, new LinearLayout.LayoutParams(Ui.dp(requireContext(), 48), Ui.dp(requireContext(), 48)));
@@ -143,7 +145,4 @@ public class LearnCenterFragment extends Fragment {
         Ui.addWithMargins(parent, card, -1, -2, 0, 14, 0, 0);
     }
 
-    private void updateFavoriteDescription(TextView view, int hexagramNumber, boolean favorite) {
-        view.setContentDescription((favorite ? "取消收藏" : "加入收藏") + "第" + hexagramNumber + "卦");
-    }
 }

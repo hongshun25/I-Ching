@@ -13,7 +13,6 @@ import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
@@ -77,6 +76,8 @@ public final class Ui {
         TextView chip = text(context, label, 13, Typeface.BOLD, R.color.ic_text_muted, false);
         chip.setGravity(Gravity.CENTER);
         chip.setPadding(dp(context, 12), dp(context, 5), dp(context, 12), dp(context, 5));
+        chip.setMinWidth(dp(context, 48));
+        chip.setMinHeight(dp(context, 48));
         chip.setBackground(strokeBg(context, R.color.ic_surface_container_low, R.color.ic_outline, 999));
         return chip;
     }
@@ -193,31 +194,8 @@ public final class Ui {
         return card;
     }
 
-    public static LinearLayout hexagramView(Context context, Hexagram hexagram, int widthDp, int lineHeightDp, boolean useGoldForChanging) {
-        LinearLayout group = column(context);
-        group.setGravity(Gravity.CENTER);
-        group.setPadding(0, dp(context, 4), 0, dp(context, 4));
-        for (int i = 5; i >= 0; i--) {
-            boolean yang = hexagram.linesBottomToTop[i];
-            if (yang) {
-                View line = new View(context);
-                line.setBackground(bg(context, R.color.ic_ink, 2));
-                addWithMargins(group, line, dp(context, widthDp), dp(context, lineHeightDp), 0, 3, 0, 3);
-            } else {
-                LinearLayout broken = row(context);
-                broken.setGravity(Gravity.CENTER);
-                View left = new View(context);
-                View gap = new Space(context);
-                View right = new View(context);
-                left.setBackground(bg(context, R.color.ic_ink, 2));
-                right.setBackground(bg(context, R.color.ic_ink, 2));
-                broken.addView(left, new LinearLayout.LayoutParams(0, dp(context, lineHeightDp), 1));
-                broken.addView(gap, new LinearLayout.LayoutParams(dp(context, Math.max(8, widthDp / 5)), dp(context, lineHeightDp)));
-                broken.addView(right, new LinearLayout.LayoutParams(0, dp(context, lineHeightDp), 1));
-                addWithMargins(group, broken, dp(context, widthDp), dp(context, lineHeightDp), 0, 3, 0, 3);
-            }
-        }
-        return group;
+    public static View hexagramView(Context context, Hexagram hexagram, int widthDp, int lineHeightDp, boolean useGoldForChanging) {
+        return new HexagramView(context, hexagram, widthDp, lineHeightDp, useGoldForChanging);
     }
 
     public static EditText bottomInput(Context context, String hint, int minLines) {

@@ -24,4 +24,22 @@
     <item name="bottom_nav_records" type="id" />
     <item name="bottom_nav_learn" type="id" />
     <item name="bottom_nav_profile" type="id" />
+    <item name="top_bar_left_action" type="id" />
+    <item name="top_bar_title" type="id" />
+    <item name="top_bar_right_action" type="id" />
+    <item name="empty_state_art" type="id" />
+    <item name="empty_state_title" type="id" />
+    <item name="empty_state_body" type="id" />
+    <item name="empty_state_action" type="id" />
+    <item name="record_item_title" type="id" />
+    <item name="record_item_relation" type="id" />
+    <item name="record_item_changing" type="id" />
+    <item name="record_item_question" type="id" />
+    <item name="record_item_meta" type="id" />
+    <item name="record_item_note" type="id" />
+    <item name="record_item_edit" type="id" />
+    <item name="record_item_delete" type="id" />
+    <item name="settings_row_label" type="id" />
+    <item name="settings_row_value" type="id" />
+    <item name="settings_row_toggle" type="id" />
 </resources>

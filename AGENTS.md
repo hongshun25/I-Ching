@@ -32,13 +32,18 @@ Use the Gradle wrapper from the repository root:
 - `./gradlew connectedDebugAndroidTest` runs instrumentation tests on a connected device or emulator.
 - `./gradlew lintDebug` runs Android lint checks for the debug variant.
 - `./gradlew clean` removes generated build outputs when caches or stale artifacts interfere.
+- `./gradlew assembleDebugAndroidTest` builds the debug instrumentation APK.
+- `./gradlew pixel2Api35DebugAndroidTest` runs instrumentation tests on the configured Gradle managed device when the local Android SDK has the required emulator/system image installed.
 
 Current known verification state after the local Beta stabilization work:
 
 - `./gradlew testDebugUnitTest` passes.
 - `./gradlew lintDebug` passes.
 - `./gradlew assembleDebug` passes.
+- `./gradlew assembleDebugAndroidTest` passes.
+- `./gradlew pixel2Api35DebugAndroidTest` passes in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning; the task is currently successful.
 - `./gradlew connectedDebugAndroidTest` builds the app/test APK but cannot run without an attached device or emulator; the current environment reports `No connected devices!`.
+- `./gradlew pixel2Api35DebugAndroidTest` is the preferred no-physical-device instrumentation command when managed-device prerequisites are installed.
 
 ## Coding Style & Naming Conventions
 
@@ -86,11 +91,13 @@ Current JVM test coverage includes:
 - `RecordRepositoryTest` also covers exported Room v1 schema and repository async export callbacks.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
 - `LocalRecordStoreFilterTest` covers record search by question, note, hexagram, and tag, plus method and changing-line filters.
+- `ResultPresentationTest`, `RecordCardPresentationTest`, and `FavoriteHexagramPresentationTest` cover pure Java UI presentation text for result sharing/changing lines, record cards, and favorite labels.
 
 Current instrumentation coverage includes:
 
 - `ExampleInstrumentedTest` checks app package context.
 - `RecordDaoInstrumentedTest` checks Room DAO insert/update/delete-all behavior with an in-memory database.
+- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts, and profile delete-all. Espresso accessibility checks are enabled in this workflow test class.
 
 Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, export formatting, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, local-mode entry, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, SAF export, delete-all, and UI workflows.
 

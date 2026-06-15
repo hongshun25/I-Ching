@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">I-Ching</string>
+    <string name="brand_title">I CHING</string>
+    <string name="nav_back">返回</string>
+    <string name="nav_menu">選單</string>
+    <string name="nav_settings">設定</string>
+    <string name="records_empty_title">你的占卜紀錄會出現在這裡</string>
+    <string name="records_empty_body">靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。</string>
+    <string name="records_empty_action">開始第一次占卜</string>
+    <string name="record_edit_note">編輯筆記</string>
+    <string name="record_delete">刪除</string>
+    <string name="settings_row_placeholder">未設定</string>
 </resources>
