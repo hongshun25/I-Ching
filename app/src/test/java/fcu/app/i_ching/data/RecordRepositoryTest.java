@@ -1,14 +1,22 @@
 package fcu.app.i_ching.data;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 import androidx.lifecycle.LiveData;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +25,8 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = 28)
 public class RecordRepositoryTest {
     @Test
     public void entityMapperPreservesRecordFields() {
@@ -92,6 +102,34 @@ public class RecordRepositoryTest {
     }
 
     @Test
+    public void legacyMigrationImportsPrefsOnceAndSetsFlag() throws Exception {
+        Context context = RuntimeEnvironment.getApplication();
+        SharedPreferences legacyPrefs = context.getSharedPreferences("record_repository_test_legacy", Context.MODE_PRIVATE);
+        SharedPreferences migrationPrefs = context.getSharedPreferences("record_repository_test_migration", Context.MODE_PRIVATE);
+        legacyPrefs.edit().clear().commit();
+        migrationPrefs.edit().clear().commit();
+
+        JSONArray legacyRecords = new JSONArray();
+        legacyRecords.put(sampleRecord().toJson());
+        legacyPrefs.edit().putString("records", legacyRecords.toString()).commit();
+
+        FakeDao dao = new FakeDao(Collections.emptyList());
+        RecordRepository repository = new RecordRepository(dao, legacyPrefs, migrationPrefs, AppExecutors.direct());
+
+        repository.migrateFromLegacyPrefsIfNeeded();
+
+        assertTrue(migrationPrefs.getBoolean("roomMigrated", false));
+        assertEquals(1, dao.recordsNow().size());
+        assertEquals(7L, dao.recordsNow().get(0).id);
+        assertEquals(1, dao.upsertCount);
+
+        repository.migrateFromLegacyPrefsIfNeeded();
+
+        assertEquals(1, dao.recordsNow().size());
+        assertEquals(1, dao.upsertCount);
+    }
+
+    @Test
     public void exportedSchemaPreservesVersionOneRecordTable() throws Exception {
         JSONObject schema = new JSONObject(new String(Files.readAllBytes(schemaFile().toPath()), StandardCharsets.UTF_8));
         JSONObject database = schema.getJSONObject("database");
@@ -130,9 +168,10 @@ public class RecordRepositoryTest {
 
     private static class FakeDao implements DivinationRecordDao {
         private final List<DivinationRecordEntity> records;
+        private int upsertCount;
 
         FakeDao(List<DivinationRecordEntity> records) {
-            this.records = records;
+            this.records = new ArrayList<>(records);
         }
 
         @Override
@@ -155,20 +194,42 @@ public class RecordRepositoryTest {
 
         @Override
         public void upsert(DivinationRecordEntity record) {
+            upsertCount++;
+            for (int i = 0; i < records.size(); i++) {
+                if (records.get(i).id == record.id) {
+                    records.set(i, record);
+                    return;
+                }
+            }
+            records.add(record);
         }
 
         @Override
         public int updateNote(long id, String note) {
-            return find(id) == null ? 0 : 1;
+            for (int i = 0; i < records.size(); i++) {
+                DivinationRecordEntity entity = records.get(i);
+                if (entity.id == id) {
+                    records.set(i, DivinationRecordEntity.fromRecord(entity.toRecord().withNote(note)));
+                    return 1;
+                }
+            }
+            return 0;
         }
 
         @Override
         public int deleteById(long id) {
-            return find(id) == null ? 0 : 1;
+            for (int i = 0; i < records.size(); i++) {
+                if (records.get(i).id == id) {
+                    records.remove(i);
+                    return 1;
+                }
+            }
+            return 0;
         }
 
         @Override
         public void deleteAll() {
+            records.clear();
         }
     }
 }

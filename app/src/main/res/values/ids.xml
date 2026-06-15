@@ -95,6 +95,7 @@
     <item name="learn_filter_favorites_chip" type="id" />
     <item name="learn_list" type="id" />
     <item name="learn_no_results" type="id" />
+    <item name="hexagram_item_card" type="id" />
     <item name="hexagram_item_hexagram" type="id" />
     <item name="hexagram_item_number" type="id" />
     <item name="hexagram_item_name" type="id" />

@@ -23,7 +23,7 @@ I Ching 是一個原生 Android 本機 Beta，目標是把 `design/stitch_export
 - 結果頁分享/變爻摘要、紀錄卡文字、收藏按鈕、Daily card、提問 presets、占法選項、Ritual reduce-motion 狀態、卦象列表與卦象詳情 sections 已抽到純 Java presentation/state mapper，並以 JVM tests 鎖住主要輸出。
 - `DailyFragment`、`QuestionFragment`、`MethodFragment`、`RitualFragment`、`RecordsFragment`、`LearnCenterFragment`、`HexagramDetailFragment`、`ResultFragment`、`ProfileSettingsFragment` 已改用 XML/ViewBinding 綁定主要畫面結構；record item、hexagram item、detail section、empty state、settings row、top bar、bottom nav 與結果頁 sections 均有 XML component / layout 基礎。
 - `RecordsFragment` 與 `LearnCenterFragment` 已改用 RecyclerView `ListAdapter` / `DiffUtil` 與 stable item IDs，並保留原本搜尋、篩選、收藏、編輯與刪除行為。
-- 已新增 Espresso stable-beta workflow tests，覆蓋 onboarding、本機模式、占卜保存、占法 selected state、紀錄編輯/刪除、result recreate 不重複 auto-save、records 搜尋/篩選狀態保留、學習中心搜尋/detail、收藏、深色模式、JSON/text SAF 匯出 contract 與 delete-all。
+- 已新增 Espresso stable-beta workflow tests，覆蓋 onboarding、本機模式、占卜保存、占法 selected state、紀錄編輯/刪除、result recreate 不重複 auto-save、records 搜尋/篩選狀態保留、學習中心搜尋/detail、收藏、深色模式、JSON/text SAF 匯出 contract 與 delete-all 確認/取消。
 
 ## 技術架構
 
@@ -117,7 +117,7 @@ ViewBinding 已啟用並承載 Beta 2 主要畫面：`fragment_daily.xml`、`fra
 ./gradlew connectedDebugAndroidTest
 ```
 
-最近一次驗證狀態：`./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過。JVM 測試涵蓋六十四卦 pattern mapping、之卦、簡易占法一致性、占卜 snapshot JSON、舊紀錄 fallback、NavigationArgs、Room entity mapper、Room v1 schema、repository async export callback、legacy parser、匯出 JSON/純文字邊界、SettingsStore defaults/toggles/favorites、Profile export writer、紀錄搜尋/篩選、學習中心 filters，以及 Beta 2 presentation/state mapper。Instrumentation 包含 app context smoke test、Room DAO insert/update/delete-all 測試，以及 stable-beta workflow tests；managed device 名稱為 `pixel2Api35`。目前 AGP 仍會在 managed-device setup 印出 `testedAbi` 提醒，但任務可完成。
+最近一次驗證狀態：`./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過；`./gradlew pixel2Api35DebugAndroidTest --stacktrace --rerun-tasks` 在具備 managed-device system image 的環境通過 14/14。`./gradlew connectedDebugAndroidTest` 在目前無連接裝置環境會建置 APK 後回報 `No connected devices!`。JVM 測試涵蓋六十四卦 pattern mapping、之卦、簡易占法一致性、占卜 snapshot JSON、舊紀錄 fallback、NavigationArgs、Room entity mapper、Room v1 schema、repository async export callback、legacy parser、legacy SharedPreferences → Room migration、匯出 JSON/純文字邊界、SettingsStore defaults/toggles/favorites、Profile export writer、Result share chooser intent、紀錄搜尋/篩選、學習中心 filters，以及 Beta 2 presentation/state mapper。Instrumentation 包含 app context smoke test、Room DAO insert/update/delete-all 測試，以及 stable-beta workflow tests；managed device 名稱為 `pixel2Api35`。目前 AGP 仍會在 managed-device setup 印出 `testedAbi` 提醒，但任務可完成。
 
 ## 已知不足
 
@@ -135,13 +135,13 @@ ViewBinding 已啟用並承載 Beta 2 主要畫面：`fragment_daily.xml`、`fra
 - 深色模式可切換，但不是所有畫面都有專屬深色版式調整；大多依 night resources 套色。
 - 已補部分 content descriptions，Espresso workflow tests 已啟用 accessibility checks；仍尚未完成 focus order、字級縮放、TalkBack 與對比的系統性人工驗收。
 - 無視覺回歸測試或截圖比對。
-- Fragment/Espresso workflow tests 已有第一批 stable-beta coverage，並補上 result recreate 不重複 auto-save 與 records filter state 保留；RecyclerView 遷移後仍缺更完整的 RecyclerView action coverage、截圖回歸與完整 SAF document provider 寫入驗收。
+- Fragment/Espresso workflow tests 已有第一批 stable-beta coverage，並補上 result recreate 不重複 auto-save、records filter state 保留、SAF UI launch contract 與 delete-all 取消案例；result 分享 chooser intent 已由 JVM/Robolectric 測試覆蓋。仍缺截圖回歸、字級縮放/focus order 驗收與完整 SAF document provider 寫入成功驗證。SAF 目前已覆蓋 formatter、writer 與 ACTION_CREATE_DOCUMENT 啟動 contract，但尚未透過真實 document provider URI 做端到端寫入驗證。
 - 尚未建立 release signing、版本策略、隱私權政策或資料保護策略。
 
 ## 未來實作展望
 
 1. 補 UI 系統化：延續 XML/ViewBinding 路線，把 Splash、Onboarding、本機模式入口與更多共用 row/section component 分批整理，並讓 `Ui` 逐步收斂為小型 primitive。
-2. 補 instrumentation workflow tests：擴充 SAF 實際寫入、分享 intent、刪除後空狀態一致性、字級縮放與更多 navigation saved-state 驗收。
+2. 補 instrumentation workflow tests：擴充 SAF 實際寫入、刪除後空狀態一致性、字級縮放與更多 navigation saved-state 驗收。
 3. 深化資料模型：補彖傳、象傳、文言、互卦、綜卦、錯卦與可審校資料集。
 4. 完整化占卜邏輯：補多變爻解讀策略，將蓍草模式從機率近似提升為互動十八變流程。
 5. 產品化準備：補 accessibility checklist、release signing、隱私權政策、資料保護策略與 changelog 流程。

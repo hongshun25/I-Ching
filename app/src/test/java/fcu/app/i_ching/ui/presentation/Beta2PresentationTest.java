@@ -53,6 +53,7 @@ public class Beta2PresentationTest {
         assertEquals("第15卦", item.numberText);
         assertEquals("謙", item.nameText);
         assertTrue(item.trigramsText.contains("上坤"));
+        assertEquals("開啟第15卦地山謙詳情", item.openContentDescription);
         assertEquals("♥", item.favoriteSymbol);
         assertEquals("取消收藏第15卦", item.favoriteContentDescription);
     }

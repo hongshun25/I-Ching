@@ -183,6 +183,7 @@ public class LearnCenterFragment extends Fragment {
             holder.binding.hexagramItemName.setText(presentation.nameText);
             holder.binding.hexagramItemTrigrams.setText(presentation.trigramsText);
             holder.binding.hexagramItemTags.setText(presentation.tagsText);
+            holder.itemView.setContentDescription(presentation.openContentDescription);
             holder.binding.hexagramItemFavorite.setText(presentation.favoriteSymbol);
             holder.binding.hexagramItemFavorite.setTextColor(Ui.color(holder.itemView.getContext(),
                     favorite ? R.color.ic_gold : R.color.ic_outline_strong));

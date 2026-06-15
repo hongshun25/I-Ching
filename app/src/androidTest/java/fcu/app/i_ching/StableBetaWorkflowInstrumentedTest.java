@@ -1,5 +1,7 @@
 package fcu.app.i_ching;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
@@ -11,9 +13,12 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.accessibility.AccessibilityChecks;
+import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -36,6 +41,8 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intended;
+import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -236,8 +243,8 @@ public class StableBetaWorkflowInstrumentedTest {
 
             onView(withId(R.id.learn_search_input)).perform(replaceText("謙"));
             closeSoftKeyboard();
-            waitFor(withText("謙"));
-            onView(withText("謙")).perform(scrollTo(), click());
+            waitFor(withContentDescription("開啟第15卦地山謙詳情"));
+            onView(withContentDescription("開啟第15卦地山謙詳情")).perform(callOnClick());
 
             waitFor(withText("第15卦｜謙"));
         }
@@ -257,6 +264,32 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     @Test
+    public void profileExportRowsLaunchStorageAccessFramework() {
+        new SettingsStore(context).setOnboardingComplete(true);
+        seedRecord();
+        Instrumentation.ActivityResult canceled = new Instrumentation.ActivityResult(Activity.RESULT_CANCELED, null);
+
+        Intents.init();
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            intending(createDocumentIntent("application/json", "i_ching_records.json")).respondWith(canceled);
+            intending(createDocumentIntent("text/plain", "i_ching_records.txt")).respondWith(canceled);
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showProfile();
+            });
+
+            waitForExists(withId(R.id.profile_export_json));
+            onView(withId(R.id.profile_export_json)).perform(scrollTo(), callOnClick());
+            waitForIntent(createDocumentIntent("application/json", "i_ching_records.json"));
+
+            onView(withId(R.id.profile_export_text)).perform(scrollTo(), callOnClick());
+            waitForIntent(createDocumentIntent("text/plain", "i_ching_records.txt"));
+        } finally {
+            Intents.release();
+        }
+    }
+
+    @Test
     public void profileDeleteAllRemovesRecords() {
         new SettingsStore(context).setOnboardingComplete(true);
         seedRecord();
@@ -272,6 +305,28 @@ public class StableBetaWorkflowInstrumentedTest {
             waitFor(withText("刪除全部紀錄？"));
             onView(withText("刪除全部")).perform(click());
             waitForRecordsCount(0);
+        }
+    }
+
+    @Test
+    public void profileDeleteAllCancelKeepsRecords() {
+        new SettingsStore(context).setOnboardingComplete(true);
+        seedRecord();
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            waitForRecordsCount(1);
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showProfile();
+            });
+            waitForExists(withId(R.id.profile_delete_all));
+            onView(withId(R.id.profile_delete_all)).perform(scrollTo(), callOnClick());
+            waitFor(withText("刪除全部紀錄？"));
+            onView(withText("取消")).perform(click());
+
+            waitForRecordsCount(1);
+            scenario.onActivity(MainActivity::showRecords);
+            waitFor(withText("內測紀錄問題"));
         }
     }
 
@@ -322,6 +377,36 @@ public class StableBetaWorkflowInstrumentedTest {
             return records.size() == count;
         });
         assertEquals(count, RecordRepository.get(context).recordsNow().size());
+    }
+
+    private void waitForIntent(Matcher<Intent> matcher) {
+        waitForCondition(() -> {
+            try {
+                intended(matcher);
+                return true;
+            } catch (AssertionError e) {
+                return false;
+            }
+        });
+    }
+
+    private Matcher<Intent> createDocumentIntent(String type, String fileName) {
+        return new TypeSafeMatcher<Intent>() {
+            @Override
+            protected boolean matchesSafely(Intent intent) {
+                return Intent.ACTION_CREATE_DOCUMENT.equals(intent.getAction())
+                        && type.equals(intent.getType())
+                        && fileName.equals(intent.getStringExtra(Intent.EXTRA_TITLE));
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("ACTION_CREATE_DOCUMENT intent with type ")
+                        .appendValue(type)
+                        .appendText(" and title ")
+                        .appendValue(fileName);
+            }
+        };
     }
 
     private ViewAction callOnClick() {

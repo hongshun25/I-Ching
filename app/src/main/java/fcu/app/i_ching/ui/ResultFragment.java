@@ -142,9 +142,13 @@ public class ResultFragment extends Fragment {
     }
 
     private void shareResult() {
+        startActivity(createShareChooserIntent(presentation.shareText));
+    }
+
+    static Intent createShareChooserIntent(String shareText) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, presentation.shareText);
-        startActivity(Intent.createChooser(intent, "分享啟示"));
+        intent.putExtra(Intent.EXTRA_TEXT, shareText);
+        return Intent.createChooser(intent, "分享啟示");
     }
 }

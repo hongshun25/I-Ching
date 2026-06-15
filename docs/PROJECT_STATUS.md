@@ -164,16 +164,16 @@ Beta 2 主要使用流程已切換到這批 layout；啟動與入口類畫面仍
 - `IChingLogicTest`：覆蓋三枚銅錢爻值 bucket、蓍草爻值 bucket、乾/坤/謙/坎/既濟/未濟 pattern mapping、64 pattern 唯一性、簡易占法 line/result 一致性、變爻與之卦。
 - `DivinationPersistenceTest`：覆蓋 `DivinationResult` / `DivinationRecord` JSON round-trip、舊紀錄 fallback、舊 JSON 由 lineValues 補算之卦、record upsert/update/delete，以及 auto-save 使用穩定 id 避免重複紀錄的資料層行為。
 - `NavigationArgsTest`：覆蓋 Fragment argument 建立/讀取、fallback 與 result JSON snapshot round-trip。
-- `RecordRepositoryTest`：覆蓋 Room entity mapper、匯出 JSON、匯出純文字、空/null 匯出邊界、Room v1 exported schema、repository async export callback 與 legacy JSON parser。
+- `RecordRepositoryTest`：覆蓋 Room entity mapper、匯出 JSON、匯出純文字、空/null 匯出邊界、Room v1 exported schema、repository async export callback、legacy JSON parser，以及舊 `SharedPreferences` 紀錄匯入 Room 後只執行一次並寫入 migration flag。
 - `SettingsStoreTest`：以 Robolectric 覆蓋設定預設值、toggle persistence 與收藏加入/移除。
 - `ProfileSettingsFragmentTest`：覆蓋 Profile SAF writer 的 UTF-8 內容寫入與 null content fallback。
+- `ResultFragmentTest`：覆蓋分享 chooser 會包住 `ACTION_SEND`、`text/plain` 與分享文字。
 - `HexagramRepositoryFilterTest`：覆蓋卦名、全名、標籤、摘要搜尋，上經/下經篩選與收藏篩選。
 - `LocalRecordStoreFilterTest`：覆蓋紀錄搜尋問題/筆記/卦名/標籤、占法篩選與有無變爻篩選。
 - `ResultPresentationTest`、`RecordCardPresentationTest`、`FavoriteHexagramPresentationTest`、`Beta2PresentationTest`：覆蓋結果分享/變爻摘要、紀錄卡關係/變爻/日期/操作 label、收藏符號與 TalkBack label，以及 Daily、Question presets、Method selected state、Hexagram list/detail 與 Ritual reduce-motion 狀態。
-- `ExampleUnitTest`：Android Studio 預設範例。
 - `ExampleInstrumentedTest`：Android Studio 預設 app context test。
 - `RecordDaoInstrumentedTest`：Room in-memory DAO insert/update/delete-all 測試。
-- `StableBetaWorkflowInstrumentedTest`：Espresso workflow tests，啟用 accessibility checks，覆蓋 onboarding → 本機 daily、占卜 → result auto-save → records、占法 selected state、result recreate 不重複 auto-save、records 搜尋/占法篩選狀態保留、紀錄筆記編輯/單筆刪除、學習中心搜尋/detail、學習中心收藏、深色模式切換、JSON/text SAF export contracts 與 profile delete-all。
+- `StableBetaWorkflowInstrumentedTest`：Espresso workflow tests，啟用 accessibility checks，覆蓋 onboarding → 本機 daily、占卜 → result auto-save → records、占法 selected state、result recreate 不重複 auto-save、records 搜尋/占法篩選狀態保留、紀錄筆記編輯/單筆刪除、學習中心搜尋/detail、學習中心收藏、深色模式切換、JSON/text SAF export contract / UI launch contract，以及 profile delete-all 確認與取消。
 
 Gradle managed device 已設定：
 
@@ -184,11 +184,11 @@ Gradle managed device 已設定：
 
 - `./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過。
 - `./gradlew tasks --all` 可列出 `app:pixel2Api35DebugAndroidTest`。
-- `./gradlew pixel2Api35DebugAndroidTest` 先前已在具備 managed-device system image 的環境通過；本輪未重跑 managed device。
+- `./gradlew pixel2Api35DebugAndroidTest --stacktrace --rerun-tasks` 已在具備 managed-device system image 的環境通過 14/14。
 
 未完成驗證：
 
-- `./gradlew connectedDebugAndroidTest` 需要連接實機或 emulator；本輪未在無裝置環境執行。
+- `./gradlew connectedDebugAndroidTest` 需要連接實機或 emulator；目前無連接裝置環境會建置 app/test APK 後回報 `No connected devices!`。
 
 備註：目前 AGP 9.2 managed-device setup 仍印出 `testedAbi` 提醒，即使 DSL 已指定 x86_64；此提醒未阻擋 `pixel2Api35DebugAndroidTest` 完成。
 
@@ -230,7 +230,7 @@ Room 已取代紀錄 JSON SharedPreferences，但長期仍有不足：
 目前已補資料序列化、紀錄 mutation、Room mapper/export、學習中心 filter、presentation mapper 的 JVM tests，也補了 Room DAO instrumentation test 與第一批 stable-beta Espresso workflow tests，但仍缺少：
 
 - 更完整的 Fragment navigation saved-state 與 RecyclerView action tests。
-- SAF 寫入成功內容驗證目前涵蓋 writer 與 ACTION_CREATE_DOCUMENT contract，但尚未透過真實 document provider URI 做端到端驗證。
+- SAF 寫入成功內容驗證目前涵蓋 formatter、writer 與 ACTION_CREATE_DOCUMENT UI launch contract，但尚未透過真實 document provider URI 做端到端驗證。
 - 視覺截圖測試。
 - 完整 accessibility 驗收；目前 Espresso checks 已啟用，但尚未覆蓋字級縮放、TalkBack 路徑與人工對比驗收。
 
@@ -249,8 +249,8 @@ Room 已取代紀錄 JSON SharedPreferences，但長期仍有不足：
 
 ### 短期：穩定本機 Beta
 
-1. 在具備 emulator/system image 的環境執行 `pixel2Api35DebugAndroidTest`，並把 managed device 納入 CI 或固定本機驗收。
-2. 補完整 SAF document provider 寫入、分享 intent、字級縮放、focus order 與更多 delete-all 邊界案例測試。
+1. 把已通過的 `pixel2Api35DebugAndroidTest` managed-device workflow 納入 CI 或固定本機驗收。
+2. 補完整 SAF document provider 寫入、字級縮放、focus order 與更多 delete-all 空狀態案例測試。
 3. 延續 XML/ViewBinding 路線，整理 Splash、Onboarding、本機入口與更多 shared component。
 4. 擴充 accessibility 驗收：focus order、字級縮放、TalkBack 與對比檢查。
 

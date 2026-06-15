@@ -86,9 +86,10 @@ Current JVM test coverage includes:
 
 - `IChingLogicTest` covers casting line-value buckets, known hexagram pattern mappings, 64-pattern uniqueness, simple-cast consistency, changing-line flips, and relating hexagrams.
 - `DivinationPersistenceTest` covers `DivinationResult` / `DivinationRecord` JSON round trips, backward-compatible old JSON fallback, relating-hexagram derivation from old `lineValues`, and record mutation helpers.
-- `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting including empty/null edge cases, and legacy JSON parser behavior.
+- `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting including empty/null edge cases, legacy JSON parser behavior, and one-time legacy SharedPreferences-to-Room migration flag behavior.
 - `SettingsStoreTest` covers settings defaults, toggles, and favorites.
 - `ProfileSettingsFragmentTest` covers the UTF-8 export writer used after SAF returns a URI.
+- `ResultFragmentTest` covers the Android share chooser intent wrapping `ACTION_SEND`, `text/plain`, and the share text.
 - `NavigationArgsTest` covers navigation argument Bundle round trips and fallback behavior.
 - `RecordRepositoryTest` also covers exported Room v1 schema and repository async export callbacks.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
@@ -99,7 +100,7 @@ Current instrumentation coverage includes:
 
 - `ExampleInstrumentedTest` checks app package context.
 - `RecordDaoInstrumentedTest` checks Room DAO insert/update/delete-all behavior with an in-memory database.
-- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, result recreate without duplicate auto-save, records search/filter state retention, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts, and profile delete-all. Espresso accessibility checks are enabled in this workflow test class.
+- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, result recreate without duplicate auto-save, records search/filter state retention, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts and UI launch intents, and profile delete-all confirm/cancel. Espresso accessibility checks are enabled in this workflow test class.
 
 Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, export formatting, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, local-mode entry, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, SAF export, delete-all, and UI workflows.
 
