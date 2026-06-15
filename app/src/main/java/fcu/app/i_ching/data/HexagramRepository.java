@@ -5,9 +5,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public final class HexagramRepository {
+    public static final String FILTER_ALL = "全部";
+    public static final String FILTER_UPPER_CANON = "上經";
+    public static final String FILTER_LOWER_CANON = "下經";
+    public static final String FILTER_FAVORITES = "我的收藏";
     private static final List<Hexagram> HEXAGRAMS = build();
     private static final Map<Integer, Hexagram> BY_NUMBER = new HashMap<>();
 
@@ -27,6 +33,42 @@ public final class HexagramRepository {
         Hexagram hexagram = BY_NUMBER.get(number);
         return hexagram == null ? BY_NUMBER.get(15) : hexagram;
     }
+
+    public static List<Hexagram> filter(String query, String filter, Set<String> favoriteNumbers) {
+        List<Hexagram> matches = new ArrayList<>();
+        String normalizedQuery = normalize(query);
+        for (Hexagram hexagram : HEXAGRAMS) {
+            if (matchesFilter(hexagram, filter, favoriteNumbers) && matchesQuery(hexagram, normalizedQuery)) {
+                matches.add(hexagram);
+            }
+        }
+        return matches;
+    }
+
+    private static boolean matchesFilter(Hexagram hexagram, String filter, Set<String> favoriteNumbers) {
+        if (FILTER_UPPER_CANON.equals(filter)) return hexagram.number <= 30;
+        if (FILTER_LOWER_CANON.equals(filter)) return hexagram.number >= 31;
+        if (FILTER_FAVORITES.equals(filter)) {
+            return favoriteNumbers != null && favoriteNumbers.contains(String.valueOf(hexagram.number));
+        }
+        return true;
+    }
+
+    private static boolean matchesQuery(Hexagram hexagram, String query) {
+        if (query.isEmpty()) return true;
+        if (normalize(hexagram.name).contains(query)) return true;
+        if (normalize(hexagram.fullName).contains(query)) return true;
+        if (normalize(hexagram.summary).contains(query)) return true;
+        for (String tag : hexagram.tags) {
+            if (normalize(tag).contains(query)) return true;
+        }
+        return false;
+    }
+
+    private static String normalize(String value) {
+        return value == null ? "" : value.trim().toLowerCase(Locale.ROOT);
+    }
+
 
     public static Hexagram fromLines(boolean[] bottomToTop) {
         if (Arrays.equals(bottomToTop, get(15).linesBottomToTop)) {

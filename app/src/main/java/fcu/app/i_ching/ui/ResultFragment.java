@@ -14,21 +14,42 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONException;
+
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
+import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.DivinationResult;
 import fcu.app.i_ching.data.LocalRecordStore;
 
 public class ResultFragment extends Fragment {
-    private static DivinationResult result;
+    private static final String ARG_RESULT_JSON = "resultJson";
+    private static final String ARG_RECORD_ID = "recordId";
+    private static final String STATE_RECORD_ID = "recordId";
+    private static final String STATE_NOTE = "note";
+    private static final long NO_RECORD_ID = -1L;
 
-    public static ResultFragment newInstance(DivinationResult value) { result = value; return new ResultFragment(); }
+    private DivinationResult result;
+    private long savedRecordId = NO_RECORD_ID;
+    private EditText noteInput;
+
+    public static ResultFragment newInstance(DivinationResult value) {
+        Bundle args = new Bundle();
+        args.putString(ARG_RESULT_JSON, value.toJsonString());
+        ResultFragment fragment = new ResultFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (result == null) result = DivinationResult.create("我目前在工作上最需要調整的是什麼？", fcu.app.i_ching.data.DivinationMethod.COINS);
+        result = readResult();
+        savedRecordId = readRecordId(savedInstanceState);
         MainActivity activity = (MainActivity) requireActivity();
+        LocalRecordStore recordStore = new LocalRecordStore(requireContext());
+        DivinationRecord existingRecord = ensureAutoSaved(recordStore, activity);
+
         LinearLayout content = Ui.column(requireContext());
         LinearLayout questionBubble = Ui.card(requireContext());
         TextView q = Ui.text(requireContext(), "“" + result.question + "”", 16, android.graphics.Typeface.ITALIC, R.color.ic_text_muted, false); q.setGravity(Gravity.CENTER); questionBubble.addView(q);
@@ -48,11 +69,82 @@ public class ResultFragment extends Fragment {
         content.addView(guides);
         LinearLayout classical = Ui.card(requireContext()); classical.addView(Ui.text(requireContext(), "古典卦象解釋", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true)); classical.addView(Ui.text(requireContext(), result.hexagram.classicalText, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false)); Ui.addWithMargins(content, classical, -1, -2, 0, 16, 0, 0);
         TextView noteLabel = Ui.text(requireContext(), "這個結果讓你想到什麼？", 14, android.graphics.Typeface.BOLD, R.color.ic_ink, false); Ui.addWithMargins(content, noteLabel, -1, -2, 0, 20, 0, 4);
-        EditText note = Ui.bottomInput(requireContext(), "寫下你的靈感或打算採取的行動...", 3); content.addView(note, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 96)));
-        Button save = Ui.pill(requireContext(), "儲存至紀錄", true);
-        save.setOnClickListener(v -> { new LocalRecordStore(requireContext()).add(DivinationRecord.fromResult(result, note.getText().toString())); Toast.makeText(requireContext(), "已儲存至紀錄", Toast.LENGTH_SHORT).show(); activity.showRecords(); });
+        noteInput = Ui.bottomInput(requireContext(), "寫下你的靈感或打算採取的行動...", 3);
+        noteInput.setContentDescription("占卜結果筆記");
+        String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
+        if (restoredNote != null) {
+            noteInput.setText(restoredNote);
+        } else if (existingRecord != null && existingRecord.note != null) {
+            noteInput.setText(existingRecord.note);
+        }
+        content.addView(noteInput, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 96)));
+        Button save = Ui.pill(requireContext(), savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記", true);
+        save.setContentDescription("儲存占卜結果筆記至紀錄");
+        save.setOnClickListener(v -> saveNote(recordStore, activity));
         Button share = Ui.pill(requireContext(), "分享啟示", false); share.setOnClickListener(v -> Toast.makeText(requireContext(), "本機 MVP 尚未接入分享", Toast.LENGTH_SHORT).show());
         Ui.addWithMargins(content, save, -1, Ui.dp(requireContext(), 52), 0, 22, 0, 10); content.addView(share, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
         return Ui.scrollPage(requireContext(), content, false);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(STATE_RECORD_ID, savedRecordId);
+        if (noteInput != null) outState.putString(STATE_NOTE, noteInput.getText().toString());
+    }
+
+    private DivinationResult readResult() {
+        Bundle args = getArguments();
+        if (args != null) {
+            String snapshot = args.getString(ARG_RESULT_JSON);
+            if (snapshot != null && !snapshot.isEmpty()) {
+                try {
+                    return DivinationResult.fromJsonString(snapshot);
+                } catch (JSONException ignored) {
+                }
+            }
+        }
+        return DivinationResult.create("我目前在工作上最需要調整的是什麼？", DivinationMethod.COINS);
+    }
+
+    private long readRecordId(@Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null) return savedInstanceState.getLong(STATE_RECORD_ID, NO_RECORD_ID);
+        Bundle args = getArguments();
+        return args == null ? NO_RECORD_ID : args.getLong(ARG_RECORD_ID, NO_RECORD_ID);
+    }
+
+    private DivinationRecord ensureAutoSaved(LocalRecordStore recordStore, MainActivity activity) {
+        DivinationRecord existing = savedRecordId == NO_RECORD_ID ? null : recordStore.find(savedRecordId);
+        if (existing == null) existing = recordStore.find(result.createdAt);
+        if (existing != null) {
+            rememberRecordId(existing.id);
+            return existing;
+        }
+        if (!activity.settings().isAutoSave()) return null;
+        DivinationRecord record = DivinationRecord.fromResult(result, "");
+        recordStore.add(record);
+        rememberRecordId(record.id);
+        return record;
+    }
+
+    private void saveNote(LocalRecordStore recordStore, MainActivity activity) {
+        DivinationRecord existing = savedRecordId == NO_RECORD_ID ? null : recordStore.find(savedRecordId);
+        if (existing == null) existing = recordStore.find(result.createdAt);
+        if (existing == null) {
+            DivinationRecord record = DivinationRecord.fromResult(result, noteInput.getText().toString());
+            recordStore.add(record);
+            rememberRecordId(record.id);
+        } else {
+            recordStore.updateNote(existing.id, noteInput.getText().toString());
+            rememberRecordId(existing.id);
+        }
+        Toast.makeText(requireContext(), "已儲存至紀錄", Toast.LENGTH_SHORT).show();
+        activity.showRecords();
+    }
+
+    private void rememberRecordId(long recordId) {
+        savedRecordId = recordId;
+        Bundle args = getArguments();
+        if (args != null) args.putLong(ARG_RECORD_ID, recordId);
     }
 }

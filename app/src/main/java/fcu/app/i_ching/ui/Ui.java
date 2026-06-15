@@ -120,12 +120,14 @@ public final class Ui {
         bar.setPadding(dp(context, 16), dp(context, 24), dp(context, 16), dp(context, 8));
         TextView leftView = text(context, left, 24, Typeface.NORMAL, R.color.ic_ink, false);
         leftView.setGravity(Gravity.CENTER);
+        leftView.setContentDescription("←".equals(left) ? "返回" : "選單");
         leftView.setOnClickListener(leftClick);
         TextView title = text(context, "I CHING", 28, Typeface.NORMAL, R.color.ic_ink, true);
         title.setGravity(Gravity.CENTER);
         title.setLetterSpacing(0.12f);
         TextView rightView = text(context, right, 24, Typeface.NORMAL, R.color.ic_ink, false);
         rightView.setGravity(Gravity.CENTER);
+        rightView.setContentDescription("⚙".equals(right) ? "設定" : "切換收藏");
         rightView.setOnClickListener(rightClick);
         bar.addView(leftView, new LinearLayout.LayoutParams(dp(context, 48), dp(context, 48)));
         bar.addView(title, new LinearLayout.LayoutParams(0, -2, 1));
@@ -169,6 +171,7 @@ public final class Ui {
         labelView.setGravity(Gravity.CENTER);
         item.addView(iconView, new LinearLayout.LayoutParams(-1, -2));
         item.addView(labelView, new LinearLayout.LayoutParams(-1, -2));
+        item.setContentDescription(label + (selected ? "，目前分頁" : "分頁"));
         item.setOnClickListener(v -> action.run());
         nav.addView(item, new LinearLayout.LayoutParams(0, -1, 1));
     }

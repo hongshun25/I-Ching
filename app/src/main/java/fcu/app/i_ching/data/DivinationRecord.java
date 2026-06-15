@@ -12,20 +12,34 @@ public class DivinationRecord {
     public final String question;
     public final int hexagramNumber;
     public final DivinationMethod method;
+    public final int[] lineValues;
+    public final List<Integer> changingLines;
     public final long createdAt;
     public String note;
 
-    public DivinationRecord(long id, String question, int hexagramNumber, DivinationMethod method, long createdAt, String note) {
+    public DivinationRecord(long id, String question, int hexagramNumber, DivinationMethod method,
+                            int[] lineValues, List<Integer> changingLines, long createdAt, String note) {
         this.id = id;
         this.question = question;
         this.hexagramNumber = hexagramNumber;
         this.method = method;
+        this.lineValues = lineValues == null ? new int[0] : lineValues;
+        this.changingLines = changingLines == null ? new ArrayList<>() : new ArrayList<>(changingLines);
         this.createdAt = createdAt;
         this.note = note;
     }
 
+    public DivinationRecord(long id, String question, int hexagramNumber, DivinationMethod method, long createdAt, String note) {
+        this(id, question, hexagramNumber, method, new int[0], new ArrayList<>(), createdAt, note);
+    }
+
     public static DivinationRecord fromResult(DivinationResult result, String note) {
-        return new DivinationRecord(System.currentTimeMillis(), result.question, result.hexagram.number, result.method, result.createdAt, note);
+        return new DivinationRecord(result.createdAt, result.question, result.hexagram.number, result.method,
+                result.lineValues, result.changingLines, result.createdAt, note);
+    }
+
+    public DivinationRecord withNote(String value) {
+        return new DivinationRecord(id, question, hexagramNumber, method, lineValues, changingLines, createdAt, value);
     }
 
     public JSONObject toJson() throws JSONException {
@@ -34,15 +48,25 @@ public class DivinationRecord {
         object.put("question", question);
         object.put("hexagramNumber", hexagramNumber);
         object.put("method", method.name());
+        object.put("lineValues", DivinationResult.intArrayToJson(lineValues));
+        object.put("changingLines", DivinationResult.integerListToJson(changingLines));
         object.put("createdAt", createdAt);
         object.put("note", note == null ? "" : note);
         return object;
     }
 
     public static DivinationRecord fromJson(JSONObject object) throws JSONException {
-        return new DivinationRecord(object.getLong("id"), object.optString("question"), object.getInt("hexagramNumber"),
-                DivinationMethod.valueOf(object.optString("method", DivinationMethod.COINS.name())),
-                object.optLong("createdAt"), object.optString("note"));
+        long createdAt = object.optLong("createdAt", object.optLong("id", System.currentTimeMillis()));
+        return new DivinationRecord(
+                object.optLong("id", createdAt),
+                object.optString("question"),
+                object.optInt("hexagramNumber", 15),
+                DivinationResult.methodFromName(object.optString("method", DivinationMethod.COINS.name())),
+                DivinationResult.jsonToIntArray(object.optJSONArray("lineValues")),
+                DivinationResult.jsonToIntegerList(object.optJSONArray("changingLines")),
+                createdAt,
+                object.optString("note")
+        );
     }
 
     public static JSONArray toJsonArray(List<DivinationRecord> records) throws JSONException {

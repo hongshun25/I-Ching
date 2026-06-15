@@ -1,12 +1,12 @@
 # Project Status
 
-更新日期：2026-06-14
+更新日期：2026-06-15
 
 ## 總覽
 
 I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的目標不是完成 production app，而是把 Stitch 設計稿中的主要畫面和端到端本機流程落到 Android 原生實作中，讓使用者可以不依賴網路或後端完成一次完整體驗。
 
-目前的 app 可以啟動、完成 onboarding、進入本機模式、查看每日一卦、提出問題、選擇占法、完成靜心儀式、取得占卜結果、保存紀錄、瀏覽學習中心、查看卦象詳情、收藏卦象，以及在設定中切換深色模式。
+目前的 app 可以啟動、完成 onboarding、進入本機模式、查看每日一卦、提出問題、選擇占法、完成靜心儀式、取得占卜結果、自動或手動保存紀錄、編輯/刪除紀錄筆記、搜尋與篩選學習中心、查看卦象詳情、收藏卦象，以及在設定中切換深色模式。
 
 ## 已實作範圍
 
@@ -55,7 +55,7 @@ I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的
 
 目前資料來源皆為本機：
 
-- 64 卦基本列表在 `HexagramRepository`。
+- 64 卦基本列表在 `HexagramRepository`，並提供學習中心共用的搜尋與篩選 helper。
 - 第 15 卦「地山謙」內容較完整，對應 light daily、result、detail 設計稿。
 - 第 29 卦「坎為水」內容較完整，對應 dark daily 設計稿。
 - 其他卦保留基本名稱、標籤與 placeholder 解釋。
@@ -95,7 +95,9 @@ I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的
 `LocalRecordStore` 使用 `SharedPreferences` 保存：
 
 - 占卜紀錄 JSON array。
-- 每筆紀錄包含 id、問題、卦號、占法、建立時間、反思筆記。
+- 每筆紀錄包含 id、問題、卦號、占法、爻值、變爻、建立時間、反思筆記。
+- 既有舊 JSON 紀錄可繼續讀取，缺少的新欄位會以空陣列或預設占法 fallback。
+- 紀錄支援新增/upsert、查找單筆、更新筆記與刪除單筆。
 
 這些資料都只存在本機 app private storage。
 
@@ -123,14 +125,16 @@ I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的
 目前測試狀態：
 
 - `IChingLogicTest`：覆蓋三枚銅錢爻值 bucket、蓍草爻值 bucket、第 15 卦 pattern mapping、repository size/content smoke checks。
+- `DivinationPersistenceTest`：覆蓋 `DivinationResult` / `DivinationRecord` JSON round-trip、舊紀錄 fallback、record upsert/update/delete，以及 auto-save 使用穩定 id 避免重複紀錄的資料層行為。
+- `HexagramRepositoryFilterTest`：覆蓋卦名、全名、標籤、摘要搜尋，上經/下經篩選與收藏篩選。
 - `ExampleUnitTest`：Android Studio 預設範例。
 - `ExampleInstrumentedTest`：Android Studio 預設 app context test。
 
 已驗證：
 
-- `./gradlew assembleDebug` 通過。
 - `./gradlew testDebugUnitTest` 通過。
 - `./gradlew lintDebug` 通過。
+- `./gradlew assembleDebug` 通過。
 
 未完成驗證：
 
@@ -152,8 +156,8 @@ I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的
 目前 `MainActivity` 手動 replace Fragment。這可以支撐 MVP，但不適合長期複雜導覽：
 
 - 沒有 Navigation Component graph。
-- Deep link、saved state、process death recovery 不完整。
-- `ResultFragment` 目前用 static 欄位暫存 result，這不適合 process recreation。
+- Deep link 與複雜 saved state recovery 仍不完整。
+- `ResultFragment` 已改用 Bundle JSON snapshot，不再依賴 static result 欄位。
 
 ### 資料完整性不足
 
@@ -161,7 +165,7 @@ I Ching Android 專案目前處於「高保真本機 MVP」階段。這一版的
 
 ### 本機儲存限制
 
-SharedPreferences 適合 MVP，但長期有不足：
+SharedPreferences 仍適合目前 MVP，且已補單筆更新與刪除，但長期仍有不足：
 
 - JSON array 越大越不適合。
 - 無 schema migration。
@@ -172,7 +176,7 @@ SharedPreferences 適合 MVP，但長期有不足：
 
 ### 測試不足
 
-目前缺少：
+目前已補資料序列化、紀錄 mutation 與學習中心 filter 的 JVM tests，但仍缺少：
 
 - Fragment navigation tests。
 - Onboarding 到 daily 的 instrumentation tests。
@@ -197,12 +201,10 @@ SharedPreferences 適合 MVP，但長期有不足：
 
 ### 短期：穩定 MVP
 
-1. 修正 `ResultFragment` static result 傳遞方式，改用 `Bundle`、`Parcelable`/`Serializable` 或 shared `ViewModel`。
-2. 讓 `autoSave` 設定真的控制結果是否自動保存。
-3. 實作學習中心搜尋與收藏篩選。
-4. 補紀錄刪除與筆記編輯。
-5. 補最小 Espresso tests：onboarding、本機模式、占卜流程、保存紀錄、深色模式。
-6. 將 `connectedDebugAndroidTest` 納入有 emulator 的 CI 或本機驗收流程。
+1. 補最小 Espresso tests：onboarding、本機模式、占卜流程、保存紀錄、深色模式。
+2. 將 `connectedDebugAndroidTest` 納入有 emulator 的 CI 或本機驗收流程。
+3. 延伸紀錄能力：搜尋、篩選、匯出與批次刪除。
+4. 擴充 accessibility 驗收：focus order、字級縮放、TalkBack 與對比檢查。
 
 ### 中期：整理架構
 
