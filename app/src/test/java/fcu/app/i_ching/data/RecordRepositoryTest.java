@@ -4,6 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import androidx.lifecycle.LiveData;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -77,8 +82,84 @@ public class RecordRepositoryTest {
         assertEquals(Arrays.asList(1, 4), records.get(0).changingLines);
     }
 
+    @Test
+    public void exportedSchemaPreservesVersionOneRecordTable() throws Exception {
+        JSONObject schema = new JSONObject(new String(Files.readAllBytes(schemaFile().toPath()), StandardCharsets.UTF_8));
+        JSONObject database = schema.getJSONObject("database");
+        JSONObject entity = database.getJSONArray("entities").getJSONObject(0);
+
+        assertEquals(1, database.getInt("version"));
+        assertEquals("divination_records", entity.getString("tableName"));
+        assertTrue(entity.getString("createSql").contains("`relatingHexagramNumber` INTEGER NOT NULL"));
+        assertTrue(entity.getString("createSql").contains("`lineValues` TEXT NOT NULL"));
+        assertTrue(entity.getString("createSql").contains("`changingLines` TEXT NOT NULL"));
+    }
+
+    @Test
+    public void asyncExportJsonUsesCallback() throws Exception {
+        FakeDao dao = new FakeDao(Collections.singletonList(DivinationRecordEntity.fromRecord(sampleRecord())));
+        RecordRepository repository = new RecordRepository(dao, null, null, AppExecutors.direct());
+        final String[] callbackValue = new String[1];
+
+        repository.exportJson(value -> callbackValue[0] = value);
+
+        JSONArray array = new JSONArray(callbackValue[0]);
+        assertEquals(1, array.length());
+        assertEquals(7L, array.getJSONObject(0).getLong("id"));
+    }
+
     private DivinationRecord sampleRecord() {
         return new DivinationRecord(7L, "是否適合調整工作節奏？", 15, 55, DivinationMethod.COINS,
                 new int[]{6, 8, 7, 6, 8, 8}, Arrays.asList(1, 4), 7L, "先整理需求");
+    }
+
+    private File schemaFile() {
+        File rootPath = new File("app/schemas/fcu.app.i_ching.data.IChingDatabase/1.json");
+        if (rootPath.isFile()) return rootPath;
+        return new File("schemas/fcu.app.i_ching.data.IChingDatabase/1.json");
+    }
+
+    private static class FakeDao implements DivinationRecordDao {
+        private final List<DivinationRecordEntity> records;
+
+        FakeDao(List<DivinationRecordEntity> records) {
+            this.records = records;
+        }
+
+        @Override
+        public LiveData<List<DivinationRecordEntity>> records() {
+            return null;
+        }
+
+        @Override
+        public List<DivinationRecordEntity> recordsNow() {
+            return records;
+        }
+
+        @Override
+        public DivinationRecordEntity find(long id) {
+            for (DivinationRecordEntity entity : records) {
+                if (entity.id == id) return entity;
+            }
+            return null;
+        }
+
+        @Override
+        public void upsert(DivinationRecordEntity record) {
+        }
+
+        @Override
+        public int updateNote(long id, String note) {
+            return find(id) == null ? 0 : 1;
+        }
+
+        @Override
+        public int deleteById(long id) {
+            return find(id) == null ? 0 : 1;
+        }
+
+        @Override
+        public void deleteAll() {
+        }
     }
 }

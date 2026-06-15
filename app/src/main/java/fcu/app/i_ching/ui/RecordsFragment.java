@@ -60,6 +60,7 @@ public class RecordsFragment extends Fragment {
         LinearLayout content = Ui.column(requireContext());
         content.addView(Ui.text(requireContext(), "占卜紀錄", 36, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
         searchInput = Ui.bottomInput(requireContext(), "搜尋問題、筆記、卦名或標籤...", 1);
+        searchInput.setId(R.id.records_search_input);
         searchInput.setContentDescription("搜尋占卜紀錄");
         if (savedInstanceState != null) searchInput.setText(savedInstanceState.getString(STATE_QUERY, ""));
         searchInput.addTextChangedListener(new TextWatcher() {
@@ -85,11 +86,23 @@ public class RecordsFragment extends Fragment {
         Ui.addWithMargins(content, Ui.horizontalChips(requireContext(), changeRow), -1, -2, 0, 8, 0, 0);
 
         listContainer = Ui.column(requireContext());
+        listContainer.setId(R.id.records_list);
         content.addView(listContainer, new LinearLayout.LayoutParams(-1, -2));
         updateChipStyles();
         viewModel.records().observe(getViewLifecycleOwner(), records -> {
             allRecords = records == null ? new ArrayList<>() : records;
             renderList(activity);
+        });
+        viewModel.actionEvents().observe(getViewLifecycleOwner(), event -> {
+            RecordsViewModel.ActionState state = event.getContentIfNotHandled();
+            if (state == null) return;
+            String message;
+            if (state.action == RecordsViewModel.Action.UPDATE_NOTE) {
+                message = state.success ? "筆記已更新" : "筆記更新失敗";
+            } else {
+                message = state.success ? "紀錄已刪除" : "刪除失敗";
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
         });
         renderList(activity);
         return Ui.pageWithChrome(activity, content, "紀錄");
@@ -256,7 +269,6 @@ public class RecordsFragment extends Fragment {
                 .setNegativeButton("取消", null)
                 .setPositiveButton("儲存", (dialog, which) -> {
                     viewModel.updateNote(record.id, input.getText().toString());
-                    Toast.makeText(requireContext(), "筆記已更新", Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }
@@ -268,7 +280,6 @@ public class RecordsFragment extends Fragment {
                 .setNegativeButton("取消", null)
                 .setPositiveButton("刪除", (dialog, which) -> {
                     viewModel.delete(record.id);
-                    Toast.makeText(requireContext(), "紀錄已刪除", Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }

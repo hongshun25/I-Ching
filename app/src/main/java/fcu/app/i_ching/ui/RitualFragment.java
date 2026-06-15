@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationMethod;
 
@@ -39,7 +40,9 @@ public class RitualFragment extends Fragment {
         root.addView(circle, new FrameLayout.LayoutParams(Ui.dp(requireContext(), 148), Ui.dp(requireContext(), 148), Gravity.CENTER));
         TextView focus = Ui.text(requireContext(), "◌", 72, android.graphics.Typeface.NORMAL, R.color.ic_gold, true); focus.setGravity(Gravity.CENTER);
         root.addView(focus, new FrameLayout.LayoutParams(Ui.dp(requireContext(), 180), Ui.dp(requireContext(), 180), Gravity.CENTER));
-        Button skip = Ui.pill(requireContext(), "略過儀式", false); skip.setOnClickListener(v -> activity.showResult(question, method));
+        Button skip = Ui.pill(requireContext(), "略過儀式", false);
+        skip.setId(R.id.ritual_skip_button);
+        skip.setOnClickListener(v -> activity.showResult(question, method));
         FrameLayout.LayoutParams sp = new FrameLayout.LayoutParams(-1, Ui.dp(requireContext(), 52), Gravity.BOTTOM); sp.setMargins(Ui.dp(requireContext(), 24), 0, Ui.dp(requireContext(), 24), Ui.dp(requireContext(), 32)); root.addView(skip, sp);
         finishRunnable = () -> activity.showResult(question, method);
         root.setOnTouchListener((v, event) -> {
@@ -59,14 +62,8 @@ public class RitualFragment extends Fragment {
     }
 
     private void readArguments() {
-        Bundle args = getArguments();
-        if (args == null) return;
-        question = args.getString(MainActivity.ARG_QUESTION);
-        try {
-            method = DivinationMethod.valueOf(args.getString(MainActivity.ARG_METHOD, DivinationMethod.COINS.name()));
-        } catch (IllegalArgumentException e) {
-            method = DivinationMethod.COINS;
-        }
+        question = NavigationArgs.question(getArguments());
+        method = NavigationArgs.method(getArguments());
     }
 
     @Override public void onDestroyView() { handler.removeCallbacksAndMessages(null); super.onDestroyView(); }

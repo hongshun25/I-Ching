@@ -16,32 +16,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.json.JSONException;
-
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
-import fcu.app.i_ching.data.DivinationMethod;
-import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.DivinationResult;
 import fcu.app.i_ching.data.HexagramLine;
 
 public class ResultFragment extends Fragment {
-    private static final String ARG_RESULT_JSON = MainActivity.ARG_RESULT_JSON;
-    private static final String ARG_RECORD_ID = "recordId";
     private static final String STATE_RECORD_ID = "recordId";
     private static final String STATE_NOTE = "note";
-    public static final long NO_RECORD_ID = -1L;
+    public static final long NO_RECORD_ID = NavigationArgs.NO_RECORD_ID;
 
     private DivinationResult result;
     private long savedRecordId = NO_RECORD_ID;
     private EditText noteInput;
+    private Button saveButton;
     private ResultViewModel viewModel;
 
     public static ResultFragment newInstance(DivinationResult value) {
-        Bundle args = new Bundle();
-        args.putString(ARG_RESULT_JSON, value.toJsonString());
         ResultFragment fragment = new ResultFragment();
-        fragment.setArguments(args);
+        fragment.setArguments(NavigationArgs.result(value));
         return fragment;
     }
 
@@ -49,10 +43,7 @@ public class ResultFragment extends Fragment {
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         result = readResult();
         savedRecordId = readRecordId(savedInstanceState);
-        MainActivity activity = (MainActivity) requireActivity();
         viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
-        DivinationRecord existingRecord = viewModel.ensureAutoSaved(result, activity.settings().isAutoSave());
-        if (existingRecord != null) rememberRecordId(existingRecord.id);
 
         LinearLayout content = Ui.column(requireContext());
         LinearLayout questionBubble = Ui.card(requireContext());
@@ -89,20 +80,34 @@ public class ResultFragment extends Fragment {
         Ui.addWithMargins(content, sharePreview, -1, -2, 0, 16, 0, 0);
         TextView noteLabel = Ui.text(requireContext(), "這個結果讓你想到什麼？", 14, android.graphics.Typeface.BOLD, R.color.ic_ink, false); Ui.addWithMargins(content, noteLabel, -1, -2, 0, 20, 0, 4);
         noteInput = Ui.bottomInput(requireContext(), "寫下你的靈感或打算採取的行動...", 3);
+        noteInput.setId(R.id.result_note_input);
         noteInput.setContentDescription("占卜結果筆記");
         String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
         if (restoredNote != null) {
             noteInput.setText(restoredNote);
-        } else if (existingRecord != null && existingRecord.note != null) {
-            noteInput.setText(existingRecord.note);
         }
         content.addView(noteInput, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 96)));
-        Button save = Ui.pill(requireContext(), savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記", true);
-        save.setContentDescription("儲存占卜結果筆記至紀錄");
-        save.setOnClickListener(v -> saveNote(activity));
-        Button share = Ui.pill(requireContext(), "分享啟示", false); share.setOnClickListener(v -> shareResult());
-        Ui.addWithMargins(content, save, -1, Ui.dp(requireContext(), 52), 0, 22, 0, 10); content.addView(share, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
+        saveButton = Ui.pill(requireContext(), savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記", true);
+        saveButton.setId(R.id.result_save_button);
+        saveButton.setContentDescription("儲存占卜結果筆記至紀錄");
+        saveButton.setOnClickListener(v -> saveNote());
+        Button share = Ui.pill(requireContext(), "分享啟示", false);
+        share.setId(R.id.result_share_button);
+        share.setOnClickListener(v -> shareResult());
+        Ui.addWithMargins(content, saveButton, -1, Ui.dp(requireContext(), 52), 0, 22, 0, 10); content.addView(share, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
         return Ui.scrollPage(requireContext(), content, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        MainActivity activity = (MainActivity) requireActivity();
+        viewModel.saveEvents().observe(getViewLifecycleOwner(), event -> {
+            ResultViewModel.SaveState state = event.getContentIfNotHandled();
+            if (state == null) return;
+            handleSaveState(activity, state);
+        });
+        viewModel.ensureAutoSaved(result, activity.settings().isAutoSave());
     }
 
     @Override
@@ -113,36 +118,42 @@ public class ResultFragment extends Fragment {
     }
 
     private DivinationResult readResult() {
-        Bundle args = getArguments();
-        if (args != null) {
-            String snapshot = args.getString(ARG_RESULT_JSON);
-            if (snapshot != null && !snapshot.isEmpty()) {
-                try {
-                    return DivinationResult.fromJsonString(snapshot);
-                } catch (JSONException ignored) {
-                }
-            }
-        }
-        return DivinationResult.create("我目前在工作上最需要調整的是什麼？", DivinationMethod.COINS);
+        return NavigationArgs.result(getArguments());
     }
 
     private long readRecordId(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) return savedInstanceState.getLong(STATE_RECORD_ID, NO_RECORD_ID);
-        Bundle args = getArguments();
-        return args == null ? NO_RECORD_ID : args.getLong(ARG_RECORD_ID, NO_RECORD_ID);
+        return NavigationArgs.recordId(getArguments());
     }
 
-    private void saveNote(MainActivity activity) {
-        DivinationRecord record = viewModel.saveNote(result, savedRecordId, noteInput.getText().toString());
-        rememberRecordId(record.id);
-        Toast.makeText(requireContext(), "已儲存至紀錄", Toast.LENGTH_SHORT).show();
-        activity.showRecords();
+    private void saveNote() {
+        if (saveButton != null) saveButton.setEnabled(false);
+        viewModel.saveNote(result, savedRecordId, noteInput.getText().toString());
+    }
+
+    private void handleSaveState(MainActivity activity, ResultViewModel.SaveState state) {
+        if (state.record != null) {
+            rememberRecordId(state.record.id);
+            if (noteInput != null
+                    && noteInput.getText().length() == 0
+                    && state.record.note != null
+                    && !state.record.note.isEmpty()) {
+                noteInput.setText(state.record.note);
+            }
+        }
+        if (saveButton != null) {
+            saveButton.setText(savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記");
+            saveButton.setEnabled(true);
+        }
+        if (state.action == ResultViewModel.SaveAction.NOTE_SAVE) {
+            Toast.makeText(requireContext(), state.success ? "已儲存至紀錄" : "儲存失敗", Toast.LENGTH_SHORT).show();
+            if (state.success) activity.showRecords();
+        }
     }
 
     private void rememberRecordId(long recordId) {
         savedRecordId = recordId;
-        Bundle args = getArguments();
-        if (args != null) args.putLong(ARG_RECORD_ID, recordId);
+        NavigationArgs.putRecordId(getArguments(), recordId);
     }
 
     private String changingSummary() {

@@ -91,6 +91,27 @@ public class ProfileSettingsFragment extends Fragment {
         return Ui.pageWithChrome(activity, content, "我的");
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        viewModel.exportEvents().observe(getViewLifecycleOwner(), event -> {
+            ProfileSettingsViewModel.ExportState state = event.getContentIfNotHandled();
+            if (state == null) return;
+            pendingExportContent = state.content;
+            pendingExportLabel = state.label;
+            if (state.kind == ProfileSettingsViewModel.ExportKind.JSON) {
+                exportJsonLauncher.launch(state.fileName);
+            } else {
+                exportTextLauncher.launch(state.fileName);
+            }
+        });
+        viewModel.deleteAllEvents().observe(getViewLifecycleOwner(), event -> {
+            Boolean success = event.getContentIfNotHandled();
+            if (success == null) return;
+            Toast.makeText(requireContext(), success ? "全部紀錄已刪除" : "刪除失敗", Toast.LENGTH_SHORT).show();
+        });
+    }
+
     private void addGroupTitle(LinearLayout content, String text) {
         Ui.addWithMargins(content, Ui.text(requireContext(), text, 13, android.graphics.Typeface.BOLD, R.color.ic_outline_strong, false), -1, -2, 0, 30, 0, 8);
     }
@@ -104,6 +125,7 @@ public class ProfileSettingsFragment extends Fragment {
             row.addView(Ui.text(requireContext(), value == null ? "›" : value + " ›", 14, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         } else {
             Switch sw = new Switch(requireContext());
+            sw.setId(toggleId(label));
             sw.setTag(label);
             sw.setOnCheckedChangeListener((buttonView, isChecked) -> toggle.changed(isChecked));
             row.addView(sw);
@@ -113,6 +135,7 @@ public class ProfileSettingsFragment extends Fragment {
 
     private void addActionRow(LinearLayout parent, String label, String value, View.OnClickListener click) {
         LinearLayout row = Ui.row(requireContext());
+        row.setId(actionId(label));
         row.setPadding(0, Ui.dp(requireContext(), 10), 0, Ui.dp(requireContext(), 10));
         row.setClickable(true);
         row.setFocusable(true);
@@ -124,16 +147,26 @@ public class ProfileSettingsFragment extends Fragment {
         parent.addView(row, new LinearLayout.LayoutParams(-1, -2));
     }
 
+    private int toggleId(String label) {
+        if ("深色模式".equals(label)) return R.id.profile_dark_mode_switch;
+        if ("減少動態效果".equals(label)) return R.id.profile_reduce_motion_switch;
+        if ("自動儲存".equals(label)) return R.id.profile_auto_save_switch;
+        return View.NO_ID;
+    }
+
+    private int actionId(String label) {
+        if ("匯出 JSON".equals(label)) return R.id.profile_export_json;
+        if ("匯出純文字".equals(label)) return R.id.profile_export_text;
+        if ("刪除全部紀錄".equals(label)) return R.id.profile_delete_all;
+        return View.NO_ID;
+    }
+
     private void startJsonExport() {
-        pendingExportContent = viewModel.exportJson();
-        pendingExportLabel = "JSON";
-        exportJsonLauncher.launch("i_ching_records.json");
+        viewModel.exportJson();
     }
 
     private void startTextExport() {
-        pendingExportContent = viewModel.exportText();
-        pendingExportLabel = "純文字";
-        exportTextLauncher.launch("i_ching_records.txt");
+        viewModel.exportText();
     }
 
     private void writeExport(Uri uri) {
@@ -158,7 +191,6 @@ public class ProfileSettingsFragment extends Fragment {
                 .setNegativeButton("取消", null)
                 .setPositiveButton("刪除全部", (dialog, which) -> {
                     viewModel.deleteAllRecords();
-                    Toast.makeText(requireContext(), "全部紀錄已刪除", Toast.LENGTH_SHORT).show();
                 })
                 .show();
     }

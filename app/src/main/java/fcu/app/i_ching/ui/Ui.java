@@ -162,6 +162,7 @@ public final class Ui {
 
     private static void addTab(Context context, LinearLayout nav, String label, String icon, boolean selected, Runnable action) {
         LinearLayout item = column(context);
+        item.setId(bottomNavId(label));
         item.setGravity(Gravity.CENTER);
         item.setPadding(dp(context, 6), dp(context, 4), dp(context, 6), dp(context, 4));
         item.setBackground(selected ? bg(context, R.color.ic_gold_container, 18) : null);
@@ -174,6 +175,15 @@ public final class Ui {
         item.setContentDescription(label + (selected ? "，目前分頁" : "分頁"));
         item.setOnClickListener(v -> action.run());
         nav.addView(item, new LinearLayout.LayoutParams(0, -1, 1));
+    }
+
+    private static int bottomNavId(String label) {
+        if ("今日".equals(label)) return R.id.bottom_nav_daily;
+        if ("占卜".equals(label)) return R.id.bottom_nav_divination;
+        if ("紀錄".equals(label)) return R.id.bottom_nav_records;
+        if ("學習".equals(label)) return R.id.bottom_nav_learn;
+        if ("我的".equals(label)) return R.id.bottom_nav_profile;
+        return View.NO_ID;
     }
 
     public static LinearLayout card(Context context) {

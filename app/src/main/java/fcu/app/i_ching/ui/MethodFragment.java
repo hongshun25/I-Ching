@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationMethod;
 
@@ -23,7 +24,7 @@ public class MethodFragment extends Fragment {
 
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        question = getArguments() == null ? null : getArguments().getString(MainActivity.ARG_QUESTION);
+        question = NavigationArgs.question(getArguments());
         LinearLayout content = Ui.column(requireContext());
         content.setGravity(Gravity.CENTER_HORIZONTAL);
         TextView step = Ui.text(requireContext(), "STEP 2 / 4", 14, android.graphics.Typeface.BOLD, R.color.ic_text_muted, false);
@@ -45,11 +46,21 @@ public class MethodFragment extends Fragment {
 
     private void addMethod(DivinationMethod method, String title, String detail) {
         LinearLayout card = Ui.card(requireContext());
+        card.setId(methodId(method));
         card.setBackground(Ui.strokeBg(requireContext(), method == selected ? R.color.ic_surface_container : R.color.ic_surface, method == selected ? R.color.ic_ink : R.color.ic_outline, 16));
         TextView t = Ui.text(requireContext(), (method == selected ? "✓ " : "") + title, 24, android.graphics.Typeface.NORMAL, R.color.ic_ink, true);
         TextView d = Ui.text(requireContext(), detail, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
         card.addView(t); Ui.addWithMargins(card, d, -1, -2, 0, 6, 0, 0);
         card.setOnClickListener(v -> { selected = method; rebuild(); });
         Ui.addWithMargins(methods, card, -1, -2, 0, 0, 0, 12);
+    }
+
+    private int methodId(DivinationMethod method) {
+        switch (method) {
+            case SIMPLE: return R.id.method_simple_card;
+            case YARROW: return R.id.method_yarrow_card;
+            case COINS:
+            default: return R.id.method_coins_card;
+        }
     }
 }

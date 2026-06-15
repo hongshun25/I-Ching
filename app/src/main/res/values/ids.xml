@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="onboarding_start_button" type="id" />
+    <item name="local_mode_button" type="id" />
+    <item name="question_input" type="id" />
+    <item name="question_next_button" type="id" />
+    <item name="method_simple_card" type="id" />
+    <item name="method_coins_card" type="id" />
+    <item name="method_yarrow_card" type="id" />
+    <item name="ritual_skip_button" type="id" />
+    <item name="result_note_input" type="id" />
+    <item name="result_save_button" type="id" />
+    <item name="result_share_button" type="id" />
+    <item name="records_search_input" type="id" />
+    <item name="records_list" type="id" />
+    <item name="profile_dark_mode_switch" type="id" />
+    <item name="profile_reduce_motion_switch" type="id" />
+    <item name="profile_auto_save_switch" type="id" />
+    <item name="profile_export_json" type="id" />
+    <item name="profile_export_text" type="id" />
+    <item name="profile_delete_all" type="id" />
+    <item name="bottom_nav_daily" type="id" />
+    <item name="bottom_nav_divination" type="id" />
+    <item name="bottom_nav_records" type="id" />
+    <item name="bottom_nav_learn" type="id" />
+    <item name="bottom_nav_profile" type="id" />
+</resources>

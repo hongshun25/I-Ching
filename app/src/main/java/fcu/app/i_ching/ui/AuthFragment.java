@@ -35,6 +35,7 @@ public class AuthFragment extends Fragment {
         Ui.addWithMargins(content, card, -1, -2, 0, 0, 0, 28);
 
         Button enter = Ui.pill(requireContext(), "進入本機模式", true);
+        enter.setId(R.id.local_mode_button);
         enter.setContentDescription("進入本機模式");
         enter.setOnClickListener(v -> activity.enterLocalMode());
         content.addView(enter, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));

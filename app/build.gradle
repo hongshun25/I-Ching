@@ -18,6 +18,14 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation": "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true"
+                ]
+            }
+        }
     }
 
     buildTypes {
@@ -34,6 +42,10 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    sourceSets {
+        androidTest.assets.srcDirs += files("$projectDir/schemas")
     }
 }
 
@@ -52,7 +64,13 @@ dependencies {
     annotationProcessor libs.room.compiler
     testImplementation libs.junit
     testImplementation libs.json
+    testImplementation libs.robolectric
+    androidTestImplementation libs.androidx.test.core
+    androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.espresso.core
+    androidTestImplementation libs.espresso.intents
     androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.fragment.testing
     androidTestImplementation libs.room.testing
+    debugImplementation libs.fragment.testing.manifest
 }

@@ -13,19 +13,23 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramLine;
 import fcu.app.i_ching.data.HexagramRepository;
 
 public class HexagramDetailFragment extends Fragment {
-    private static final String ARG_NUMBER = "number";
-    public static HexagramDetailFragment newInstance(int number) { Bundle args = new Bundle(); args.putInt(ARG_NUMBER, number); HexagramDetailFragment f = new HexagramDetailFragment(); f.setArguments(args); return f; }
+    public static HexagramDetailFragment newInstance(int number) {
+        HexagramDetailFragment fragment = new HexagramDetailFragment();
+        fragment.setArguments(NavigationArgs.hexagramDetail(number));
+        return fragment;
+    }
 
     @Nullable @Override
     public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
-        int number = getArguments() == null ? 15 : getArguments().getInt(ARG_NUMBER, 15);
+        int number = NavigationArgs.hexagramNumber(getArguments());
         Hexagram hex = HexagramRepository.get(number);
         FrameLayout frame = new FrameLayout(requireContext()); frame.setBackgroundColor(Ui.color(requireContext(), R.color.ic_background));
         LinearLayout page = Ui.column(requireContext());

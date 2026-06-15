@@ -7,7 +7,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {DivinationRecordEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {DivinationRecordEntity.class}, version = 1, exportSchema = true)
 @TypeConverters({RecordTypeConverters.class})
 public abstract class IChingDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "i_ching_records.db";
@@ -25,7 +25,6 @@ public abstract class IChingDatabase extends RoomDatabase {
                                     IChingDatabase.class,
                                     DATABASE_NAME
                             )
-                            .allowMainThreadQueries()
                             .build();
                 }
             }

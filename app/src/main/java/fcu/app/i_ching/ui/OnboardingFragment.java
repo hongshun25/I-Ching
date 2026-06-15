@@ -43,6 +43,8 @@ public class OnboardingFragment extends Fragment {
         bottom.addView(dots, new LinearLayout.LayoutParams(-1, -2));
         Button start = Ui.pill(requireContext(), "開始使用", true);
         Button local = Ui.pill(requireContext(), "以本機模式使用", false);
+        start.setId(R.id.onboarding_start_button);
+        local.setId(R.id.local_mode_button);
         start.setOnClickListener(v -> activity.completeOnboarding());
         local.setOnClickListener(v -> activity.enterLocalMode());
         Ui.addWithMargins(bottom, start, -1, Ui.dp(requireContext(), 48), 0, 16, 0, 8);

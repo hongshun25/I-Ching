@@ -49,6 +49,7 @@ Prefer existing local patterns before adding new ones:
 - Add pure app logic under `data/`.
 - Add screens and screen-level ViewModels under `ui/`.
 - Route screens through `MainActivity` helpers backed by `NavController`; do not add new manual Fragment transactions.
+- Use `NavigationArgs` as the single Fragment argument contract for question, method, result JSON, hexagram number, and record id fallback. Do not add new ad hoc argument constants to Fragments or `MainActivity`.
 - Reuse `Ui` for shared visual primitives until a screen or component is deliberately migrated to XML. New substantial screens should prefer XML/ViewBinding where practical.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
@@ -62,10 +63,13 @@ Prefer existing local patterns before adding new ones:
 
 - Room database name: `i_ching_records.db`.
 - Room schema v1 table: `divination_records`.
+- `IChingDatabase` must keep `exportSchema = true`, and committed schemas live under `app/schemas/`.
+- Production Room builders must not use `allowMainThreadQueries()`. UI-facing DAO work should go through `RecordRepository` async callback methods backed by `AppExecutors.diskIo()`.
 - DAO list queries should default to `createdAt DESC`.
 - Preserve record fields: `id`, `question`, `hexagramNumber`, `relatingHexagramNumber`, `method`, `lineValues`, `changingLines`, `createdAt`, `note`.
 - Store `lineValues` and `changingLines` through `RecordTypeConverters` as JSON strings.
 - `RecordRepository.migrateFromLegacyPrefsIfNeeded()` imports old `i_ching_records.records` JSON once and writes a migration flag; do not delete legacy SharedPreferences during migration.
+- `RecordRepository.recordsNow()` and synchronous repository helpers are for tests, export helpers, or non-UI background work only. Fragment/ViewModel code should use LiveData or async callbacks.
 - Export must use Storage Access Framework from UI; do not request broad storage permissions for JSON/text export.
 - Keep `i_ching_records.xml` and `i_ching_records.db`/WAL/SHM excluded from cloud backup unless a future privacy review deliberately changes the backup model.
 
@@ -78,6 +82,8 @@ Current JVM test coverage includes:
 - `IChingLogicTest` covers casting line-value buckets, known hexagram pattern mappings, 64-pattern uniqueness, simple-cast consistency, changing-line flips, and relating hexagrams.
 - `DivinationPersistenceTest` covers `DivinationResult` / `DivinationRecord` JSON round trips, backward-compatible old JSON fallback, relating-hexagram derivation from old `lineValues`, and record mutation helpers.
 - `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting, and legacy JSON parser behavior.
+- `NavigationArgsTest` covers navigation argument Bundle round trips and fallback behavior.
+- `RecordRepositoryTest` also covers exported Room v1 schema and repository async export callbacks.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
 - `LocalRecordStoreFilterTest` covers record search by question, note, hexagram, and tag, plus method and changing-line filters.
 

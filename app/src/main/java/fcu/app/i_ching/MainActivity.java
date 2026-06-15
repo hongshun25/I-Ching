@@ -20,15 +20,6 @@ import fcu.app.i_ching.data.RecordRepository;
 import fcu.app.i_ching.data.SettingsStore;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String ARG_QUESTION = "question";
-    public static final String ARG_METHOD = "method";
-    public static final String ARG_RESULT_JSON = "resultJson";
-    public static final String ARG_HEXAGRAM_NUMBER = "number";
-
-    private static final String DEFAULT_QUESTION = "我目前在工作上最需要調整的是什麼？";
-
-    private String pendingQuestion = DEFAULT_QUESTION;
-    private DivinationMethod pendingMethod = DivinationMethod.COINS;
     private SettingsStore settingsStore;
 
     @Override
@@ -38,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 ? AppCompatDelegate.MODE_NIGHT_YES
                 : AppCompatDelegate.MODE_NIGHT_NO);
         super.onCreate(savedInstanceState);
-        RecordRepository.get(this).migrateFromLegacyPrefsIfNeeded();
+        RecordRepository.get(this).migrateFromLegacyPrefsIfNeeded(null);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -72,45 +63,34 @@ public class MainActivity extends AppCompatActivity {
     public void showQuestion() { navigateTopLevel(R.id.questionFragment, null); }
 
     public void showMethod(String question) {
-        pendingQuestion = normalizeQuestion(question);
-        Bundle args = new Bundle();
-        args.putString(ARG_QUESTION, pendingQuestion);
-        navigate(R.id.methodFragment, args);
+        navigate(R.id.methodFragment, NavigationArgs.method(question));
     }
 
     public void showRitual(DivinationMethod method) {
-        showRitual(pendingQuestion, method);
+        showRitual(NavigationArgs.DEFAULT_QUESTION, method);
     }
 
     public void showRitual(String question, DivinationMethod method) {
-        pendingQuestion = normalizeQuestion(question);
-        pendingMethod = method == null ? DivinationMethod.COINS : method;
-        Bundle args = new Bundle();
-        args.putString(ARG_QUESTION, pendingQuestion);
-        args.putString(ARG_METHOD, pendingMethod.name());
-        navigate(R.id.ritualFragment, args);
+        navigate(R.id.ritualFragment, NavigationArgs.ritual(question, method));
     }
 
     public void showResult() {
-        showResult(pendingQuestion, pendingMethod);
+        showResult(NavigationArgs.DEFAULT_QUESTION, DivinationMethod.COINS);
     }
 
     public void showResult(String question, DivinationMethod method) {
-        pendingQuestion = normalizeQuestion(question);
-        pendingMethod = method == null ? DivinationMethod.COINS : method;
-        DivinationResult result = DivinationResult.create(pendingQuestion, pendingMethod);
-        Bundle args = new Bundle();
-        args.putString(ARG_RESULT_JSON, result.toJsonString());
-        navigate(R.id.resultFragment, args);
+        DivinationResult result = DivinationResult.create(
+                NavigationArgs.normalizeQuestion(question),
+                method == null ? DivinationMethod.COINS : method
+        );
+        navigate(R.id.resultFragment, NavigationArgs.result(result));
     }
 
     public void showRecords() { navigateTopLevel(R.id.recordsFragment, null); }
     public void showLearnCenter() { navigateTopLevel(R.id.learnCenterFragment, null); }
 
     public void showHexagramDetail(int number) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_HEXAGRAM_NUMBER, number);
-        navigate(R.id.hexagramDetailFragment, args);
+        navigate(R.id.hexagramDetailFragment, NavigationArgs.hexagramDetail(number));
     }
 
     public void showProfile() { navigateTopLevel(R.id.profileSettingsFragment, null); }
@@ -147,7 +127,4 @@ public class MainActivity extends AppCompatActivity {
         return host.getNavController();
     }
 
-    private String normalizeQuestion(String question) {
-        return question == null || question.trim().isEmpty() ? DEFAULT_QUESTION : question.trim();
-    }
 }
