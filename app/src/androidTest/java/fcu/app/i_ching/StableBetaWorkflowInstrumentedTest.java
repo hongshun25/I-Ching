@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.view.View;
 
@@ -25,6 +26,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +63,7 @@ public class StableBetaWorkflowInstrumentedTest {
 
     @BeforeClass
     public static void enableAccessibilityChecks() {
-        AccessibilityChecks.enable();
+        AccessibilityChecks.enable().setRunChecksFromRootView(true);
     }
 
     @Before
@@ -290,6 +295,37 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     @Test
+    public void profileExportWritesJsonAndTextToReturnedDocumentUris() {
+        new SettingsStore(context).setOnboardingComplete(true);
+        seedRecord();
+        Uri jsonUri = TestDocumentProvider.documentUri("i_ching_records.json");
+        Uri textUri = TestDocumentProvider.documentUri("i_ching_records.txt");
+        context.getContentResolver().delete(jsonUri, null, null);
+        context.getContentResolver().delete(textUri, null, null);
+
+        Intents.init();
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            intending(createDocumentIntent("application/json", "i_ching_records.json"))
+                    .respondWith(documentResult(jsonUri));
+            intending(createDocumentIntent("text/plain", "i_ching_records.txt"))
+                    .respondWith(documentResult(textUri));
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showProfile();
+            });
+
+            waitForExists(withId(R.id.profile_export_json));
+            onView(withId(R.id.profile_export_json)).perform(scrollTo(), callOnClick());
+            waitForCondition(() -> readDocument(jsonUri).contains("內測紀錄問題"));
+
+            onView(withId(R.id.profile_export_text)).perform(scrollTo(), callOnClick());
+            waitForCondition(() -> readDocument(textUri).contains("問題：內測紀錄問題"));
+        } finally {
+            Intents.release();
+        }
+    }
+
+    @Test
     public void profileDeleteAllRemovesRecords() {
         new SettingsStore(context).setOnboardingComplete(true);
         seedRecord();
@@ -407,6 +443,28 @@ public class StableBetaWorkflowInstrumentedTest {
                         .appendValue(fileName);
             }
         };
+    }
+
+    private Instrumentation.ActivityResult documentResult(Uri uri) {
+        Intent data = new Intent();
+        data.setData(uri);
+        data.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        return new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
+    }
+
+    private String readDocument(Uri uri) {
+        try (InputStream stream = context.getContentResolver().openInputStream(uri)) {
+            if (stream == null) return "";
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = stream.read(buffer)) != -1) {
+                output.write(buffer, 0, read);
+            }
+            return new String(output.toByteArray(), StandardCharsets.UTF_8);
+        } catch (IOException | RuntimeException e) {
+            return "";
+        }
     }
 
     private ViewAction callOnClick() {

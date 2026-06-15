@@ -1,12 +1,9 @@
 package fcu.app.i_ching.ui;
 
 import android.os.Bundle;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,63 +15,117 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
+import fcu.app.i_ching.databinding.FragmentOnboardingBinding;
+import fcu.app.i_ching.databinding.ItemOnboardingPageBinding;
 
 public class OnboardingFragment extends Fragment {
-    private final String[] titles = {"每日靜心", "專注提問", "保存與回看"};
-    private final String[] bodies = {"每天用一卦，整理當下的心。", "把模糊的不安，轉化成可以思考的問題。", "記錄你的提問、選擇與後來的答案。"};
+    private final PagerSnapHelper snapHelper = new PagerSnapHelper();
+    private FragmentOnboardingBinding binding;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
-        FrameLayout root = new FrameLayout(requireContext());
-        root.setBackgroundColor(Ui.color(requireContext(), R.color.ic_background));
-        RecyclerView recycler = new RecyclerView(requireContext());
-        recycler.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
-        recycler.setAdapter(new Adapter());
-        new PagerSnapHelper().attachToRecyclerView(recycler);
-        root.addView(recycler, new FrameLayout.LayoutParams(-1, -1));
-        LinearLayout bottom = Ui.column(requireContext());
-        bottom.setPadding(Ui.dp(requireContext(), 24), Ui.dp(requireContext(), 32), Ui.dp(requireContext(), 24), Ui.dp(requireContext(), 28));
-        bottom.setBackgroundColor(Ui.color(requireContext(), R.color.ic_background));
-        LinearLayout dots = Ui.row(requireContext());
-        dots.setGravity(Gravity.CENTER);
-        dots.addView(Ui.chip(requireContext(), "●  ·  ·"));
-        bottom.addView(dots, new LinearLayout.LayoutParams(-1, -2));
-        Button start = Ui.pill(requireContext(), "開始使用", true);
-        Button local = Ui.pill(requireContext(), "以本機模式使用", false);
-        start.setId(R.id.onboarding_start_button);
-        local.setId(R.id.local_mode_button);
-        start.setOnClickListener(v -> activity.completeOnboarding());
-        local.setOnClickListener(v -> activity.enterLocalMode());
-        Ui.addWithMargins(bottom, start, -1, Ui.dp(requireContext(), 48), 0, 16, 0, 8);
-        Ui.addWithMargins(bottom, local, -1, Ui.dp(requireContext(), 48), 0, 0, 0, 0);
-        root.addView(bottom, new FrameLayout.LayoutParams(-1, -2, Gravity.BOTTOM));
-        return root;
+        binding = FragmentOnboardingBinding.inflate(inflater, container, false);
+        binding.onboardingRecycler.setLayoutManager(
+                new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
+        binding.onboardingRecycler.setAdapter(new Adapter(
+                getResources().getStringArray(R.array.onboarding_page_symbols),
+                getResources().getStringArray(R.array.onboarding_page_titles),
+                getResources().getStringArray(R.array.onboarding_page_bodies)
+        ));
+        snapHelper.attachToRecyclerView(binding.onboardingRecycler);
+        binding.onboardingRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) updateIndicator(snappedPosition());
+            }
+        });
+        binding.onboardingStartButton.setOnClickListener(v -> activity.completeOnboarding());
+        binding.localModeButton.setOnClickListener(v -> activity.enterLocalMode());
+        updateIndicator(0);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        snapHelper.attachToRecyclerView(null);
+        binding = null;
+        super.onDestroyView();
+    }
+
+    private int snappedPosition() {
+        if (binding == null) return 0;
+        RecyclerView.LayoutManager layoutManager = binding.onboardingRecycler.getLayoutManager();
+        if (layoutManager == null) return 0;
+        View snap = snapHelper.findSnapView(layoutManager);
+        if (snap == null) return 0;
+        int position = binding.onboardingRecycler.getChildAdapterPosition(snap);
+        return position == RecyclerView.NO_POSITION ? 0 : position;
+    }
+
+    private void updateIndicator(int position) {
+        if (binding == null) return;
+        TextView[] dots = {
+                binding.onboardingDotDaily,
+                binding.onboardingDotQuestion,
+                binding.onboardingDotRecords
+        };
+        for (int i = 0; i < dots.length; i++) {
+            boolean selected = i == position;
+            dots[i].setText(selected ? "●" : "·");
+            dots[i].setTextColor(Ui.color(requireContext(), selected ? R.color.ic_gold : R.color.ic_text_muted));
+            dots[i].setTextSize(selected ? 18 : 22);
+        }
+        binding.onboardingIndicator.setContentDescription(
+                getString(R.string.onboarding_indicator, position + 1, dots.length));
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
-        @NonNull @Override public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LinearLayout page = Ui.column(parent.getContext());
-            page.setGravity(Gravity.CENTER);
-            page.setPadding(Ui.dp(parent.getContext(), 24), Ui.dp(parent.getContext(), 40), Ui.dp(parent.getContext(), 24), Ui.dp(parent.getContext(), 180));
-            page.setLayoutParams(new RecyclerView.LayoutParams(parent.getResources().getDisplayMetrics().widthPixels, -1));
-            return new Holder(page);
+        private final String[] symbols;
+        private final String[] titles;
+        private final String[] bodies;
+        private final int itemCount;
+
+        Adapter(String[] symbols, String[] titles, String[] bodies) {
+            this.symbols = symbols;
+            this.titles = titles;
+            this.bodies = bodies;
+            this.itemCount = Math.min(symbols.length, Math.min(titles.length, bodies.length));
         }
-        @Override public void onBindViewHolder(@NonNull Holder holder, int position) {
-            LinearLayout page = (LinearLayout) holder.itemView;
-            page.removeAllViews();
-            TextView ink = Ui.text(page.getContext(), position == 0 ? "◯" : position == 1 ? "◌" : "≋", 130, android.graphics.Typeface.NORMAL, R.color.ic_outline_strong, true);
-            ink.setGravity(Gravity.CENTER);
-            TextView title = Ui.text(page.getContext(), titles[position], 30, android.graphics.Typeface.NORMAL, R.color.ic_ink, true);
-            title.setGravity(Gravity.CENTER);
-            TextView body = Ui.text(page.getContext(), bodies[position], 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false);
-            body.setGravity(Gravity.CENTER);
-            page.addView(ink, new LinearLayout.LayoutParams(-1, Ui.dp(page.getContext(), 240)));
-            Ui.addWithMargins(page, title, -1, -2, 0, 48, 0, 8);
-            page.addView(body, new LinearLayout.LayoutParams(-1, -2));
+
+        @NonNull
+        @Override
+        public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            ItemOnboardingPageBinding itemBinding = ItemOnboardingPageBinding.inflate(
+                    LayoutInflater.from(parent.getContext()), parent, false);
+            itemBinding.getRoot().setLayoutParams(new RecyclerView.LayoutParams(
+                    parent.getResources().getDisplayMetrics().widthPixels,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            return new Holder(itemBinding);
         }
-        @Override public int getItemCount() { return titles.length; }
-        class Holder extends RecyclerView.ViewHolder { Holder(@NonNull View itemView) { super(itemView); } }
+
+        @Override
+        public void onBindViewHolder(@NonNull Holder holder, int position) {
+            holder.binding.onboardingPageArt.setText(symbols[position]);
+            holder.binding.onboardingPageTitle.setText(titles[position]);
+            holder.binding.onboardingPageBody.setText(bodies[position]);
+            holder.itemView.setContentDescription(titles[position] + "。" + bodies[position]);
+        }
+
+        @Override
+        public int getItemCount() {
+            return itemCount;
+        }
+
+        class Holder extends RecyclerView.ViewHolder {
+            final ItemOnboardingPageBinding binding;
+
+            Holder(@NonNull ItemOnboardingPageBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+        }
     }
 }

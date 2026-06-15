@@ -1,6 +1,30 @@
 <resources>
     <string name="app_name">I-Ching</string>
     <string name="brand_title">I CHING</string>
+    <string name="splash_tagline">古老智慧 現代心境</string>
+    <string name="onboarding_start">開始使用</string>
+    <string name="onboarding_local_mode">以本機模式使用</string>
+    <string name="onboarding_indicator">第 %1$d 頁，共 %2$d 頁</string>
+    <string-array name="onboarding_page_symbols">
+        <item>◯</item>
+        <item>◌</item>
+        <item>≋</item>
+    </string-array>
+    <string-array name="onboarding_page_titles">
+        <item>每日靜心</item>
+        <item>專注提問</item>
+        <item>保存與回看</item>
+    </string-array>
+    <string-array name="onboarding_page_bodies">
+        <item>每天用一卦，整理當下的心。</item>
+        <item>把模糊的不安，轉化成可以思考的問題。</item>
+        <item>記錄你的提問、選擇與後來的答案。</item>
+    </string-array>
+    <string name="local_entry_title">本機模式</string>
+    <string name="local_entry_subtitle">不建立帳號，資料只保存在這台裝置。</string>
+    <string name="local_entry_body">目前內測版未啟用登入、同步或雲端備份。占卜問題、筆記與紀錄會寫入此裝置的本機資料庫；之後可在「我的」匯出 JSON 或純文字，也可以刪除全部紀錄。</string>
+    <string name="local_entry_primary">進入本機模式</string>
+    <string name="local_entry_daily_preview">先看看每日靜心</string>
     <string name="nav_back">返回</string>
     <string name="nav_menu">選單</string>
     <string name="nav_settings">設定</string>

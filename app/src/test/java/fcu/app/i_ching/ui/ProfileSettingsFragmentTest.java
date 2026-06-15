@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class ProfileSettingsFragmentTest {
     @Test
@@ -20,5 +21,15 @@ public class ProfileSettingsFragmentTest {
         ProfileSettingsFragment.writeExportContent(empty, null);
 
         assertEquals("", empty.toString(StandardCharsets.UTF_8.name()));
+    }
+
+    @Test
+    public void canceledExportClearsPendingState() {
+        ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+        fragment.preparePendingExport("{}", "JSON");
+
+        fragment.writeExport(null);
+
+        assertFalse(fragment.hasPendingExport());
     }
 }

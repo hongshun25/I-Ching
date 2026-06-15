@@ -70,6 +70,7 @@ public class RecordsFragment extends Fragment {
         setupSearch(activity, savedInstanceState);
         setupFilterChips(activity);
         updateChipStyles();
+        NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_RECORDS);
 
         viewModel.records().observe(getViewLifecycleOwner(), records -> {
             allRecords = records == null ? new ArrayList<>() : records;
@@ -87,7 +88,7 @@ public class RecordsFragment extends Fragment {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
         });
         renderList(activity);
-        return Ui.pageWithChrome(activity, binding.getRoot(), "紀錄");
+        return binding.getRoot();
     }
 
     @Override

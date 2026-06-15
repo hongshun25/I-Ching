@@ -6,11 +6,11 @@ I Ching 是一個原生 Android 本機 Beta，目標是把 `design/stitch_export
 
 ## 當前狀態
 
-目前已完成一版可建置的本機 Beta：
+目前已完成 Beta 3 穩定化版：
 
-- Splash 啟動畫面，約 3.5 秒後依 onboarding 狀態分流。
-- Onboarding 三頁輪播，完成後進入明確的「本機模式」入口。
-- 本機模式入口清楚說明不建立帳號、不登入、不同步，資料只保存在此裝置。
+- Splash 啟動畫面，約 3.5 秒後依 onboarding 狀態分流，已改用 XML/ViewBinding。
+- Onboarding 三頁輪播，完成後進入明確的「本機模式」入口，頁面 indicator 會隨目前頁面更新。
+- 本機模式入口 `LocalEntryFragment` 清楚說明不建立帳號、不登入、不同步，資料只保存在此裝置。
 - Daily 每日一卦，light mode 顯示第 15 卦「地山謙」，night mode 顯示第 29 卦「坎為水」風格。
 - 占卜流程：提問、占法選擇、長按靜心儀式、結果頁。
 - 三種占法：簡易占法、三枚銅錢、蓍草靈感模式。
@@ -21,9 +21,11 @@ I Ching 是一個原生 Android 本機 Beta，目標是把 `design/stitch_export
 - 個人設定頁可切換深色模式、減少動態效果與自動儲存設定，並可透過 Storage Access Framework 匯出 JSON、匯出純文字或刪除全部紀錄；減少動態效果已實際縮短 Ritual 的長動畫與長按等待。
 - 占卜紀錄已改由 Room 保存；首次啟動會從舊 `SharedPreferences` JSON 匯入 Room，成功後寫入 migration flag，但不立即刪除舊資料。
 - 結果頁分享/變爻摘要、紀錄卡文字、收藏按鈕、Daily card、提問 presets、占法選項、Ritual reduce-motion 狀態、卦象列表與卦象詳情 sections 已抽到純 Java presentation/state mapper，並以 JVM tests 鎖住主要輸出。
-- `DailyFragment`、`QuestionFragment`、`MethodFragment`、`RitualFragment`、`RecordsFragment`、`LearnCenterFragment`、`HexagramDetailFragment`、`ResultFragment`、`ProfileSettingsFragment` 已改用 XML/ViewBinding 綁定主要畫面結構；record item、hexagram item、detail section、empty state、settings row、top bar、bottom nav 與結果頁 sections 均有 XML component / layout 基礎。
+- `SplashFragment`、`OnboardingFragment`、`LocalEntryFragment`、`DailyFragment`、`QuestionFragment`、`MethodFragment`、`RitualFragment`、`RecordsFragment`、`LearnCenterFragment`、`HexagramDetailFragment`、`ResultFragment`、`ProfileSettingsFragment` 已改用 XML/ViewBinding 綁定主要畫面結構；record item、hexagram item、detail section、empty state、settings row、top bar、bottom nav 與結果頁 sections 均有 XML component / layout 基礎。
+- Daily、Records、Learn、Profile 的 top bar / bottom nav 由 XML include 承載，不再由 `Ui` 生成整頁 chrome。
 - `RecordsFragment` 與 `LearnCenterFragment` 已改用 RecyclerView `ListAdapter` / `DiffUtil` 與 stable item IDs，並保留原本搜尋、篩選、收藏、編輯與刪除行為。
-- 已新增 Espresso stable-beta workflow tests，覆蓋 onboarding、本機模式、占卜保存、占法 selected state、紀錄編輯/刪除、result recreate 不重複 auto-save、records 搜尋/篩選狀態保留、學習中心搜尋/detail、收藏、深色模式、JSON/text SAF 匯出 contract 與 delete-all 確認/取消。
+- 已新增 Espresso stable-beta workflow tests，覆蓋 onboarding、本機模式、占卜保存、占法 selected state、紀錄編輯/刪除、result recreate 不重複 auto-save、records 搜尋/篩選狀態保留、學習中心搜尋/detail、收藏、深色模式、JSON/text SAF 匯出 contract、provider-backed 實際寫入與 delete-all 確認/取消。
+- 已新增 `.github/workflows/android-beta.yml` 與 `.github/workflows/android-managed-device.yml`，分別執行本機 Beta 基線 checks 與 manual/nightly managed-device 驗收。
 
 ## 技術架構
 
@@ -57,11 +59,12 @@ docs/
 - `data/SettingsStore`：保存 onboarding、深色模式、減少動態、自動儲存與收藏；設定與收藏本階段仍留在 `SharedPreferences`。
 - `data/LocalRecordStore`：保留 legacy JSON 解析與紀錄搜尋/篩選 helper；新 UI 不再用它直接保存紀錄。
 - `ui/RecordsViewModel`、`ResultViewModel`、`ProfileSettingsViewModel`：紀錄列表、結果保存與設定資料控制的狀態/資料入口；Room 寫入、匯出與 migration 透過 repository async callbacks 回到主執行緒。
-- `ui/Ui`：過渡 helper，保留 dp/color、chip/input 小型 primitive、scroll/page chrome wrapper 與 `HexagramView` factory；top bar 與 bottom nav 由 XML include inflate 後綁定事件，不再用於產生 Beta 2 主要頁面內容。
+- `ui/Ui`：過渡 helper，保留 dp/color、chip、scroll helper、input 與 `HexagramView` factory 等小型 primitive；不再產生整頁 chrome。
+- `ui/NavigationChrome`：綁定 XML include 的 top bar / bottom nav 狀態與導覽事件。
 - `ui/HexagramView`：自訂 View，集中繪製六爻卦象，取代舊的多層動態 `LinearLayout` renderer。
 - `ui/presentation/`：純 Java presentation/state mappers，用於結果分享/變爻、紀錄卡、收藏狀態、Daily、Question presets、Method options、Ritual reduce-motion、Learning list item 與 Hexagram detail sections。
 
-ViewBinding 已啟用並承載 Beta 2 主要畫面：`fragment_daily.xml`、`fragment_question.xml`、`fragment_method.xml`、`fragment_ritual.xml`、`fragment_records.xml`、`fragment_learn_center.xml`、`fragment_hexagram_detail.xml`、`fragment_result.xml`、`fragment_profile_settings.xml`。Splash、Onboarding 與本機模式入口仍保留少量 programmatic View，作為後續整理範圍。
+ViewBinding 已啟用並承載 Beta 3 主要畫面：`fragment_splash.xml`、`fragment_onboarding.xml`、`item_onboarding_page.xml`、`fragment_local_entry.xml`、`fragment_daily.xml`、`fragment_question.xml`、`fragment_method.xml`、`fragment_ritual.xml`、`fragment_records.xml`、`fragment_learn_center.xml`、`fragment_hexagram_detail.xml`、`fragment_result.xml`、`fragment_profile_settings.xml`。
 
 ## 本機資料與持久化
 
@@ -117,14 +120,13 @@ ViewBinding 已啟用並承載 Beta 2 主要畫面：`fragment_daily.xml`、`fra
 ./gradlew connectedDebugAndroidTest
 ```
 
-最近一次驗證狀態：`./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過；`./gradlew pixel2Api35DebugAndroidTest --stacktrace --rerun-tasks` 在具備 managed-device system image 的環境通過 14/14。`./gradlew connectedDebugAndroidTest` 在目前無連接裝置環境會建置 APK 後回報 `No connected devices!`。JVM 測試涵蓋六十四卦 pattern mapping、之卦、簡易占法一致性、占卜 snapshot JSON、舊紀錄 fallback、NavigationArgs、Room entity mapper、Room v1 schema、repository async export callback、legacy parser、legacy SharedPreferences → Room migration、匯出 JSON/純文字邊界、SettingsStore defaults/toggles/favorites、Profile export writer、Result share chooser intent、紀錄搜尋/篩選、學習中心 filters，以及 Beta 2 presentation/state mapper。Instrumentation 包含 app context smoke test、Room DAO insert/update/delete-all 測試，以及 stable-beta workflow tests；managed device 名稱為 `pixel2Api35`。目前 AGP 仍會在 managed-device setup 印出 `testedAbi` 提醒，但任務可完成。
+最近一次驗證狀態（2026-06-16，Gradle wrapper 9.5.1）：`./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過；`./gradlew pixel2Api35DebugAndroidTest` 通過 15/15。JVM 測試涵蓋六十四卦 pattern mapping、之卦、簡易占法一致性、占卜 snapshot JSON、舊紀錄 fallback、NavigationArgs、Room entity mapper、Room v1 schema、repository async export callback、legacy parser、legacy SharedPreferences → Room migration、匯出 JSON/純文字邊界、SAF cancel pending state、backup/data-extraction XML rules、SettingsStore defaults/toggles/favorites、Profile export writer、Result share chooser intent、紀錄搜尋/篩選、學習中心 filters，以及 presentation/state mapper。Instrumentation 包含 app context smoke test、Room DAO insert/update/delete-all 測試，以及 stable-beta workflow tests；managed device 名稱為 `pixel2Api35`。目前 AGP 仍在 managed-device setup 印出 `testedAbi` 提醒，但不阻擋任務完成。
 
 ## 已知不足
 
 目前版本仍是本機內測 Beta，有以下明確限制：
 
 - 不提供真實登入、帳號、驗證、密碼處理、後端或雲端同步。
-- Splash、Onboarding 與本機模式入口仍以 Java 程式化 View 建立；Beta 2 主要使用流程已搬到 XML/ViewBinding，但仍可繼續把啟動畫面與入口整理成 XML component。
 - 沒有使用實際 Noto Sans TC / Noto Serif TC bundled font，目前以系統 sans/serif 呈現。
 - Material Symbols 沒有以正式 icon font 或 vector asset 系統導入，部分圖示以文字符號近似。
 - 墨洗圖、紙張紋理與插圖目前多以簡化符號或色塊呈現，未建立 production-ready raster/vector asset pipeline。
@@ -135,13 +137,13 @@ ViewBinding 已啟用並承載 Beta 2 主要畫面：`fragment_daily.xml`、`fra
 - 深色模式可切換，但不是所有畫面都有專屬深色版式調整；大多依 night resources 套色。
 - 已補部分 content descriptions，Espresso workflow tests 已啟用 accessibility checks；仍尚未完成 focus order、字級縮放、TalkBack 與對比的系統性人工驗收。
 - 無視覺回歸測試或截圖比對。
-- Fragment/Espresso workflow tests 已有第一批 stable-beta coverage，並補上 result recreate 不重複 auto-save、records filter state 保留、SAF UI launch contract 與 delete-all 取消案例；result 分享 chooser intent 已由 JVM/Robolectric 測試覆蓋。仍缺截圖回歸、字級縮放/focus order 驗收與完整 SAF document provider 寫入成功驗證。SAF 目前已覆蓋 formatter、writer 與 ACTION_CREATE_DOCUMENT 啟動 contract，但尚未透過真實 document provider URI 做端到端寫入驗證。
+- Fragment/Espresso workflow tests 已有 stable-beta coverage，並補上 result recreate 不重複 auto-save、records filter state 保留、SAF UI launch contract、provider-backed 實際寫入與 delete-all 取消案例；result 分享 chooser intent 已由 JVM/Robolectric 測試覆蓋。仍缺截圖回歸、字級縮放與 focus order 驗收。
 - 尚未建立 release signing、版本策略、隱私權政策或資料保護策略。
 
 ## 未來實作展望
 
-1. 補 UI 系統化：延續 XML/ViewBinding 路線，把 Splash、Onboarding、本機模式入口與更多共用 row/section component 分批整理，並讓 `Ui` 逐步收斂為小型 primitive。
-2. 補 instrumentation workflow tests：擴充 SAF 實際寫入、刪除後空狀態一致性、字級縮放與更多 navigation saved-state 驗收。
+1. 補 UI 系統化：延續 XML/ViewBinding 路線，整理更多共用 row/section component，並讓 `Ui` 持續收斂為小型 primitive。
+2. 補 instrumentation workflow tests：擴充刪除後空狀態一致性、字級縮放與更多 navigation saved-state 驗收。
 3. 深化資料模型：補彖傳、象傳、文言、互卦、綜卦、錯卦與可審校資料集。
 4. 完整化占卜邏輯：補多變爻解讀策略，將蓍草模式從機率近似提升為互動十八變流程。
 5. 產品化準備：補 accessibility checklist、release signing、隱私權政策、資料保護策略與 changelog 流程。

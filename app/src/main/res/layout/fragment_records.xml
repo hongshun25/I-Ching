@@ -1,114 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/ic_background"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="serif"
-        android:text="占卜紀錄"
-        android:textColor="@color/ic_ink"
-        android:textSize="36sp" />
+    <include
+        android:id="@id/top_bar"
+        layout="@layout/include_top_bar" />
 
-    <EditText
-        android:id="@id/records_search_input"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_input_underline"
-        android:gravity="top|start"
-        android:hint="@string/records_search_hint"
-        android:inputType="text"
-        android:minLines="1"
-        android:padding="8dp"
-        android:textColor="@color/ic_ink"
-        android:textColorHint="@color/ic_outline_strong"
-        android:textSize="16sp" />
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp">
 
             <TextView
-                android:id="@id/records_method_all_chip"
-                style="@style/RecordsFilterChip"
-                android:text="全部占法" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="serif"
+                android:text="占卜紀錄"
+                android:textColor="@color/ic_ink"
+                android:textSize="36sp" />
+
+            <EditText
+                android:id="@id/records_search_input"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_underline"
+                android:gravity="top|start"
+                android:hint="@string/records_search_hint"
+                android:inputType="text"
+                android:minLines="1"
+                android:padding="8dp"
+                android:textColor="@color/ic_ink"
+                android:textColorHint="@color/ic_outline_strong"
+                android:textSize="16sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@id/records_method_all_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="全部占法" />
+
+                    <TextView
+                        android:id="@id/records_method_coins_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="三枚銅錢" />
+
+                    <TextView
+                        android:id="@id/records_method_yarrow_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="蓍草靈感模式" />
+
+                    <TextView
+                        android:id="@id/records_method_simple_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="簡易占法" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@id/records_change_all_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="全部" />
+
+                    <TextView
+                        android:id="@id/records_change_with_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="有變爻" />
+
+                    <TextView
+                        android:id="@id/records_change_without_chip"
+                        style="@style/RecordsFilterChip"
+                        android:text="無變爻" />
+                </LinearLayout>
+            </HorizontalScrollView>
 
             <TextView
-                android:id="@id/records_method_coins_chip"
-                style="@style/RecordsFilterChip"
-                android:text="三枚銅錢" />
+                android:id="@id/records_no_results"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="@string/records_no_results"
+                android:textColor="@color/ic_text_muted"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@id/records_method_yarrow_chip"
-                style="@style/RecordsFilterChip"
-                android:text="蓍草靈感模式" />
+            <include
+                android:id="@id/records_empty_state"
+                layout="@layout/include_empty_state"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@id/records_method_simple_chip"
-                style="@style/RecordsFilterChip"
-                android:text="簡易占法" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@id/records_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
         </LinearLayout>
-    </HorizontalScrollView>
-
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:scrollbars="none">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@id/records_change_all_chip"
-                style="@style/RecordsFilterChip"
-                android:text="全部" />
-
-            <TextView
-                android:id="@id/records_change_with_chip"
-                style="@style/RecordsFilterChip"
-                android:text="有變爻" />
-
-            <TextView
-                android:id="@id/records_change_without_chip"
-                style="@style/RecordsFilterChip"
-                android:text="無變爻" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@id/records_no_results"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:gravity="center"
-        android:text="@string/records_no_results"
-        android:textColor="@color/ic_text_muted"
-        android:textSize="16sp"
-        android:visibility="gone" />
+    </ScrollView>
 
     <include
-        android:id="@id/records_empty_state"
-        layout="@layout/include_empty_state"
-        android:visibility="gone" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@id/records_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false" />
+        android:id="@id/bottom_nav"
+        layout="@layout/include_bottom_nav" />
 </LinearLayout>

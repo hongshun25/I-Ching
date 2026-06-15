@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void completeOnboarding() {
         settingsStore.setOnboardingComplete(true);
-        navigateClearingStack(R.id.authFragment, null);
+        navigateClearingStack(R.id.localEntryFragment, null);
     }
 
     public void enterLocalMode() {

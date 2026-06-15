@@ -4,13 +4,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -18,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
 
-import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 
@@ -46,63 +40,20 @@ public final class Ui {
         return drawable;
     }
 
-    public static TextView text(Context context, String value, float sp, int style, @ColorRes int color, boolean serif) {
-        TextView view = new TextView(context);
-        view.setText(value);
-        view.setTextColor(color(context, color));
-        view.setTextSize(sp);
-        view.setLineSpacing(dp(context, 3), 1.0f);
-        view.setIncludeFontPadding(true);
-        view.setTypeface(serif ? Typeface.SERIF : Typeface.SANS_SERIF, style);
-        return view;
-    }
-
-    public static Button pill(Context context, String label, boolean primary) {
-        Button button = new Button(context);
-        button.setText(label);
-        button.setAllCaps(false);
-        button.setTextSize(14);
-        button.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-        button.setTextColor(color(context, primary ? R.color.ic_background : R.color.ic_ink));
-        button.setBackground(primary
-                ? bg(context, R.color.ic_ink, 999)
-                : strokeBg(context, R.color.ic_background, R.color.ic_outline, 999));
-        button.setMinHeight(dp(context, 48));
-        button.setPadding(dp(context, 18), 0, dp(context, 18), 0);
-        return button;
-    }
-
     public static TextView chip(Context context, String label) {
-        TextView chip = text(context, label, 13, Typeface.BOLD, R.color.ic_text_muted, false);
+        TextView chip = new TextView(context);
+        chip.setText(label);
+        chip.setTextColor(color(context, R.color.ic_text_muted));
+        chip.setTextSize(13);
+        chip.setLineSpacing(dp(context, 3), 1.0f);
+        chip.setIncludeFontPadding(true);
+        chip.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
         chip.setGravity(Gravity.CENTER);
         chip.setPadding(dp(context, 12), dp(context, 5), dp(context, 12), dp(context, 5));
         chip.setMinWidth(dp(context, 48));
         chip.setMinHeight(dp(context, 48));
         chip.setBackground(strokeBg(context, R.color.ic_surface_container_low, R.color.ic_outline, 999));
         return chip;
-    }
-
-    public static LinearLayout column(Context context) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        return layout;
-    }
-
-    public static LinearLayout row(Context context) {
-        LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setGravity(Gravity.CENTER_VERTICAL);
-        return layout;
-    }
-
-    public static void add(ViewGroup parent, View child, int width, int height) {
-        parent.addView(child, new ViewGroup.LayoutParams(width, height));
-    }
-
-    public static void addWithMargins(LinearLayout parent, View child, int width, int height, int l, int t, int r, int b) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-        params.setMargins(dp(parent.getContext(), l), dp(parent.getContext(), t), dp(parent.getContext(), r), dp(parent.getContext(), b));
-        parent.addView(child, params);
     }
 
     public static ScrollView scrollPage(Context context, LinearLayout content, boolean bottomNav) {
@@ -113,72 +64,6 @@ public final class Ui {
         content.setPadding(dp(context, 24), dp(context, 24), dp(context, 24), dp(context, bottom));
         scroll.addView(content, new ScrollView.LayoutParams(-1, -2));
         return scroll;
-    }
-
-    public static LinearLayout topBar(Context context, String left, View.OnClickListener leftClick, String right, View.OnClickListener rightClick) {
-        LinearLayout bar = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.include_top_bar, null, false);
-        TextView leftView = bar.findViewById(R.id.top_bar_left_action);
-        leftView.setText(left);
-        leftView.setContentDescription("←".equals(left) ? "返回" : "選單");
-        leftView.setOnClickListener(leftClick);
-        TextView title = bar.findViewById(R.id.top_bar_title);
-        title.setText("I CHING");
-        TextView rightView = bar.findViewById(R.id.top_bar_right_action);
-        rightView.setText(right);
-        rightView.setContentDescription("⚙".equals(right) ? "設定" : "切換收藏");
-        rightView.setOnClickListener(rightClick);
-        return bar;
-    }
-
-    public static View pageWithChrome(MainActivity activity, LinearLayout content, String activeTab) {
-        FrameLayout frame = new FrameLayout(activity);
-        frame.setBackgroundColor(color(activity, R.color.ic_background));
-        LinearLayout page = column(activity);
-        page.addView(topBar(activity, "☰", v -> {}, "⚙", v -> activity.showProfile()), new LinearLayout.LayoutParams(-1, -2));
-        page.addView(scrollPage(activity, content, true), new LinearLayout.LayoutParams(-1, 0, 1));
-        frame.addView(page, new FrameLayout.LayoutParams(-1, -1));
-        FrameLayout.LayoutParams navParams = new FrameLayout.LayoutParams(-1, dp(activity, 78), Gravity.BOTTOM);
-        frame.addView(bottomNav(activity, activeTab), navParams);
-        return frame;
-    }
-
-    public static LinearLayout bottomNav(MainActivity activity, String active) {
-        LinearLayout nav = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.include_bottom_nav, null, false);
-        bindTab(activity, nav, R.id.bottom_nav_daily, "今日", "◎", active.equals("今日"), () -> activity.showDaily(false));
-        bindTab(activity, nav, R.id.bottom_nav_divination, "占卜", "✦", active.equals("占卜"), activity::showQuestion);
-        bindTab(activity, nav, R.id.bottom_nav_records, "紀錄", "↺", active.equals("紀錄"), activity::showRecords);
-        bindTab(activity, nav, R.id.bottom_nav_learn, "學習", "書", active.equals("學習"), activity::showLearnCenter);
-        bindTab(activity, nav, R.id.bottom_nav_profile, "我的", "人", active.equals("我的"), activity::showProfile);
-        return nav;
-    }
-
-    private static void bindTab(Context context, LinearLayout nav, int id, String label, String icon, boolean selected, Runnable action) {
-        LinearLayout item = nav.findViewById(id);
-        TextView iconView = (TextView) item.getChildAt(0);
-        TextView labelView = (TextView) item.getChildAt(1);
-        item.setBackground(selected ? ContextCompat.getDrawable(context, R.drawable.bg_bottom_tab_selected) : null);
-        iconView.setText(icon);
-        iconView.setTextColor(color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
-        labelView.setText(label);
-        labelView.setTextColor(color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
-        item.setContentDescription(label + (selected ? "，目前分頁" : "分頁"));
-        item.setOnClickListener(v -> action.run());
-    }
-
-    private static int bottomNavId(String label) {
-        if ("今日".equals(label)) return R.id.bottom_nav_daily;
-        if ("占卜".equals(label)) return R.id.bottom_nav_divination;
-        if ("紀錄".equals(label)) return R.id.bottom_nav_records;
-        if ("學習".equals(label)) return R.id.bottom_nav_learn;
-        if ("我的".equals(label)) return R.id.bottom_nav_profile;
-        return View.NO_ID;
-    }
-
-    public static LinearLayout card(Context context) {
-        LinearLayout card = column(context);
-        card.setPadding(dp(context, 22), dp(context, 22), dp(context, 22), dp(context, 22));
-        card.setBackground(strokeBg(context, R.color.ic_surface, R.color.ic_outline, 20));
-        return card;
     }
 
     public static View hexagramView(Context context, Hexagram hexagram, int widthDp, int lineHeightDp, boolean useGoldForChanging) {
@@ -197,21 +82,5 @@ public final class Ui {
         GradientDrawable underline = strokeBg(context, android.R.color.transparent, R.color.ic_outline, 0);
         edit.setBackground(underline);
         return edit;
-    }
-
-    public static LinearLayout chipsRow(Context context, String... labels) {
-        LinearLayout wrapper = row(context);
-        wrapper.setGravity(Gravity.CENTER);
-        for (String label : labels) {
-            addWithMargins(wrapper, chip(context, label), -2, -2, 4, 4, 4, 4);
-        }
-        return wrapper;
-    }
-
-    public static HorizontalScrollView horizontalChips(Context context, LinearLayout row) {
-        HorizontalScrollView scroll = new HorizontalScrollView(context);
-        scroll.setHorizontalScrollBarEnabled(false);
-        scroll.addView(row);
-        return scroll;
     }
 }

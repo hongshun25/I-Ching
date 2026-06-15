@@ -2,7 +2,7 @@
 
 ## Project Snapshot
 
-This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Navigation Component, Room, Material/AppCompat dependencies, XML resources, and programmatic Android views. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
+This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Navigation Component, Room, Material/AppCompat dependencies, XML resources/ViewBinding, and limited programmatic Android view helpers. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
 
 The current Beta implements a local high-fidelity flow based on the Stitch exports in `design/stitch_export/`: splash, onboarding, local-mode entry, daily insight, three-step divination, divination result with original hexagram / changing lines / relating hexagram, searchable and filterable records, learning center, hexagram detail with six line texts, profile/settings, data export/delete controls, and dark-mode daily styling. Authentication is not implemented; local mode is the real operating mode.
 
@@ -14,7 +14,7 @@ Core data is local-first and deterministic: `HexagramRepository` stores all 64 K
 - `app/src/main/java/fcu/app/i_ching/` contains app code.
 - `app/src/main/java/fcu/app/i_ching/data/` contains local models, static hexagram data, casting and relating-hexagram logic, settings persistence, Room record persistence, legacy record migration/export helpers, and record filtering helpers.
 - `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, presentation helpers, and the transitional UI helper `Ui`.
-- `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; `RecordsFragment`, `ResultFragment`, `ProfileSettingsFragment`, top bar, bottom nav, empty state, record item, and settings row now use XML/ViewBinding components, while several Beta screens remain programmatic Java views during the migration.
+- `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; splash, onboarding, local entry, daily, records, learn, result, profile/settings, top bar, bottom nav, empty state, record item, and settings row now use XML/ViewBinding components.
 - `app/src/main/res/navigation/main_graph.xml` defines the app navigation graph. Use simple Bundle/JSON arguments for now; Safe Args is not enabled.
 - `app/src/main/res/values/` and `app/src/main/res/values-night/` contain the current design tokens for colors, themes, and spacing.
 - `app/src/main/res/xml/backup_rules.xml` and `app/src/main/res/xml/data_extraction_rules.xml` define backup behavior. Divination records are excluded from cloud backup because questions and notes may be sensitive.
@@ -41,7 +41,7 @@ Current known verification state after the local Beta stabilization work:
 - `./gradlew lintDebug` passes.
 - `./gradlew assembleDebug` passes.
 - `./gradlew assembleDebugAndroidTest` passes.
-- `./gradlew pixel2Api35DebugAndroidTest` passes in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning; the task is currently successful.
+- `./gradlew pixel2Api35DebugAndroidTest` passes 15/15 in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning; the task is currently successful.
 - `./gradlew connectedDebugAndroidTest` builds the app/test APK but cannot run without an attached device or emulator; the current environment reports `No connected devices!`.
 - `./gradlew pixel2Api35DebugAndroidTest` is the preferred no-physical-device instrumentation command when managed-device prerequisites are installed.
 
@@ -55,7 +55,7 @@ Prefer existing local patterns before adding new ones:
 - Add screens and screen-level ViewModels under `ui/`.
 - Route screens through `MainActivity` helpers backed by `NavController`; do not add new manual Fragment transactions.
 - Use `NavigationArgs` as the single Fragment argument contract for question, method, result JSON, hexagram number, and record id fallback. Do not add new ad hoc argument constants to Fragments or `MainActivity`.
-- Reuse `Ui` for shared visual primitives until a screen or component is deliberately migrated to XML. New substantial screens should prefer XML/ViewBinding where practical.
+- Reuse `Ui` only for small visual primitives such as dimensions, colors, chips, simple scroll wrapping, bottom inputs, and hexagram rendering hooks. New substantial screens should prefer XML/ViewBinding.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
 - Keep divination consistency in the data layer: derive `Hexagram` and `relatingHexagram` from the same line values / changing-line helpers in `HexagramRepository`.
@@ -92,6 +92,7 @@ Current JVM test coverage includes:
 - `ResultFragmentTest` covers the Android share chooser intent wrapping `ACTION_SEND`, `text/plain`, and the share text.
 - `NavigationArgsTest` covers navigation argument Bundle round trips and fallback behavior.
 - `RecordRepositoryTest` also covers exported Room v1 schema and repository async export callbacks.
+- `BackupRulesTest` covers Auto Backup and Data Extraction XML rules for sensitive local record storage.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
 - `LocalRecordStoreFilterTest` covers record search by question, note, hexagram, and tag, plus method and changing-line filters.
 - `ResultPresentationTest`, `RecordCardPresentationTest`, and `FavoriteHexagramPresentationTest` cover pure Java UI presentation text for result sharing/changing lines, record cards, and favorite labels.
@@ -100,7 +101,8 @@ Current instrumentation coverage includes:
 
 - `ExampleInstrumentedTest` checks app package context.
 - `RecordDaoInstrumentedTest` checks Room DAO insert/update/delete-all behavior with an in-memory database.
-- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, result recreate without duplicate auto-save, records search/filter state retention, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts and UI launch intents, and profile delete-all confirm/cancel. Espresso accessibility checks are enabled in this workflow test class.
+- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, result recreate without duplicate auto-save, records search/filter state retention, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts, UI launch intents, provider-backed SAF writes, and profile delete-all confirm/cancel. Espresso root-view accessibility checks are enabled in this workflow test class.
+- `TestDocumentProvider` is androidTest-only and exists to verify actual SAF writes through `ContentResolver.openOutputStream()`.
 
 Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, export formatting, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, local-mode entry, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, SAF export, delete-all, and UI workflows.
 

@@ -32,8 +32,9 @@ public class DailyFragment extends Fragment {
         boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;
         Hexagram hexagram = HexagramRepository.get(night ? 29 : 15);
+        NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_DAILY);
         bindDaily(activity, hexagram, DailyCardPresentation.from(hexagram, night));
-        return Ui.pageWithChrome(activity, binding.getRoot(), "今日");
+        return binding.getRoot();
     }
 
     @Override

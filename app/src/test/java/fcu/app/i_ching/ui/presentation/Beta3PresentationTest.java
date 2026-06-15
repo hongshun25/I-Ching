@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class Beta2PresentationTest {
+public class Beta3PresentationTest {
     @Test
     public void questionPresetsExposeStableLabelsAndQuestions() {
         assertEquals(8, QuestionPresetPresentation.all().size());

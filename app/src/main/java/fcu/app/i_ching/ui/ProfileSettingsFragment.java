@@ -50,8 +50,9 @@ public class ProfileSettingsFragment extends Fragment {
         MainActivity activity = (MainActivity) requireActivity();
         SettingsStore settings = activity.settings();
         binding = FragmentProfileSettingsBinding.inflate(inflater, container, false);
+        NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_PROFILE);
         bindRows(settings);
-        return Ui.pageWithChrome(activity, binding.getRoot(), "我的");
+        return binding.getRoot();
     }
 
     @Override
@@ -66,8 +67,7 @@ public class ProfileSettingsFragment extends Fragment {
         viewModel.exportEvents().observe(getViewLifecycleOwner(), event -> {
             ProfileSettingsViewModel.ExportState state = event.getContentIfNotHandled();
             if (state == null) return;
-            pendingExportContent = state.content;
-            pendingExportLabel = state.label;
+            preparePendingExport(state.content, state.label);
             if (state.kind == ProfileSettingsViewModel.ExportKind.JSON) {
                 exportJsonLauncher.launch(state.fileName);
             } else {
@@ -149,16 +149,16 @@ public class ProfileSettingsFragment extends Fragment {
         viewModel.exportText();
     }
 
-    private void writeExport(Uri uri) {
-        if (uri == null || pendingExportContent == null) return;
+    void writeExport(Uri uri) {
+        String content = pendingExportContent;
+        String label = pendingExportLabel;
+        clearPendingExport();
+        if (uri == null || content == null) return;
         try (OutputStream stream = requireContext().getContentResolver().openOutputStream(uri)) {
-            writeExportContent(stream, pendingExportContent);
-            Toast.makeText(requireContext(), pendingExportLabel + "已匯出", Toast.LENGTH_SHORT).show();
+            writeExportContent(stream, content);
+            Toast.makeText(requireContext(), (label == null ? "" : label) + "已匯出", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(requireContext(), "匯出失敗", Toast.LENGTH_SHORT).show();
-        } finally {
-            pendingExportContent = null;
-            pendingExportLabel = null;
         }
     }
 
@@ -167,6 +167,20 @@ public class ProfileSettingsFragment extends Fragment {
         OutputStreamWriter writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8);
         writer.write(content == null ? "" : content);
         writer.flush();
+    }
+
+    void preparePendingExport(String content, String label) {
+        pendingExportContent = content;
+        pendingExportLabel = label;
+    }
+
+    boolean hasPendingExport() {
+        return pendingExportContent != null || pendingExportLabel != null;
+    }
+
+    private void clearPendingExport() {
+        pendingExportContent = null;
+        pendingExportLabel = null;
     }
 
     private void confirmDeleteAll() {

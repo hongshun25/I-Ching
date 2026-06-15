@@ -15,8 +15,8 @@
         android:label="Onboarding" />
 
     <fragment
-        android:id="@+id/authFragment"
-        android:name="fcu.app.i_ching.ui.AuthFragment"
+        android:id="@+id/localEntryFragment"
+        android:name="fcu.app.i_ching.ui.LocalEntryFragment"
         android:label="Local Entry" />
 
     <fragment

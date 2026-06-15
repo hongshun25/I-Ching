@@ -52,8 +52,9 @@ public class LearnCenterFragment extends Fragment {
         setupSearch(savedInstanceState);
         setupFilterChips(activity);
         updateChipStyles();
+        NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_LEARN);
         renderList(activity);
-        return Ui.pageWithChrome(activity, binding.getRoot(), "學習");
+        return binding.getRoot();
     }
 
     @Override

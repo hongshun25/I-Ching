@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="onboarding_start_button" type="id" />
+    <item name="onboarding_recycler" type="id" />
+    <item name="onboarding_indicator" type="id" />
+    <item name="onboarding_dot_daily" type="id" />
+    <item name="onboarding_dot_question" type="id" />
+    <item name="onboarding_dot_records" type="id" />
+    <item name="onboarding_page_art" type="id" />
+    <item name="onboarding_page_title" type="id" />
+    <item name="onboarding_page_body" type="id" />
     <item name="local_mode_button" type="id" />
+    <item name="local_entry_daily_preview_button" type="id" />
+    <item name="splash_title" type="id" />
+    <item name="splash_subtitle" type="id" />
+    <item name="top_bar" type="id" />
+    <item name="bottom_nav" type="id" />
     <item name="question_input" type="id" />
     <item name="question_next_button" type="id" />
     <item name="method_simple_card" type="id" />

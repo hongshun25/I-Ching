@@ -1,8 +1,6 @@
 package fcu.app.i_ching.ui;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,26 +10,24 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import fcu.app.i_ching.MainActivity;
-import fcu.app.i_ching.databinding.FragmentSplashBinding;
+import fcu.app.i_ching.databinding.FragmentLocalEntryBinding;
 
-public class SplashFragment extends Fragment {
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private FragmentSplashBinding binding;
+public class LocalEntryFragment extends Fragment {
+    private FragmentLocalEntryBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentSplashBinding.inflate(inflater, container, false);
-        handler.postDelayed(() -> {
-            if (isAdded()) ((MainActivity) requireActivity()).routeAfterSplash();
-        }, 3500);
+        MainActivity activity = (MainActivity) requireActivity();
+        binding = FragmentLocalEntryBinding.inflate(inflater, container, false);
+        binding.localModeButton.setOnClickListener(v -> activity.enterLocalMode());
+        binding.localEntryDailyPreviewButton.setOnClickListener(v -> activity.enterLocalMode());
         return binding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
-        handler.removeCallbacksAndMessages(null);
         binding = null;
         super.onDestroyView();
     }
