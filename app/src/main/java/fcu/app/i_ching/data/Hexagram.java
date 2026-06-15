@@ -1,15 +1,20 @@
 package fcu.app.i_ching.data;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Hexagram {
     public final int number;
     public final String name;
     public final String fullName;
+    public final Trigram upperTrigram;
+    public final Trigram lowerTrigram;
     public final String upper;
     public final String lower;
     public final boolean[] linesBottomToTop;
+    public final List<HexagramLine> lineTexts;
     public final List<String> tags;
     public final String judgment;
     public final String summary;
@@ -19,24 +24,36 @@ public class Hexagram {
     public final List<String> doItems;
     public final List<String> avoidItems;
 
-    public Hexagram(int number, String name, String fullName, String upper, String lower,
-                    boolean[] linesBottomToTop, List<String> tags, String judgment, String summary,
-                    String theme, String classicalText, String modernText,
+    public Hexagram(int number, String name, String fullName, Trigram upperTrigram, Trigram lowerTrigram,
+                    boolean[] linesBottomToTop, List<HexagramLine> lineTexts, List<String> tags,
+                    String judgment, String summary, String theme, String classicalText, String modernText,
                     List<String> doItems, List<String> avoidItems) {
         this.number = number;
         this.name = name;
         this.fullName = fullName;
-        this.upper = upper;
-        this.lower = lower;
-        this.linesBottomToTop = linesBottomToTop;
-        this.tags = tags;
+        this.upperTrigram = upperTrigram;
+        this.lowerTrigram = lowerTrigram;
+        this.upper = upperTrigram.displayName();
+        this.lower = lowerTrigram.displayName();
+        this.linesBottomToTop = linesBottomToTop == null ? new boolean[0] : linesBottomToTop.clone();
+        this.lineTexts = immutableLineTexts(lineTexts);
+        this.tags = tags == null ? Collections.emptyList() : Collections.unmodifiableList(new ArrayList<>(tags));
         this.judgment = judgment;
         this.summary = summary;
         this.theme = theme;
         this.classicalText = classicalText;
         this.modernText = modernText;
-        this.doItems = doItems;
-        this.avoidItems = avoidItems;
+        this.doItems = doItems == null ? Collections.emptyList() : Collections.unmodifiableList(new ArrayList<>(doItems));
+        this.avoidItems = avoidItems == null ? Collections.emptyList() : Collections.unmodifiableList(new ArrayList<>(avoidItems));
+    }
+
+    public Hexagram(int number, String name, String fullName, String upper, String lower,
+                    boolean[] linesBottomToTop, List<String> tags, String judgment, String summary,
+                    String theme, String classicalText, String modernText,
+                    List<String> doItems, List<String> avoidItems) {
+        this(number, name, fullName, Trigram.QIAN, Trigram.QIAN, linesBottomToTop,
+                fallbackLineTexts(linesBottomToTop), tags, judgment, summary, theme, classicalText,
+                modernText, doItems, avoidItems);
     }
 
     public static Hexagram basic(int number, String name, String fullName, String upper, String lower,
@@ -49,5 +66,19 @@ public class Hexagram {
                 "這一卦可作為自我反思的入口：辨識當前處境的主要力量，並選擇較穩妥的行動。",
                 Arrays.asList("整理資訊", "保留彈性"),
                 Arrays.asList("急於定論", "忽略訊號"));
+    }
+
+    private static List<HexagramLine> immutableLineTexts(List<HexagramLine> value) {
+        if (value == null) return Collections.emptyList();
+        return Collections.unmodifiableList(new ArrayList<>(value));
+    }
+
+    private static List<HexagramLine> fallbackLineTexts(boolean[] lines) {
+        List<HexagramLine> values = new ArrayList<>();
+        int count = lines == null ? 6 : Math.min(6, lines.length);
+        for (int i = 0; i < count; i++) {
+            values.add(new HexagramLine(i + 1, "第" + (i + 1) + "爻", "爻辭待補。", "觀察此爻所在的位置與當下行動的關係。"));
+        }
+        return values;
     }
 }

@@ -11,6 +11,7 @@ public class DivinationRecord {
     public final long id;
     public final String question;
     public final int hexagramNumber;
+    public final int relatingHexagramNumber;
     public final DivinationMethod method;
     public final int[] lineValues;
     public final List<Integer> changingLines;
@@ -19,9 +20,17 @@ public class DivinationRecord {
 
     public DivinationRecord(long id, String question, int hexagramNumber, DivinationMethod method,
                             int[] lineValues, List<Integer> changingLines, long createdAt, String note) {
+        this(id, question, hexagramNumber, inferRelatingNumber(hexagramNumber, lineValues, changingLines), method,
+                lineValues, changingLines, createdAt, note);
+    }
+
+    public DivinationRecord(long id, String question, int hexagramNumber, int relatingHexagramNumber,
+                            DivinationMethod method, int[] lineValues, List<Integer> changingLines,
+                            long createdAt, String note) {
         this.id = id;
         this.question = question;
         this.hexagramNumber = hexagramNumber;
+        this.relatingHexagramNumber = relatingHexagramNumber;
         this.method = method;
         this.lineValues = lineValues == null ? new int[0] : lineValues;
         this.changingLines = changingLines == null ? new ArrayList<>() : new ArrayList<>(changingLines);
@@ -34,12 +43,14 @@ public class DivinationRecord {
     }
 
     public static DivinationRecord fromResult(DivinationResult result, String note) {
-        return new DivinationRecord(result.createdAt, result.question, result.hexagram.number, result.method,
-                result.lineValues, result.changingLines, result.createdAt, note);
+        return new DivinationRecord(result.createdAt, result.question, result.hexagram.number,
+                result.relatingHexagramNumber, result.method, result.lineValues, result.changingLines,
+                result.createdAt, note);
     }
 
     public DivinationRecord withNote(String value) {
-        return new DivinationRecord(id, question, hexagramNumber, method, lineValues, changingLines, createdAt, value);
+        return new DivinationRecord(id, question, hexagramNumber, relatingHexagramNumber, method,
+                lineValues, changingLines, createdAt, value);
     }
 
     public JSONObject toJson() throws JSONException {
@@ -47,6 +58,7 @@ public class DivinationRecord {
         object.put("id", id);
         object.put("question", question);
         object.put("hexagramNumber", hexagramNumber);
+        object.put("relatingHexagramNumber", relatingHexagramNumber);
         object.put("method", method.name());
         object.put("lineValues", DivinationResult.intArrayToJson(lineValues));
         object.put("changingLines", DivinationResult.integerListToJson(changingLines));
@@ -57,13 +69,22 @@ public class DivinationRecord {
 
     public static DivinationRecord fromJson(JSONObject object) throws JSONException {
         long createdAt = object.optLong("createdAt", object.optLong("id", System.currentTimeMillis()));
+        int hexagramNumber = object.optInt("hexagramNumber", 15);
+        int[] lineValues = DivinationResult.jsonToIntArray(object.optJSONArray("lineValues"));
+        List<Integer> changingLines = object.has("changingLines")
+                ? DivinationResult.jsonToIntegerList(object.optJSONArray("changingLines"))
+                : HexagramRepository.changingLinesFromValues(lineValues);
+        int relatingNumber = object.has("relatingHexagramNumber")
+                ? object.optInt("relatingHexagramNumber", hexagramNumber)
+                : inferRelatingNumber(hexagramNumber, lineValues, changingLines);
         return new DivinationRecord(
                 object.optLong("id", createdAt),
                 object.optString("question"),
-                object.optInt("hexagramNumber", 15),
+                hexagramNumber,
+                relatingNumber,
                 DivinationResult.methodFromName(object.optString("method", DivinationMethod.COINS.name())),
-                DivinationResult.jsonToIntArray(object.optJSONArray("lineValues")),
-                DivinationResult.jsonToIntegerList(object.optJSONArray("changingLines")),
+                lineValues,
+                changingLines,
                 createdAt,
                 object.optString("note")
         );
@@ -80,5 +101,11 @@ public class DivinationRecord {
         JSONArray array = new JSONArray(value == null || value.isEmpty() ? "[]" : value);
         for (int i = 0; i < array.length(); i++) records.add(fromJson(array.getJSONObject(i)));
         return records;
+    }
+
+    private static int inferRelatingNumber(int hexagramNumber, int[] lineValues, List<Integer> changingLines) {
+        boolean[] lines = HexagramRepository.linesFromValues(lineValues);
+        if (lines.length == 6) return HexagramRepository.relatingFrom(lines, changingLines).number;
+        return hexagramNumber;
     }
 }

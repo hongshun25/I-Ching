@@ -1,6 +1,5 @@
 package fcu.app.i_ching.data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -17,19 +16,11 @@ public class DivinationEngine {
 
     public DivinationResult cast(String question, DivinationMethod method) {
         int[] lineValues = castLineValues(method);
-        boolean[] lines = new boolean[6];
-        List<Integer> changing = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            int value = lineValues[i];
-            lines[i] = value == 7 || value == 9;
-            if (value == 6 || value == 9) {
-                changing.add(i + 1);
-            }
-        }
-        Hexagram hexagram = method == DivinationMethod.SIMPLE
-                ? HexagramRepository.get(random.nextInt(64) + 1)
-                : HexagramRepository.fromLines(lines);
-        return new DivinationResult(question, method, hexagram, lineValues, changing, System.currentTimeMillis());
+        boolean[] lines = HexagramRepository.linesFromValues(lineValues);
+        List<Integer> changing = HexagramRepository.changingLinesFromValues(lineValues);
+        Hexagram hexagram = HexagramRepository.fromLines(lines);
+        Hexagram relating = HexagramRepository.relatingFrom(lines, changing);
+        return new DivinationResult(question, method, hexagram, relating, lineValues, changing, System.currentTimeMillis());
     }
 
     public int[] castLineValues(DivinationMethod method) {

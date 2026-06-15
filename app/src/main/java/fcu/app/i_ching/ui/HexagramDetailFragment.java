@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
+import fcu.app.i_ching.data.HexagramLine;
 import fcu.app.i_ching.data.HexagramRepository;
 
 public class HexagramDetailFragment extends Fragment {
@@ -34,9 +35,11 @@ public class HexagramDetailFragment extends Fragment {
         content.addView(Ui.chipsRow(requireContext(), hex.fullName, hex.tags.contains("吉卦") ? "吉卦" : hex.tags.get(0)));
         TextView title = Ui.text(requireContext(), "第" + hex.number + "卦｜" + hex.name, 40, android.graphics.Typeface.BOLD, R.color.ic_ink, true); title.setGravity(Gravity.CENTER); Ui.addWithMargins(content, title, -1, -2, 0, 14, 0, 8);
         TextView summary = Ui.text(requireContext(), hex.summary, 18, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false); summary.setGravity(Gravity.CENTER); content.addView(summary);
+        addSection(content, "卦象組成", "上卦：" + hex.upper + "\n下卦：" + hex.lower);
         addSection(content, "主旨核心", hex.theme);
         addSection(content, "適宜情境", "• " + String.join("\n• ", hex.doItems));
         addSection(content, "《易經》原文", hex.judgment + "\n\n" + hex.classicalText);
+        addSection(content, "六爻爻辭", lineText(hex));
         addSection(content, "現代解析", hex.modernText);
         page.addView(Ui.scrollPage(requireContext(), content, false), new LinearLayout.LayoutParams(-1, 0, 1));
         frame.addView(page, new FrameLayout.LayoutParams(-1, -1));
@@ -55,5 +58,14 @@ public class HexagramDetailFragment extends Fragment {
         section.addView(Ui.text(requireContext(), title, 22, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
         Ui.addWithMargins(section, Ui.text(requireContext(), body, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 8, 0, 0);
         Ui.addWithMargins(content, section, -1, -2, 0, 20, 0, 0);
+    }
+
+    private String lineText(Hexagram hex) {
+        StringBuilder builder = new StringBuilder();
+        for (HexagramLine line : hex.lineTexts) {
+            if (builder.length() > 0) builder.append("\n\n");
+            builder.append(line.label).append("：").append(line.text).append("\n").append(line.modernHint);
+        }
+        return builder.toString();
     }
 }

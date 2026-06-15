@@ -120,6 +120,7 @@ public class LearnCenterFragment extends Fragment {
         LinearLayout texts = Ui.column(requireContext());
         texts.addView(Ui.text(requireContext(), "第" + hex.number + "卦", 12, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         texts.addView(Ui.text(requireContext(), hex.name, 24, android.graphics.Typeface.NORMAL, R.color.ic_ink, true));
+        texts.addView(Ui.text(requireContext(), "上" + hex.upper + "　下" + hex.lower, 12, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
         row.addView(texts, new LinearLayout.LayoutParams(0, -2, 1));
         boolean favorite = settings.isFavorite(hex.number);
         TextView fav = Ui.text(requireContext(), favorite ? "♥" : "♡", 26, android.graphics.Typeface.NORMAL, favorite ? R.color.ic_gold : R.color.ic_outline_strong, false);

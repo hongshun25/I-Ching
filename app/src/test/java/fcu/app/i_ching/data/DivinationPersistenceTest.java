@@ -23,7 +23,8 @@ public class DivinationPersistenceTest {
         assertEquals("是否適合調整工作節奏？", restored.question);
         assertEquals(DivinationMethod.COINS, restored.method);
         assertEquals(15, restored.hexagram.number);
-        assertArrayEquals(new int[]{6, 7, 8, 9, 7, 8}, restored.lineValues);
+        assertEquals(55, restored.relatingHexagramNumber);
+        assertArrayEquals(new int[]{6, 8, 7, 6, 8, 8}, restored.lineValues);
         assertEquals(Arrays.asList(1, 4), restored.changingLines);
         assertEquals(123456789L, restored.createdAt);
     }
@@ -37,8 +38,9 @@ public class DivinationPersistenceTest {
         assertEquals(123456789L, restored.id);
         assertEquals("是否適合調整工作節奏？", restored.question);
         assertEquals(15, restored.hexagramNumber);
+        assertEquals(55, restored.relatingHexagramNumber);
         assertEquals(DivinationMethod.COINS, restored.method);
-        assertArrayEquals(new int[]{6, 7, 8, 9, 7, 8}, restored.lineValues);
+        assertArrayEquals(new int[]{6, 8, 7, 6, 8, 8}, restored.lineValues);
         assertEquals(Arrays.asList(1, 4), restored.changingLines);
         assertEquals(123456789L, restored.createdAt);
         assertEquals("先整理需求", restored.note);
@@ -59,11 +61,45 @@ public class DivinationPersistenceTest {
         assertEquals(77L, restored.id);
         assertEquals("舊紀錄", restored.question);
         assertEquals(29, restored.hexagramNumber);
+        assertEquals(29, restored.relatingHexagramNumber);
         assertEquals(DivinationMethod.COINS, restored.method);
         assertArrayEquals(new int[0], restored.lineValues);
         assertTrue(restored.changingLines.isEmpty());
         assertEquals(66L, restored.createdAt);
         assertEquals("舊筆記", restored.note);
+    }
+
+    @Test
+    public void oldResultJsonDerivesRelatingHexagramFromLineValues() throws Exception {
+        JSONObject oldJson = new JSONObject();
+        oldJson.put("question", "舊結果");
+        oldJson.put("method", "COINS");
+        oldJson.put("hexagramNumber", 15);
+        oldJson.put("lineValues", DivinationResult.intArrayToJson(new int[]{6, 8, 7, 6, 8, 8}));
+        oldJson.put("createdAt", 5L);
+
+        DivinationResult restored = DivinationResult.fromJson(oldJson);
+
+        assertEquals(15, restored.hexagram.number);
+        assertEquals(55, restored.relatingHexagramNumber);
+        assertEquals(Arrays.asList(1, 4), restored.changingLines);
+    }
+
+    @Test
+    public void oldRecordJsonDerivesRelatingHexagramFromLineValues() throws Exception {
+        JSONObject oldJson = new JSONObject();
+        oldJson.put("id", 88L);
+        oldJson.put("question", "舊紀錄含爻值");
+        oldJson.put("hexagramNumber", 15);
+        oldJson.put("method", "COINS");
+        oldJson.put("lineValues", DivinationResult.intArrayToJson(new int[]{6, 8, 7, 6, 8, 8}));
+        oldJson.put("createdAt", 88L);
+
+        DivinationRecord restored = DivinationRecord.fromJson(oldJson);
+
+        assertEquals(15, restored.hexagramNumber);
+        assertEquals(55, restored.relatingHexagramNumber);
+        assertEquals(Arrays.asList(1, 4), restored.changingLines);
     }
 
     @Test
@@ -92,7 +128,7 @@ public class DivinationPersistenceTest {
                 "是否適合調整工作節奏？",
                 DivinationMethod.COINS,
                 HexagramRepository.get(15),
-                new int[]{6, 7, 8, 9, 7, 8},
+                new int[]{6, 8, 7, 6, 8, 8},
                 Arrays.asList(1, 4),
                 123456789L
         );
