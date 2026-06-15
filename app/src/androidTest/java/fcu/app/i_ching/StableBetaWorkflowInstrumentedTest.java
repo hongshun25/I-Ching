@@ -34,6 +34,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -132,6 +133,56 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     @Test
+    public void resultRecreateDoesNotDuplicateAutoSavedRecord() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showResult("旋轉後是否仍是同一筆紀錄？", DivinationMethod.SIMPLE);
+            });
+            waitForExists(withId(R.id.result_note_input));
+            waitForRecordsCount(1);
+
+            scenario.recreate();
+
+            waitForExists(withId(R.id.result_note_input));
+            waitForRecordsCount(1);
+        }
+    }
+
+    @Test
+    public void recordsSearchAndMethodFilterSurviveRecreate() {
+        new SettingsStore(context).setOnboardingComplete(true);
+        seedRecord(new DivinationRecord(9101L, "保留篩選 金錢紀錄", 15, 55,
+                DivinationMethod.COINS, new int[]{6, 8, 7, 6, 8, 8}, Arrays.asList(1, 4),
+                9101L, ""));
+        seedRecord(new DivinationRecord(9102L, "保留篩選 簡易紀錄", 29, 29,
+                DivinationMethod.SIMPLE, new int[]{8, 7, 8, 8, 7, 8}, Arrays.asList(),
+                9102L, ""));
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(activity -> {
+                activity.enterLocalMode();
+                activity.showRecords();
+            });
+            waitFor(withId(R.id.records_search_input));
+            onView(withId(R.id.records_search_input)).perform(replaceText("保留篩選"));
+            closeSoftKeyboard();
+            onView(withText("簡易占法")).perform(click());
+            waitFor(withText("保留篩選 簡易紀錄"));
+            onView(withText("保留篩選 金錢紀錄")).check(doesNotExist());
+
+            scenario.recreate();
+
+            waitFor(withId(R.id.records_search_input));
+            onView(withId(R.id.records_search_input)).check(matches(withText("保留篩選")));
+            waitFor(withText("保留篩選 簡易紀錄"));
+            onView(withText("保留篩選 金錢紀錄")).check(doesNotExist());
+        }
+    }
+
+    @Test
     public void learnCenterFavoriteAndProfileDarkModePersist() {
         SettingsStore settings = new SettingsStore(context);
         settings.setOnboardingComplete(true);
@@ -186,9 +237,12 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     private void seedRecord() {
-        DivinationRecord record = new DivinationRecord(9001L, "內測紀錄問題", 15, 55,
+        seedRecord(new DivinationRecord(9001L, "內測紀錄問題", 15, 55,
                 DivinationMethod.COINS, new int[]{6, 8, 7, 6, 8, 8}, Arrays.asList(1, 4),
-                9001L, "");
+                9001L, ""));
+    }
+
+    private void seedRecord(DivinationRecord record) {
         RecordRepository.get(context).addOrUpdate(record);
     }
 

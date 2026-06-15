@@ -1,10 +1,10 @@
 package fcu.app.i_ching.ui;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -116,23 +116,17 @@ public final class Ui {
     }
 
     public static LinearLayout topBar(Context context, String left, View.OnClickListener leftClick, String right, View.OnClickListener rightClick) {
-        LinearLayout bar = row(context);
-        bar.setGravity(Gravity.CENTER_VERTICAL);
-        bar.setPadding(dp(context, 16), dp(context, 24), dp(context, 16), dp(context, 8));
-        TextView leftView = text(context, left, 24, Typeface.NORMAL, R.color.ic_ink, false);
-        leftView.setGravity(Gravity.CENTER);
+        LinearLayout bar = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.include_top_bar, null, false);
+        TextView leftView = bar.findViewById(R.id.top_bar_left_action);
+        leftView.setText(left);
         leftView.setContentDescription("←".equals(left) ? "返回" : "選單");
         leftView.setOnClickListener(leftClick);
-        TextView title = text(context, "I CHING", 28, Typeface.NORMAL, R.color.ic_ink, true);
-        title.setGravity(Gravity.CENTER);
-        title.setLetterSpacing(0.12f);
-        TextView rightView = text(context, right, 24, Typeface.NORMAL, R.color.ic_ink, false);
-        rightView.setGravity(Gravity.CENTER);
+        TextView title = bar.findViewById(R.id.top_bar_title);
+        title.setText("I CHING");
+        TextView rightView = bar.findViewById(R.id.top_bar_right_action);
+        rightView.setText(right);
         rightView.setContentDescription("⚙".equals(right) ? "設定" : "切換收藏");
         rightView.setOnClickListener(rightClick);
-        bar.addView(leftView, new LinearLayout.LayoutParams(dp(context, 48), dp(context, 48)));
-        bar.addView(title, new LinearLayout.LayoutParams(0, -2, 1));
-        bar.addView(rightView, new LinearLayout.LayoutParams(dp(context, 48), dp(context, 48)));
         return bar;
     }
 
@@ -149,33 +143,26 @@ public final class Ui {
     }
 
     public static LinearLayout bottomNav(MainActivity activity, String active) {
-        LinearLayout nav = row(activity);
-        nav.setGravity(Gravity.CENTER);
-        nav.setPadding(dp(activity, 6), dp(activity, 8), dp(activity, 6), dp(activity, 10));
-        nav.setBackground(strokeBg(activity, R.color.ic_surface, R.color.ic_outline, 20));
-        addTab(activity, nav, "今日", "◎", active.equals("今日"), () -> activity.showDaily(false));
-        addTab(activity, nav, "占卜", "✦", active.equals("占卜"), activity::showQuestion);
-        addTab(activity, nav, "紀錄", "↺", active.equals("紀錄"), activity::showRecords);
-        addTab(activity, nav, "學習", "書", active.equals("學習"), activity::showLearnCenter);
-        addTab(activity, nav, "我的", "人", active.equals("我的"), activity::showProfile);
+        LinearLayout nav = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.include_bottom_nav, null, false);
+        bindTab(activity, nav, R.id.bottom_nav_daily, "今日", "◎", active.equals("今日"), () -> activity.showDaily(false));
+        bindTab(activity, nav, R.id.bottom_nav_divination, "占卜", "✦", active.equals("占卜"), activity::showQuestion);
+        bindTab(activity, nav, R.id.bottom_nav_records, "紀錄", "↺", active.equals("紀錄"), activity::showRecords);
+        bindTab(activity, nav, R.id.bottom_nav_learn, "學習", "書", active.equals("學習"), activity::showLearnCenter);
+        bindTab(activity, nav, R.id.bottom_nav_profile, "我的", "人", active.equals("我的"), activity::showProfile);
         return nav;
     }
 
-    private static void addTab(Context context, LinearLayout nav, String label, String icon, boolean selected, Runnable action) {
-        LinearLayout item = column(context);
-        item.setId(bottomNavId(label));
-        item.setGravity(Gravity.CENTER);
-        item.setPadding(dp(context, 6), dp(context, 4), dp(context, 6), dp(context, 4));
-        item.setBackground(selected ? bg(context, R.color.ic_gold_container, 18) : null);
-        TextView iconView = text(context, icon, 18, Typeface.BOLD, selected ? R.color.ic_gold : R.color.ic_text_muted, false);
-        iconView.setGravity(Gravity.CENTER);
-        TextView labelView = text(context, label, 11, Typeface.BOLD, selected ? R.color.ic_gold : R.color.ic_text_muted, false);
-        labelView.setGravity(Gravity.CENTER);
-        item.addView(iconView, new LinearLayout.LayoutParams(-1, -2));
-        item.addView(labelView, new LinearLayout.LayoutParams(-1, -2));
+    private static void bindTab(Context context, LinearLayout nav, int id, String label, String icon, boolean selected, Runnable action) {
+        LinearLayout item = nav.findViewById(id);
+        TextView iconView = (TextView) item.getChildAt(0);
+        TextView labelView = (TextView) item.getChildAt(1);
+        item.setBackground(selected ? ContextCompat.getDrawable(context, R.drawable.bg_bottom_tab_selected) : null);
+        iconView.setText(icon);
+        iconView.setTextColor(color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
+        labelView.setText(label);
+        labelView.setTextColor(color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
         item.setContentDescription(label + (selected ? "，目前分頁" : "分頁"));
         item.setOnClickListener(v -> action.run());
-        nav.addView(item, new LinearLayout.LayoutParams(0, -1, 1));
     }
 
     private static int bottomNavId(String label) {

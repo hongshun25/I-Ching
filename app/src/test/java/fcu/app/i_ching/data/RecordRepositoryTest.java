@@ -64,6 +64,15 @@ public class RecordRepositoryTest {
     }
 
     @Test
+    public void exportEmptyAndNullRecordsUseStableFallbackContent() {
+        assertEquals("[]", RecordRepository.exportJson(Collections.emptyList()));
+        assertEquals("[]", RecordRepository.exportJson((List<DivinationRecord>) null));
+
+        assertEquals("易經占卜紀錄\n目前沒有占卜紀錄。\n", RecordRepository.exportText(Collections.emptyList()));
+        assertEquals("易經占卜紀錄\n目前沒有占卜紀錄。\n", RecordRepository.exportText((List<DivinationRecord>) null));
+    }
+
+    @Test
     public void legacyParserKeepsBackwardCompatibleDerivation() throws Exception {
         JSONObject oldJson = new JSONObject();
         oldJson.put("id", 88L);

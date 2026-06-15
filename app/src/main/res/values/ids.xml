@@ -13,12 +13,24 @@
     <item name="result_share_button" type="id" />
     <item name="records_search_input" type="id" />
     <item name="records_list" type="id" />
+    <item name="records_method_all_chip" type="id" />
+    <item name="records_method_coins_chip" type="id" />
+    <item name="records_method_yarrow_chip" type="id" />
+    <item name="records_method_simple_chip" type="id" />
+    <item name="records_change_all_chip" type="id" />
+    <item name="records_change_with_chip" type="id" />
+    <item name="records_change_without_chip" type="id" />
+    <item name="records_no_results" type="id" />
     <item name="profile_dark_mode_switch" type="id" />
     <item name="profile_reduce_motion_switch" type="id" />
     <item name="profile_auto_save_switch" type="id" />
     <item name="profile_export_json" type="id" />
     <item name="profile_export_text" type="id" />
     <item name="profile_delete_all" type="id" />
+    <item name="profile_info_group" type="id" />
+    <item name="profile_appearance_group" type="id" />
+    <item name="profile_divination_group" type="id" />
+    <item name="profile_data_group" type="id" />
     <item name="bottom_nav_daily" type="id" />
     <item name="bottom_nav_divination" type="id" />
     <item name="bottom_nav_records" type="id" />
@@ -42,4 +54,18 @@
     <item name="settings_row_label" type="id" />
     <item name="settings_row_value" type="id" />
     <item name="settings_row_toggle" type="id" />
+    <item name="result_question_card" type="id" />
+    <item name="result_question_text" type="id" />
+    <item name="result_hero_card" type="id" />
+    <item name="result_hexagram" type="id" />
+    <item name="result_title" type="id" />
+    <item name="result_tags" type="id" />
+    <item name="result_insight" type="id" />
+    <item name="result_relation" type="id" />
+    <item name="result_changing_summary" type="id" />
+    <item name="result_changed_lines" type="id" />
+    <item name="result_do_items" type="id" />
+    <item name="result_avoid_items" type="id" />
+    <item name="result_classical_text" type="id" />
+    <item name="result_share_preview" type="id" />
 </resources>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@id/result_question_card"
+        style="@style/ResultCard">
+
+        <TextView
+            android:id="@id/result_question_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@id/result_hero_card"
+        style="@style/ResultCard"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="18dp"
+        android:gravity="center_horizontal">
+
+        <fcu.app.i_ching.ui.HexagramView
+            android:id="@id/result_hexagram"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:id="@id/result_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:textColor="@color/ic_ink"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_tags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_insight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="serif"
+            android:gravity="center"
+            android:textColor="@color/ic_gold"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/ResultCard">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="本卦與之卦"
+            android:textColor="@color/ic_ink"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_relation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ic_gold"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_changing_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@id/result_changed_lines"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ResultCard"
+        android:layout_marginTop="18dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="適合做"
+            android:textColor="@color/ic_gold"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_do_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="暫時避免"
+            android:textColor="@color/ic_error"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_avoid_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ResultCard"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="古典卦象解釋"
+            android:textColor="@color/ic_ink"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_classical_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ResultCard"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="serif"
+            android:text="可分享文字"
+            android:textColor="@color/ic_ink"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/result_share_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="4dp"
+        android:labelFor="@id/result_note_input"
+        android:text="@string/result_note_label"
+        android:textColor="@color/ic_ink"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@id/result_note_input"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@drawable/bg_input_underline"
+        android:gravity="top|start"
+        android:hint="@string/result_note_hint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:minLines="3"
+        android:padding="8dp"
+        android:textColor="@color/ic_ink"
+        android:textColorHint="@color/ic_outline_strong"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@id/result_save_button"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_pill_primary"
+        android:contentDescription="儲存占卜結果筆記至紀錄"
+        android:text="@string/result_save_new"
+        android:textAllCaps="false"
+        android:textColor="@color/ic_background"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@id/result_share_button"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_pill_secondary"
+        android:text="@string/result_share"
+        android:textAllCaps="false"
+        android:textColor="@color/ic_ink"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+</LinearLayout>

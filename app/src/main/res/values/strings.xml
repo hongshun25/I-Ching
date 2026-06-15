@@ -6,8 +6,15 @@
     <string name="nav_settings">設定</string>
     <string name="records_empty_title">你的占卜紀錄會出現在這裡</string>
     <string name="records_empty_body">靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。</string>
-    <string name="records_empty_action">開始第一次占卜</string>
+    <string name="records_empty_action">✦ 開始第一次占卜</string>
+    <string name="records_search_hint">搜尋問題、筆記、卦名或標籤...</string>
+    <string name="records_no_results">沒有符合的占卜紀錄</string>
     <string name="record_edit_note">編輯筆記</string>
     <string name="record_delete">刪除</string>
+    <string name="result_note_label">這個結果讓你想到什麼？</string>
+    <string name="result_note_hint">寫下你的靈感或打算採取的行動...</string>
+    <string name="result_save_new">儲存至紀錄</string>
+    <string name="result_save_existing">更新紀錄筆記</string>
+    <string name="result_share">分享啟示</string>
     <string name="settings_row_placeholder">未設定</string>
 </resources>

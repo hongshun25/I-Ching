@@ -2,6 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_card"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     android:padding="22dp">
 
@@ -47,7 +50,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/ic_gold"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,6 +64,11 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_pill_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/ic_ink"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:text="@string/record_edit_note" />
 
         <Button
@@ -68,6 +77,11 @@
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_pill_secondary"
+            android:textAllCaps="false"
+            android:textColor="@color/ic_ink"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:text="@string/record_delete" />
     </LinearLayout>
 </LinearLayout>

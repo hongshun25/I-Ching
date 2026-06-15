@@ -13,8 +13,8 @@ Core data is local-first and deterministic: `HexagramRepository` stores all 64 K
 - `app/` contains the Android app module.
 - `app/src/main/java/fcu/app/i_ching/` contains app code.
 - `app/src/main/java/fcu/app/i_ching/data/` contains local models, static hexagram data, casting and relating-hexagram logic, settings persistence, Room record persistence, legacy record migration/export helpers, and record filtering helpers.
-- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, and the shared programmatic UI helper `Ui`.
-- `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; most Beta screens remain programmatic Java views while ViewBinding is enabled for future XML component work.
+- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, presentation helpers, and the transitional UI helper `Ui`.
+- `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; `RecordsFragment`, `ResultFragment`, `ProfileSettingsFragment`, top bar, bottom nav, empty state, record item, and settings row now use XML/ViewBinding components, while several Beta screens remain programmatic Java views during the migration.
 - `app/src/main/res/navigation/main_graph.xml` defines the app navigation graph. Use simple Bundle/JSON arguments for now; Safe Args is not enabled.
 - `app/src/main/res/values/` and `app/src/main/res/values-night/` contain the current design tokens for colors, themes, and spacing.
 - `app/src/main/res/xml/backup_rules.xml` and `app/src/main/res/xml/data_extraction_rules.xml` define backup behavior. Divination records are excluded from cloud backup because questions and notes may be sensitive.
@@ -86,7 +86,9 @@ Current JVM test coverage includes:
 
 - `IChingLogicTest` covers casting line-value buckets, known hexagram pattern mappings, 64-pattern uniqueness, simple-cast consistency, changing-line flips, and relating hexagrams.
 - `DivinationPersistenceTest` covers `DivinationResult` / `DivinationRecord` JSON round trips, backward-compatible old JSON fallback, relating-hexagram derivation from old `lineValues`, and record mutation helpers.
-- `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting, and legacy JSON parser behavior.
+- `RecordRepositoryTest` covers Room entity mapping, export JSON/text formatting including empty/null edge cases, and legacy JSON parser behavior.
+- `SettingsStoreTest` covers settings defaults, toggles, and favorites.
+- `ProfileSettingsFragmentTest` covers the UTF-8 export writer used after SAF returns a URI.
 - `NavigationArgsTest` covers navigation argument Bundle round trips and fallback behavior.
 - `RecordRepositoryTest` also covers exported Room v1 schema and repository async export callbacks.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
@@ -97,7 +99,7 @@ Current instrumentation coverage includes:
 
 - `ExampleInstrumentedTest` checks app package context.
 - `RecordDaoInstrumentedTest` checks Room DAO insert/update/delete-all behavior with an in-memory database.
-- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts, and profile delete-all. Espresso accessibility checks are enabled in this workflow test class.
+- `StableBetaWorkflowInstrumentedTest` covers onboarding to local daily, divination result auto-save to records, result recreate without duplicate auto-save, records search/filter state retention, record note edit/delete, favorites, dark-mode preference, JSON/text SAF export contracts, and profile delete-all. Espresso accessibility checks are enabled in this workflow test class.
 
 Add local tests for pure Java logic such as casting, repository mapping, relating-hexagram behavior, serialization, filtering, export formatting, and backup-sensitive persistence decisions. Add instrumentation tests for Fragment routing, onboarding, local-mode entry, dark-mode toggles, records persistence/search/filtering, favorites, sharing intent, SAF export, delete-all, and UI workflows.
 

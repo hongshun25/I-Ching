@@ -2,13 +2,9 @@ package fcu.app.i_ching.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +16,7 @@ import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationResult;
+import fcu.app.i_ching.databinding.FragmentResultBinding;
 import fcu.app.i_ching.ui.presentation.ResultPresentation;
 
 public class ResultFragment extends Fragment {
@@ -29,10 +26,9 @@ public class ResultFragment extends Fragment {
 
     private DivinationResult result;
     private long savedRecordId = NO_RECORD_ID;
-    private EditText noteInput;
-    private Button saveButton;
     private ResultViewModel viewModel;
     private ResultPresentation presentation;
+    private FragmentResultBinding binding;
 
     public static ResultFragment newInstance(DivinationResult value) {
         ResultFragment fragment = new ResultFragment();
@@ -40,62 +36,17 @@ public class ResultFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable @Override
-    public View onCreateView(@NonNull android.view.LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         result = readResult();
         presentation = ResultPresentation.from(result);
         savedRecordId = readRecordId(savedInstanceState);
         viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
+        binding = FragmentResultBinding.inflate(inflater, container, false);
 
-        LinearLayout content = Ui.column(requireContext());
-        LinearLayout questionBubble = Ui.card(requireContext());
-        TextView q = Ui.text(requireContext(), presentation.questionText, 16, android.graphics.Typeface.ITALIC, R.color.ic_text_muted, false); q.setGravity(Gravity.CENTER); questionBubble.addView(q);
-        content.addView(questionBubble, new LinearLayout.LayoutParams(-1, -2));
-        LinearLayout hero = Ui.card(requireContext()); hero.setGravity(Gravity.CENTER_HORIZONTAL);
-        hero.addView(Ui.hexagramView(requireContext(), result.hexagram, 96, 8, false));
-        TextView title = Ui.text(requireContext(), presentation.titleText, 36, android.graphics.Typeface.BOLD, R.color.ic_ink, true); title.setGravity(Gravity.CENTER);
-        TextView tags = Ui.text(requireContext(), presentation.tagText, 14, android.graphics.Typeface.BOLD, R.color.ic_text_muted, false); tags.setGravity(Gravity.CENTER);
-        TextView insight = Ui.text(requireContext(), result.hexagram.summary, 22, android.graphics.Typeface.NORMAL, R.color.ic_gold, true); insight.setGravity(Gravity.CENTER);
-        Ui.addWithMargins(hero, title, -1, -2, 0, 18, 0, 4); hero.addView(tags); Ui.addWithMargins(hero, insight, -1, -2, 0, 18, 0, 0);
-        Ui.addWithMargins(content, hero, -1, -2, 0, 18, 0, 18);
-        LinearLayout relating = Ui.card(requireContext());
-        relating.addView(Ui.text(requireContext(), "本卦與之卦", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true));
-        relating.addView(Ui.text(requireContext(), presentation.relationText, 16, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
-        Ui.addWithMargins(relating, Ui.text(requireContext(), presentation.changingSummary, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 8, 0, 0);
-        String changedLines = presentation.changedLineText;
-        if (!changedLines.isEmpty()) {
-            Ui.addWithMargins(relating, Ui.text(requireContext(), changedLines, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false), -1, -2, 0, 10, 0, 0);
-        }
-        Ui.addWithMargins(content, relating, -1, -2, 0, 0, 0, 18);
-        LinearLayout guides = Ui.card(requireContext());
-        guides.addView(Ui.text(requireContext(), "適合做", 16, android.graphics.Typeface.BOLD, R.color.ic_gold, false));
-        guides.addView(Ui.text(requireContext(), String.join("\n", result.hexagram.doItems), 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        Ui.addWithMargins(guides, Ui.text(requireContext(), "暫時避免", 16, android.graphics.Typeface.BOLD, R.color.ic_error, false), -1, -2, 0, 16, 0, 0);
-        guides.addView(Ui.text(requireContext(), String.join("\n", result.hexagram.avoidItems), 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        content.addView(guides);
-        LinearLayout classical = Ui.card(requireContext()); classical.addView(Ui.text(requireContext(), "古典卦象解釋", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true)); classical.addView(Ui.text(requireContext(), result.hexagram.judgment + "\n\n" + result.hexagram.classicalText, 16, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false)); Ui.addWithMargins(content, classical, -1, -2, 0, 16, 0, 0);
-        LinearLayout sharePreview = Ui.card(requireContext());
-        sharePreview.addView(Ui.text(requireContext(), "可分享文字", 18, android.graphics.Typeface.BOLD, R.color.ic_ink, true));
-        sharePreview.addView(Ui.text(requireContext(), presentation.shareText, 15, android.graphics.Typeface.NORMAL, R.color.ic_text_muted, false));
-        Ui.addWithMargins(content, sharePreview, -1, -2, 0, 16, 0, 0);
-        TextView noteLabel = Ui.text(requireContext(), "這個結果讓你想到什麼？", 14, android.graphics.Typeface.BOLD, R.color.ic_ink, false); Ui.addWithMargins(content, noteLabel, -1, -2, 0, 20, 0, 4);
-        noteInput = Ui.bottomInput(requireContext(), "寫下你的靈感或打算採取的行動...", 3);
-        noteInput.setId(R.id.result_note_input);
-        noteLabel.setLabelFor(R.id.result_note_input);
-        String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
-        if (restoredNote != null) {
-            noteInput.setText(restoredNote);
-        }
-        content.addView(noteInput, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 96)));
-        saveButton = Ui.pill(requireContext(), savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記", true);
-        saveButton.setId(R.id.result_save_button);
-        saveButton.setContentDescription("儲存占卜結果筆記至紀錄");
-        saveButton.setOnClickListener(v -> saveNote());
-        Button share = Ui.pill(requireContext(), "分享啟示", false);
-        share.setId(R.id.result_share_button);
-        share.setOnClickListener(v -> shareResult());
-        Ui.addWithMargins(content, saveButton, -1, Ui.dp(requireContext(), 52), 0, 22, 0, 10); content.addView(share, new LinearLayout.LayoutParams(-1, Ui.dp(requireContext(), 52)));
-        return Ui.scrollPage(requireContext(), content, false);
+        bindResult(savedInstanceState);
+        return Ui.scrollPage(requireContext(), binding.getRoot(), false);
     }
 
     @Override
@@ -111,10 +62,39 @@ public class ResultFragment extends Fragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(STATE_RECORD_ID, savedRecordId);
-        if (noteInput != null) outState.putString(STATE_NOTE, noteInput.getText().toString());
+        if (binding != null) outState.putString(STATE_NOTE, binding.resultNoteInput.getText().toString());
+    }
+
+    private void bindResult(@Nullable Bundle savedInstanceState) {
+        binding.resultQuestionText.setText(presentation.questionText);
+        binding.resultHexagram.configure(result.hexagram, 96, 8, false);
+        binding.resultTitle.setText(presentation.titleText);
+        binding.resultTags.setText(presentation.tagText);
+        binding.resultInsight.setText(result.hexagram.summary);
+        binding.resultRelation.setText(presentation.relationText);
+        binding.resultChangingSummary.setText(presentation.changingSummary);
+        binding.resultChangedLines.setText(presentation.changedLineText);
+        binding.resultChangedLines.setVisibility(presentation.changedLineText.isEmpty() ? View.GONE : View.VISIBLE);
+        binding.resultDoItems.setText(String.join("\n", result.hexagram.doItems));
+        binding.resultAvoidItems.setText(String.join("\n", result.hexagram.avoidItems));
+        binding.resultClassicalText.setText(result.hexagram.judgment + "\n\n" + result.hexagram.classicalText);
+        binding.resultSharePreview.setText(presentation.shareText);
+        String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
+        if (restoredNote != null) {
+            binding.resultNoteInput.setText(restoredNote);
+        }
+        binding.resultSaveButton.setText(saveButtonLabel());
+        binding.resultSaveButton.setOnClickListener(v -> saveNote());
+        binding.resultShareButton.setOnClickListener(v -> shareResult());
     }
 
     private DivinationResult readResult() {
@@ -127,28 +107,33 @@ public class ResultFragment extends Fragment {
     }
 
     private void saveNote() {
-        if (saveButton != null) saveButton.setEnabled(false);
-        viewModel.saveNote(result, savedRecordId, noteInput.getText().toString());
+        if (binding == null) return;
+        binding.resultSaveButton.setEnabled(false);
+        viewModel.saveNote(result, savedRecordId, binding.resultNoteInput.getText().toString());
     }
 
     private void handleSaveState(MainActivity activity, ResultViewModel.SaveState state) {
         if (state.record != null) {
             rememberRecordId(state.record.id);
-            if (noteInput != null
-                    && noteInput.getText().length() == 0
+            if (binding != null
+                    && binding.resultNoteInput.getText().length() == 0
                     && state.record.note != null
                     && !state.record.note.isEmpty()) {
-                noteInput.setText(state.record.note);
+                binding.resultNoteInput.setText(state.record.note);
             }
         }
-        if (saveButton != null) {
-            saveButton.setText(savedRecordId == NO_RECORD_ID ? "儲存至紀錄" : "更新紀錄筆記");
-            saveButton.setEnabled(true);
+        if (binding != null) {
+            binding.resultSaveButton.setText(saveButtonLabel());
+            binding.resultSaveButton.setEnabled(true);
         }
         if (state.action == ResultViewModel.SaveAction.NOTE_SAVE) {
             Toast.makeText(requireContext(), state.success ? "已儲存至紀錄" : "儲存失敗", Toast.LENGTH_SHORT).show();
             if (state.success) activity.showRecords();
         }
+    }
+
+    private String saveButtonLabel() {
+        return savedRecordId == NO_RECORD_ID ? getString(R.string.result_save_new) : getString(R.string.result_save_existing);
     }
 
     private void rememberRecordId(long recordId) {

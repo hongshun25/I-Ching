@@ -40,5 +40,10 @@
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:layout_marginTop="28dp"
+        android:background="@drawable/bg_pill_primary"
+        android:textAllCaps="false"
+        android:textColor="@color/ic_background"
+        android:textSize="14sp"
+        android:textStyle="bold"
         android:text="@string/records_empty_action" />
 </LinearLayout>
