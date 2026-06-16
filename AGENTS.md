@@ -56,6 +56,7 @@ Prefer existing local patterns before adding new ones:
 - Route screens through `MainActivity` helpers backed by `NavController`; do not add new manual Fragment transactions.
 - Use `NavigationArgs` as the single Fragment argument contract for question, method, result JSON, hexagram number, and record id fallback. Do not add new ad hoc argument constants to Fragments or `MainActivity`.
 - Reuse `Ui` only for small visual primitives such as dimensions, colors, chips, simple scroll wrapping, bottom inputs, and hexagram rendering hooks. New substantial screens should prefer XML/ViewBinding.
+- Keep major XML screens and reusable item/include layouts previewable in Android Studio: add `tools:` sample text/hints, `tools:listitem`/`tools:itemCount` for RecyclerViews, `tools:showIn` where useful, and edit-mode fallbacks for custom Views that would otherwise render blank.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
 - Keep divination consistency in the data layer: derive `Hexagram` and `relatingHexagram` from the same line values / changing-line helpers in `HexagramRepository`.

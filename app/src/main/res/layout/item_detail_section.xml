@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/IChingCard"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    tools:showIn="@layout/fragment_hexagram_detail">
 
     <TextView
         android:id="@id/detail_section_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:textColor="@color/ic_ink"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        tools:text="主旨核心" />
 
     <TextView
         android:id="@id/detail_section_body"
         style="@style/IChingBodyText"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        tools:text="謙虛、退讓、平衡。提醒我們在成就面前保持低調，不自滿。" />
 </LinearLayout>

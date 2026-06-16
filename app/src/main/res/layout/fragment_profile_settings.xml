@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ic_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.ProfileSettingsFragment">
 
     <include
         android:id="@id/top_bar"
@@ -27,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:typeface="serif"
                 android:gravity="center"
                 android:text="我的"
                 android:textColor="@color/ic_ink"
@@ -47,7 +49,30 @@
 
             <LinearLayout
                 android:id="@id/profile_info_group"
-                style="@style/ProfileSettingsCard" />
+                style="@style/ProfileSettingsCard">
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="使用模式" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="本機模式 ›" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="帳號同步" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="未啟用 ›" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 style="@style/ProfileGroupTitle"
@@ -55,7 +80,49 @@
 
             <LinearLayout
                 android:id="@id/profile_appearance_group"
-                style="@style/ProfileSettingsCard" />
+                style="@style/ProfileSettingsCard">
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="深色模式" />
+
+                    <Switch
+                        android:id="@id/profile_dark_mode_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="深色模式"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="字體大小" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="適中 ›" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="減少動態效果" />
+
+                    <Switch
+                        android:id="@id/profile_reduce_motion_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="減少動態效果"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 style="@style/ProfileGroupTitle"
@@ -63,7 +130,45 @@
 
             <LinearLayout
                 android:id="@id/profile_divination_group"
-                style="@style/ProfileSettingsCard" />
+                style="@style/ProfileSettingsCard">
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="預設占法" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="金錢卦 ›" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="自動儲存" />
+
+                    <Switch
+                        android:id="@id/profile_auto_save_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="自動儲存"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="提醒通知" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="未啟用 ›" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 style="@style/ProfileGroupTitle"
@@ -71,7 +176,56 @@
 
             <LinearLayout
                 android:id="@id/profile_data_group"
-                style="@style/ProfileSettingsCard" />
+                style="@style/ProfileSettingsCard">
+
+                <LinearLayout
+                    android:id="@id/profile_export_json"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="匯出 JSON，完整本機紀錄"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="匯出 JSON" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="完整本機紀錄 ›" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_export_text"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="匯出純文字，方便閱讀與備份"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="匯出純文字" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="方便閱讀與備份 ›" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_delete_all"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="刪除全部紀錄，不可復原"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="刪除全部紀錄" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="不可復原 ›" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

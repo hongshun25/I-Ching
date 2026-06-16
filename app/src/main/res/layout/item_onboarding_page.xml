@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -7,16 +8,18 @@
     android:paddingStart="24dp"
     android:paddingTop="40dp"
     android:paddingEnd="24dp"
-    android:paddingBottom="180dp">
+    android:paddingBottom="180dp"
+    tools:showIn="@layout/fragment_onboarding">
 
     <TextView
         android:id="@id/onboarding_page_art"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:gravity="center"
         android:textColor="@color/ic_outline_strong"
-        android:textSize="130sp" />
+        android:textSize="130sp"
+        tools:text="◯" />
 
     <TextView
         android:id="@id/onboarding_page_title"
@@ -24,10 +27,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:gravity="center"
         android:textColor="@color/ic_ink"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        tools:text="每日靜心" />
 
     <TextView
         android:id="@id/onboarding_page_body"
@@ -35,5 +39,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/ic_text_muted"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:text="每天用一卦，整理當下的心。" />
 </LinearLayout>

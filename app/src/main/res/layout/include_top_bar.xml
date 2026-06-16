@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -7,7 +8,8 @@
     android:paddingStart="16dp"
     android:paddingTop="24dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:showIn="@layout/fragment_daily">
 
     <TextView
         android:id="@id/top_bar_left_action"
@@ -24,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:gravity="center"
         android:letterSpacing="0.12"
         android:text="@string/brand_title"

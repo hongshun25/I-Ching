@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ic_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.DailyFragment">
 
     <include
         android:id="@id/top_bar"
@@ -29,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/ic_text_muted"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="早安，今天想安靜一下嗎？" />
 
             <LinearLayout
                 android:id="@id/daily_card"
@@ -43,7 +46,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RecordsFilterChip"
+                        android:text="坤" />
+
+                    <TextView
+                        style="@style/RecordsFilterChip"
+                        android:text="艮" />
+                </LinearLayout>
 
                 <fcu.app.i_ching.ui.HexagramView
                     android:id="@id/daily_hexagram"
@@ -57,10 +69,11 @@
                     android:id="@id/daily_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="serif"
+                    android:typeface="serif"
                     android:gravity="center"
                     android:textColor="@color/ic_ink"
-                    android:textSize="26sp" />
+                    android:textSize="26sp"
+                    tools:text="第十五卦｜地山謙" />
 
                 <TextView
                     android:id="@id/daily_judgment"
@@ -68,15 +81,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="12dp"
-                    android:fontFamily="serif"
+                    android:typeface="serif"
                     android:gravity="center"
                     android:textColor="@color/ic_gold"
-                    android:textSize="24sp" />
+                    android:textSize="24sp"
+                    tools:text="謙卦亨，君子有終。" />
 
                 <TextView
                     android:id="@id/daily_summary"
                     style="@style/IChingBodyText"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    tools:text="在高處仍保留餘地，先傾聽與補足資訊，讓今日的選擇更穩。" />
             </LinearLayout>
 
             <TextView
@@ -96,20 +111,20 @@
                 android:inputType="textMultiLine|textCapSentences"
                 android:minLines="3" />
 
-            <Button
+            <TextView
                 android:id="@id/daily_cast_button"
                 style="@style/IChingPrimaryButton"
                 android:layout_marginTop="28dp"
                 android:layout_marginBottom="10dp"
                 android:text="@string/daily_cast" />
 
-            <Button
+            <TextView
                 android:id="@id/daily_records_button"
                 style="@style/IChingSecondaryButton"
                 android:layout_marginBottom="10dp"
                 android:text="@string/daily_records" />
 
-            <Button
+            <TextView
                 android:id="@id/daily_learn_button"
                 style="@style/IChingSecondaryButton"
                 android:text="@string/daily_learn" />

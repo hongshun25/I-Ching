@@ -12,6 +12,8 @@ import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 
 public class HexagramView extends View {
+    private static final boolean[] EDIT_MODE_LINES = {false, false, true, false, false, false};
+
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Hexagram hexagram;
     private int widthDp = 72;
@@ -66,7 +68,11 @@ public class HexagramView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (hexagram == null) return;
+        boolean[] lines = hexagram == null ? null : hexagram.linesBottomToTop;
+        if (lines == null && isInEditMode()) {
+            lines = EDIT_MODE_LINES;
+        }
+        if (lines == null) return;
         paint.setColor(Ui.color(getContext(), gold ? R.color.ic_gold : R.color.ic_ink));
         float targetWidth = Math.min(getWidth(), Ui.dp(getContext(), widthDp));
         float left = (getWidth() - targetWidth) / 2f;
@@ -76,7 +82,7 @@ public class HexagramView extends View {
         float radius = Ui.dp(getContext(), 2);
         float brokenGap = Math.max(Ui.dp(getContext(), 8), targetWidth / 5f);
         for (int i = 5; i >= 0; i--) {
-            boolean yang = hexagram.linesBottomToTop[i];
+            boolean yang = lines[i];
             if (yang) {
                 canvas.drawRoundRect(left, y, left + targetWidth, y + lineHeight, radius, radius, paint);
             } else {

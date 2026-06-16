@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_card"
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:padding="22dp">
+    android:padding="22dp"
+    tools:showIn="@layout/fragment_records">
 
     <TextView
         android:id="@id/record_item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:textColor="@color/ic_ink"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        tools:text="第十五卦｜地山謙" />
 
     <TextView
         android:id="@id/record_item_relation"
@@ -22,28 +25,32 @@
         android:layout_height="wrap_content"
         android:textColor="@color/ic_gold"
         android:textStyle="bold"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        tools:text="之卦：第46卦 地風升" />
 
     <TextView
         android:id="@id/record_item_changing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/ic_outline_strong"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:text="變爻：初六、六二" />
 
     <TextView
         android:id="@id/record_item_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/ic_text_muted"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:text="我目前在工作上最需要調整的是什麼？" />
 
     <TextView
         android:id="@id/record_item_meta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/ic_outline_strong"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:text="三枚銅錢 · 2026/06/16" />
 
     <TextView
         android:id="@id/record_item_note"
@@ -51,7 +58,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/ic_gold"
         android:textSize="15sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:text="筆記：先聽完需求，再回覆承諾。"
+        tools:visibility="visible" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,29 +68,21 @@
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
-        <Button
+        <TextView
             android:id="@id/record_item_edit"
+            style="@style/IChingSecondaryButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_pill_secondary"
-            android:textAllCaps="false"
-            android:textColor="@color/ic_ink"
-            android:textSize="14sp"
-            android:textStyle="bold"
             android:text="@string/record_edit_note" />
 
-        <Button
+        <TextView
             android:id="@id/record_item_delete"
+            style="@style/IChingSecondaryButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_pill_secondary"
-            android:textAllCaps="false"
-            android:textColor="@color/ic_ink"
-            android:textSize="14sp"
-            android:textStyle="bold"
             android:text="@string/record_delete" />
     </LinearLayout>
 </LinearLayout>

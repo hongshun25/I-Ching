@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="28dp">
+    android:paddingTop="28dp"
+    tools:showIn="@layout/fragment_records">
 
     <TextView
         android:id="@id/empty_state_art"
@@ -19,7 +21,7 @@
         android:id="@id/empty_state_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="serif"
+        android:typeface="serif"
         android:gravity="center"
         android:text="@string/records_empty_title"
         android:textColor="@color/ic_ink"
@@ -35,15 +37,9 @@
         android:textColor="@color/ic_text_muted"
         android:textSize="16sp" />
 
-    <Button
+    <TextView
         android:id="@id/empty_state_action"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
+        style="@style/IChingPrimaryButton"
         android:layout_marginTop="28dp"
-        android:background="@drawable/bg_pill_primary"
-        android:textAllCaps="false"
-        android:textColor="@color/ic_background"
-        android:textSize="14sp"
-        android:textStyle="bold"
         android:text="@string/records_empty_action" />
 </LinearLayout>

@@ -1,28 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:minHeight="48dp"
-    android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/SettingsRow"
+    tools:showIn="@layout/fragment_profile_settings">
 
     <TextView
         android:id="@id/settings_row_label"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textColor="@color/ic_ink"
-        android:textSize="16sp" />
+        style="@style/SettingsRowLabel"
+        tools:text="深色模式" />
 
     <TextView
         android:id="@id/settings_row_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/SettingsRowValue"
         android:text="@string/settings_row_placeholder"
-        android:textColor="@color/ic_text_muted"
-        android:textSize="14sp" />
+        tools:text="適中 ›" />
 
     <Switch
         android:id="@id/settings_row_toggle"

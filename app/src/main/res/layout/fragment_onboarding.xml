@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background">
+    android:background="@color/ic_background"
+    tools:context=".ui.OnboardingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@id/onboarding_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_onboarding_page" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,14 +61,14 @@
                 android:textSize="22sp" />
         </LinearLayout>
 
-        <Button
+        <TextView
             android:id="@id/onboarding_start_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/onboarding_start" />
 
-        <Button
+        <TextView
             android:id="@id/local_mode_button"
             style="@style/IChingSecondaryButton"
             android:text="@string/onboarding_local_mode" />

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ic_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.RecordsFragment">
 
     <include
         android:id="@id/top_bar"
@@ -27,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="serif"
+                android:typeface="serif"
                 android:text="占卜紀錄"
                 android:textColor="@color/ic_ink"
                 android:textSize="36sp" />
@@ -46,7 +48,8 @@
                 android:padding="8dp"
                 android:textColor="@color/ic_ink"
                 android:textColorHint="@color/ic_outline_strong"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                tools:text="工作" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -62,6 +65,8 @@
                     <TextView
                         android:id="@id/records_method_all_chip"
                         style="@style/RecordsFilterChip"
+                        android:background="@drawable/bg_chip_selected"
+                        android:textColor="@color/ic_background"
                         android:text="全部占法" />
 
                     <TextView
@@ -96,6 +101,8 @@
                     <TextView
                         android:id="@id/records_change_all_chip"
                         style="@style/RecordsFilterChip"
+                        android:background="@drawable/bg_chip_selected"
+                        android:textColor="@color/ic_background"
                         android:text="全部" />
 
                     <TextView
@@ -130,7 +137,9 @@
                 android:id="@id/records_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_record" />
         </LinearLayout>
     </ScrollView>
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ic_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.HexagramDetailFragment">
 
     <include
         android:id="@id/hex_detail_top_bar"
@@ -36,7 +38,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:gravity="center"
-                android:orientation="horizontal" />
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/RecordsFilterChip"
+                    android:text="地山謙" />
+
+                <TextView
+                    style="@style/RecordsFilterChip"
+                    android:text="吉卦" />
+            </LinearLayout>
 
             <TextView
                 android:id="@id/hex_detail_title"
@@ -45,19 +56,130 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:textSize="40sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:text="第15卦｜謙" />
 
             <TextView
                 android:id="@id/hex_detail_summary"
                 style="@style/IChingBodyText"
                 android:gravity="center"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="內高而外卑，象徵謙虛退讓，萬事皆吉。" />
 
             <LinearLayout
                 android:id="@id/hex_detail_sections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="卦象組成"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="上卦：坤&#10;下卦：艮" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="主旨核心"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="謙虛、退讓、平衡。提醒我們在成就面前保持低調，不自滿。" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="適宜情境"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="• 先聽完對方需求&#10;• 拆解小步驟&#10;• 保留彈性" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="《易經》原文"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="謙：亨，君子有終。&#10;&#10;天道虧盈而益謙，地道變盈而流謙。" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="六爻爻辭"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="初六：謙謙君子，用涉大川，吉。&#10;&#10;六二：鳴謙，貞吉。" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingCard"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:typeface="serif"
+                        android:text="現代解析"
+                        android:textColor="@color/ic_ink"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:text="此卦提醒：降低姿態不是退縮，而是為了看清整體局勢。" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -46,7 +46,7 @@ public class ResultFragment extends Fragment {
         binding = FragmentResultBinding.inflate(inflater, container, false);
 
         bindResult(savedInstanceState);
-        return Ui.scrollPage(requireContext(), binding.getRoot(), false);
+        return binding.getRoot();
     }
 
     @Override

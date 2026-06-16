@@ -32,7 +32,7 @@ public class QuestionFragment extends Fragment {
         setupQuestion(savedInstanceState);
         binding.questionNextButton.setOnClickListener(v ->
                 activity.showMethod(binding.questionInput.getText().toString()));
-        return Ui.scrollPage(requireContext(), binding.getRoot(), false);
+        return binding.getRoot();
     }
 
     @Override

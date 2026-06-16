@@ -35,7 +35,7 @@ public class MethodFragment extends Fragment {
         bindMethodCards();
         binding.methodNextButton.setOnClickListener(v ->
                 ((MainActivity) requireActivity()).showRitual(question, selected));
-        return Ui.scrollPage(requireContext(), binding.getRoot(), false);
+        return binding.getRoot();
     }
 
     @Override

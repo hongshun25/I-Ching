@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/ic_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.LearnCenterFragment">
 
     <include
         android:id="@id/top_bar"
@@ -41,7 +43,8 @@
                 android:layout_marginBottom="14dp"
                 android:hint="@string/learn_search_hint"
                 android:inputType="text"
-                android:minLines="1" />
+                android:minLines="1"
+                tools:text="謙" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -57,6 +60,8 @@
                     <TextView
                         android:id="@id/learn_filter_all_chip"
                         style="@style/RecordsFilterChip"
+                        android:background="@drawable/bg_chip_selected"
+                        android:textColor="@color/ic_background"
                         android:text="全部" />
 
                     <TextView
@@ -91,7 +96,9 @@
                 android:id="@id/learn_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_hexagram" />
         </LinearLayout>
     </ScrollView>
 

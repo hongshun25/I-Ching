@@ -23,6 +23,7 @@ I Ching 是一個原生 Android 本機 Beta，目標是把 `design/stitch_export
 - 結果頁分享/變爻摘要、紀錄卡文字、收藏按鈕、Daily card、提問 presets、占法選項、Ritual reduce-motion 狀態、卦象列表與卦象詳情 sections 已抽到純 Java presentation/state mapper，並以 JVM tests 鎖住主要輸出。
 - `SplashFragment`、`OnboardingFragment`、`LocalEntryFragment`、`DailyFragment`、`QuestionFragment`、`MethodFragment`、`RitualFragment`、`RecordsFragment`、`LearnCenterFragment`、`HexagramDetailFragment`、`ResultFragment`、`ProfileSettingsFragment` 已改用 XML/ViewBinding 綁定主要畫面結構；record item、hexagram item、detail section、empty state、settings row、top bar、bottom nav 與結果頁 sections 均有 XML component / layout 基礎。
 - Daily、Records、Learn、Profile 的 top bar / bottom nav 由 XML include 承載，不再由 `Ui` 生成整頁 chrome。
+- 主要 XML layout 已補 Layout Editor preview sample：Question/Method/Result 由 XML 承載完整 scroll shell，RecyclerView/item layout 有 `tools:listitem` / sample text，Profile 固定 rows 已轉 XML，`HexagramView` 在 design-time 可繪製代表性卦象。
 - `RecordsFragment` 與 `LearnCenterFragment` 已改用 RecyclerView `ListAdapter` / `DiffUtil` 與 stable item IDs，並保留原本搜尋、篩選、收藏、編輯與刪除行為。
 - 已新增 Espresso stable-beta workflow tests，覆蓋 onboarding、本機模式、占卜保存、占法 selected state、紀錄編輯/刪除、result recreate 不重複 auto-save、records 搜尋/篩選狀態保留、學習中心搜尋/detail、收藏、深色模式、JSON/text SAF 匯出 contract、provider-backed 實際寫入與 delete-all 確認/取消。
 - 已新增 `.github/workflows/android-beta.yml` 與 `.github/workflows/android-managed-device.yml`，分別執行本機 Beta 基線 checks 與 manual/nightly managed-device 驗收。
@@ -95,7 +96,7 @@ ViewBinding 已啟用並承載 Beta 3 主要畫面：`fragment_splash.xml`、`fr
 
 ## 設計來源
 
-設計參考在 `design/stitch_export/`。目前 Android 實作採用相同的資訊架構、文案方向、紙感色票、墨洗感與 pill/button/card 語言，但不是逐像素轉譯。Stitch HTML 是參考文件，不是 production code。
+設計參考在 `design/stitch_export/`。目前 Android 實作採用相同的資訊架構、文案方向、紙感色票、墨洗感與 pill/button/card 語言，但不是逐像素轉譯。Stitch HTML 是參考文件，不是 production code。已新增 `docs/UI_AUDIT.md` 記錄 Layout Editor preview 支援、已修正的小型 drift、以及本機模式/字體/icon/asset 等文件化例外。
 
 ## 建置與測試
 
@@ -137,6 +138,7 @@ ViewBinding 已啟用並承載 Beta 3 主要畫面：`fragment_splash.xml`、`fr
 - 深色模式可切換，但不是所有畫面都有專屬深色版式調整；大多依 night resources 套色。
 - 已補部分 content descriptions，Espresso workflow tests 已啟用 accessibility checks；仍尚未完成 focus order、字級縮放、TalkBack 與對比的系統性人工驗收。
 - 無視覺回歸測試或截圖比對。
+- 已補主要 XML 的 design-time preview sample，但 Android Studio Layout Editor / Layout Validation 的逐畫面人工驗收仍需在 IDE 中執行。
 - Fragment/Espresso workflow tests 已有 stable-beta coverage，並補上 result recreate 不重複 auto-save、records filter state 保留、SAF UI launch contract、provider-backed 實際寫入與 delete-all 取消案例；result 分享 chooser intent 已由 JVM/Robolectric 測試覆蓋。仍缺截圖回歸、字級縮放與 focus order 驗收。
 - 尚未建立 release signing、版本策略、隱私權政策或資料保護策略。
 
