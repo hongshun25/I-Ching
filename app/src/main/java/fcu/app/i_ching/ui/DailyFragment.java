@@ -1,17 +1,18 @@
 package fcu.app.i_ching.ui;
 
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.chip.Chip;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
@@ -46,7 +47,7 @@ public class DailyFragment extends Fragment {
     private void bindDaily(MainActivity activity, Hexagram hexagram, DailyCardPresentation presentation) {
         binding.dailyGreeting.setText(presentation.greetingText);
         binding.dailyGreeting.setGravity(presentation.centeredGreeting ? Gravity.CENTER : Gravity.START);
-        binding.dailyGreeting.setTextColor(Ui.color(requireContext(),
+        binding.dailyGreeting.setTextColor(ContextCompat.getColor(requireContext(),
                 presentation.centeredGreeting ? R.color.ic_gold : R.color.ic_text_muted));
         binding.dailyGreeting.setTextSize(presentation.centeredGreeting ? 14 : 18);
 
@@ -54,7 +55,7 @@ public class DailyFragment extends Fragment {
         addChip(binding.dailyChips, hexagram.upper);
         addChip(binding.dailyChips, hexagram.lower);
         ViewGroup.LayoutParams params = binding.dailyHexagram.getLayoutParams();
-        params.width = Ui.dp(requireContext(), presentation.hexagramWidthDp);
+        params.width = dp(presentation.hexagramWidthDp);
         binding.dailyHexagram.setLayoutParams(params);
         binding.dailyHexagram.configure(hexagram, presentation.hexagramWidthDp, presentation.lineHeightDp, false);
         binding.dailyTitle.setText(presentation.titleText);
@@ -68,8 +69,12 @@ public class DailyFragment extends Fragment {
     }
 
     private void addChip(ViewGroup parent, String label) {
-        TextView chip = Ui.chip(requireContext(), label);
-        chip.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
+        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.item_filter_chip, parent, false);
+        chip.setText(label);
         parent.addView(chip);
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 }

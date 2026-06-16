@@ -2,7 +2,7 @@
 
 ## Project Snapshot
 
-This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Navigation Component, Room, Material/AppCompat dependencies, XML resources/ViewBinding, and limited programmatic Android view helpers. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
+This repository is currently a single-module native Android local Beta for an I Ching app. The app is implemented with Java, AndroidX Fragment, Navigation Component, Room, Material/AppCompat dependencies, XML resources/ViewBinding, shared XML components, and focused custom views. It does not use WebView, Jetpack Compose, a backend, or network-loaded production UI assets.
 
 The current Beta implements a local high-fidelity flow based on the Stitch exports in `design/stitch_export/`: splash, onboarding, local-mode entry, daily insight, three-step divination, divination result with original hexagram / changing lines / relating hexagram, searchable and filterable records, learning center, hexagram detail with six line texts, profile/settings, data export/delete controls, and dark-mode daily styling. Authentication is not implemented; local mode is the real operating mode.
 
@@ -13,15 +13,17 @@ Core data is local-first and deterministic: `HexagramRepository` stores all 64 K
 - `app/` contains the Android app module.
 - `app/src/main/java/fcu/app/i_ching/` contains app code.
 - `app/src/main/java/fcu/app/i_ching/data/` contains local models, static hexagram data, casting and relating-hexagram logic, settings persistence, Room record persistence, legacy record migration/export helpers, and record filtering helpers.
-- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, presentation helpers, and the transitional UI helper `Ui`.
+- `app/src/main/java/fcu/app/i_ching/ui/` contains Fragment screens, ViewModels, presentation helpers, `NavigationChrome`, and custom views such as `HexagramView`. The old transitional `Ui` helper has been removed; do not reintroduce it.
 - `app/src/main/res/layout/activity_main.xml` hosts the default `NavHostFragment`; splash, onboarding, local entry, daily, records, learn, result, profile/settings, top bar, bottom nav, empty state, record item, and settings row now use XML/ViewBinding components.
 - `app/src/main/res/navigation/main_graph.xml` defines the app navigation graph. Use simple Bundle/JSON arguments for now; Safe Args is not enabled.
-- `app/src/main/res/values/` and `app/src/main/res/values-night/` contain the current design tokens for colors, themes, and spacing.
+- `app/src/main/res/values/` and `app/src/main/res/values-night/` contain the current design tokens for colors, themes, typography, and spacing.
+- `app/src/main/res/font/`, `app/src/main/res/drawable/`, `app/src/main/res/drawable-nodpi/`, `app/src/main/res/color/`, and `app/src/main/res/menu/` contain committed production fonts, vectors, bitmap assets, selectors, and menus. New production assets must be tracked in `tools/assets/asset_manifest.json`.
 - `app/src/main/res/xml/backup_rules.xml` and `app/src/main/res/xml/data_extraction_rules.xml` define backup behavior. Divination records are excluded from cloud backup because questions and notes may be sensitive.
 - `app/src/test/java/` contains JVM tests for pure Java logic.
 - `app/src/androidTest/java/` contains instrumentation tests, including app-context and Room DAO coverage.
 - `design/stitch_export/` contains design references only. Treat these HTML files and screenshots as reference material, not production Android UI code.
-- `docs/` contains project documentation. Keep it updated when app architecture, behavior, test status, or known gaps change.
+- `tools/assets/asset_manifest.json` records production asset source URLs, licenses, transforms, target paths, and checksums.
+- `docs/` contains project documentation. Keep it updated when app architecture, behavior, asset policy, test status, or known gaps change.
 
 ## Build, Test, and Development Commands
 
@@ -35,13 +37,13 @@ Use the Gradle wrapper from the repository root:
 - `./gradlew assembleDebugAndroidTest` builds the debug instrumentation APK.
 - `./gradlew pixel2Api35DebugAndroidTest` runs instrumentation tests on the configured Gradle managed device when the local Android SDK has the required emulator/system image installed.
 
-Current known verification state after the local Beta stabilization work:
+Current known verification state after the UI debt / asset pipeline refactor:
 
 - `./gradlew testDebugUnitTest` passes.
 - `./gradlew lintDebug` passes.
 - `./gradlew assembleDebug` passes.
 - `./gradlew assembleDebugAndroidTest` passes.
-- `./gradlew pixel2Api35DebugAndroidTest` passes 15/15 in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning; the task is currently successful.
+- `./gradlew pixel2Api35DebugAndroidTest` passes 15/15 in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning.
 - `./gradlew connectedDebugAndroidTest` builds the app/test APK but cannot run without an attached device or emulator; the current environment reports `No connected devices!`.
 - `./gradlew pixel2Api35DebugAndroidTest` is the preferred no-physical-device instrumentation command when managed-device prerequisites are installed.
 
@@ -55,7 +57,12 @@ Prefer existing local patterns before adding new ones:
 - Add screens and screen-level ViewModels under `ui/`.
 - Route screens through `MainActivity` helpers backed by `NavController`; do not add new manual Fragment transactions.
 - Use `NavigationArgs` as the single Fragment argument contract for question, method, result JSON, hexagram number, and record id fallback. Do not add new ad hoc argument constants to Fragments or `MainActivity`.
-- Reuse `Ui` only for small visual primitives such as dimensions, colors, chips, simple scroll wrapping, bottom inputs, and hexagram rendering hooks. New substantial screens should prefer XML/ViewBinding.
+- Use XML/ViewBinding and Material components for shared UI. Do not reintroduce the removed `Ui` helper. Keep small reusable rendering logic inside focused classes such as `HexagramView` or shared XML layouts.
+- Use `MaterialToolbar` / `BottomNavigationView` through `NavigationChrome` for app chrome. Do not add new hand-built TextView icon bars.
+- Use Material `Chip`/`ChipGroup` or `item_filter_chip.xml` for chips. Do not create TextView chips by hand.
+- Do not use icon-like text glyphs for UI controls, including `☰`, `⚙`, `◎`, `✦`, `↺`, `♡`, `♥`, `✓`, `◯`, `◌`, or `●`. Use VectorDrawable, ImageView/ImageButton, selectors, or custom views instead. Semantic reading text such as 「本卦 → 之卦」 may remain when it is content, not an icon.
+- New production icon/font/image/texture assets must be committed under `res/`, listed in `tools/assets/asset_manifest.json`, and documented in `docs/ASSET_LICENSES.md` / `docs/ASSET_PIPELINE.md`. Include source URL, license, transform notes, target path, and SHA-256 checksum.
+- Do not use Stitch-exported `lh3.googleusercontent.com/aida-public/...` images as production assets unless a separate verifiable redistribution license is added to the asset docs.
 - Keep major XML screens and reusable item/include layouts previewable in Android Studio: add `tools:` sample text/hints, `tools:listitem`/`tools:itemCount` for RecyclerViews, `tools:showIn` where useful, and edit-mode fallbacks for custom Views that would otherwise render blank.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
@@ -96,7 +103,9 @@ Current JVM test coverage includes:
 - `BackupRulesTest` covers Auto Backup and Data Extraction XML rules for sensitive local record storage.
 - `HexagramRepositoryFilterTest` covers learning-center search and canon/favorite filters.
 - `LocalRecordStoreFilterTest` covers record search by question, note, hexagram, and tag, plus method and changing-line filters.
-- `ResultPresentationTest`, `RecordCardPresentationTest`, and `FavoriteHexagramPresentationTest` cover pure Java UI presentation text for result sharing/changing lines, record cards, and favorite labels.
+- `ResultPresentationTest`, `RecordCardPresentationTest`, and `FavoriteHexagramPresentationTest` cover pure Java UI presentation text/state for result sharing/changing lines, record cards, and favorite icon labels.
+- `AssetManifestTest` verifies production asset manifest entries, target paths, licenses/source metadata, and SHA-256 checksums.
+- `UiDebtGuardTest` blocks icon-like text symbols from returning to production UI Java/XML/value resources.
 
 Current instrumentation coverage includes:
 
@@ -113,6 +122,7 @@ When changing behavior, update documentation in the same change. At minimum:
 
 - Update `README.md` when build steps, app scope, or user-facing behavior changes.
 - Update `docs/PROJECT_STATUS.md` when current capabilities, limitations, verification status, or future roadmap changes.
+- Update `docs/ASSET_PIPELINE.md`, `docs/ASSET_LICENSES.md`, and `tools/assets/asset_manifest.json` when adding or changing production assets.
 - Update this `AGENTS.md` when repository conventions or contributor expectations change.
 
 Documentation should explicitly distinguish between implemented Beta behavior, design intent, known limitations, and future work.

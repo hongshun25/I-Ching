@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HexagramView">
+        <attr name="hexagramWidthDp" format="integer" />
+        <attr name="hexagramLineHeightDp" format="integer" />
+        <attr name="hexagramGoldLines" format="boolean" />
+        <attr name="hexagramLineColor" format="color|reference" />
+        <attr name="hexagramChangingLineColor" format="color|reference" />
+    </declare-styleable>
+</resources>

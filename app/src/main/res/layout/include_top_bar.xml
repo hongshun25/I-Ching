@@ -1,45 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.appbar.MaterialToolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/top_bar_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:paddingStart="16dp"
-    android:paddingTop="24dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp"
-    tools:showIn="@layout/fragment_daily">
-
-    <TextView
-        android:id="@id/top_bar_left_action"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/nav_menu"
-        android:gravity="center"
-        android:text="☰"
-        android:textColor="@color/ic_ink"
-        android:textSize="24sp" />
-
-    <TextView
-        android:id="@id/top_bar_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:typeface="serif"
-        android:gravity="center"
-        android:letterSpacing="0.12"
-        android:text="@string/brand_title"
-        android:textColor="@color/ic_ink"
-        android:textSize="28sp" />
-
-    <TextView
-        android:id="@id/top_bar_right_action"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/nav_settings"
-        android:gravity="center"
-        android:text="⚙"
-        android:textColor="@color/ic_ink"
-        android:textSize="24sp" />
-</LinearLayout>
+    android:layout_height="80dp"
+    android:background="@color/ic_surface"
+    android:minHeight="56dp"
+    android:paddingStart="4dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="4dp"
+    app:contentInsetStartWithNavigation="0dp"
+    app:menu="@menu/top_bar_settings"
+    app:navigationContentDescription="@string/nav_menu"
+    app:navigationIcon="@drawable/ic_menu_24"
+    app:title="@string/brand_title"
+    app:titleCentered="true"
+    app:titleTextAppearance="@style/TextAppearance.IChing.TopBarTitle"
+    tools:showIn="@layout/fragment_daily" />

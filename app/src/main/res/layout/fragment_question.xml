@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     android:fillViewport="true"
     tools:context=".ui.QuestionFragment">
 
@@ -79,51 +80,54 @@
             android:layout_height="wrap_content"
             android:scrollbars="none">
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
                 android:id="@id/question_presets"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                app:singleLine="true">
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="職涯" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="感情" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="人際" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="財務" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="學業" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="家庭" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="健康" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="決策" />
-            </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
         <TextView
             android:id="@id/question_next_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="36dp"
+            android:drawableEnd="@drawable/ic_arrow_forward_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/ic_background"
             android:text="@string/question_next" />
     </LinearLayout>
 </ScrollView>

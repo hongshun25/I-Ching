@@ -49,6 +49,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
@@ -101,10 +102,10 @@ public class StableBetaWorkflowInstrumentedTest {
 
             onView(withId(R.id.question_input)).perform(replaceText("內測工作節奏如何調整？"));
             closeSoftKeyboard();
-            onView(withId(R.id.question_next_button)).perform(scrollTo(), click());
+            onView(withId(R.id.question_next_button)).perform(callOnClick());
             waitFor(withId(R.id.method_simple_card));
             onView(withId(R.id.method_simple_card)).perform(scrollTo(), click());
-            onView(withText("開始靜心 →")).perform(scrollTo(), click());
+            onView(withId(R.id.method_next_button)).perform(callOnClick());
             waitFor(withId(R.id.ritual_skip_button));
             onView(withId(R.id.ritual_skip_button)).perform(click());
 
@@ -128,15 +129,15 @@ public class StableBetaWorkflowInstrumentedTest {
             });
             waitFor(withText("內測紀錄問題"));
 
-            waitFor(withContentDescription("編輯第15卦紀錄筆記"));
+            waitForExists(withContentDescription("編輯第15卦紀錄筆記"));
             onView(withContentDescription("編輯第15卦紀錄筆記")).perform(callOnClick());
             waitForExists(withHint("補充這次占卜的反思..."));
             onView(withHint("補充這次占卜的反思...")).perform(replaceText("已更新的內測筆記"));
             closeSoftKeyboard();
             onView(withText("儲存")).perform(click());
-            waitFor(withText("已更新的內測筆記"));
+            waitForExists(withText("已更新的內測筆記"));
 
-            waitFor(withContentDescription("刪除第15卦紀錄"));
+            waitForExists(withContentDescription("刪除第15卦紀錄"));
             onView(withContentDescription("刪除第15卦紀錄")).perform(callOnClick());
             waitFor(withText("刪除紀錄？"));
             onView(withText("刪除")).perform(click());
@@ -181,7 +182,7 @@ public class StableBetaWorkflowInstrumentedTest {
             waitFor(withId(R.id.records_search_input));
             onView(withId(R.id.records_search_input)).perform(replaceText("保留篩選"));
             closeSoftKeyboard();
-            onView(withText("簡易占法")).perform(click());
+            onView(withId(R.id.records_method_simple_chip)).perform(callOnClick());
             waitFor(withText("保留篩選 簡易紀錄"));
             onView(withText("保留篩選 金錢紀錄")).check(doesNotExist());
 
@@ -189,7 +190,8 @@ public class StableBetaWorkflowInstrumentedTest {
 
             waitFor(withId(R.id.records_search_input));
             onView(withId(R.id.records_search_input)).check(matches(withText("保留篩選")));
-            waitFor(withText("保留篩選 簡易紀錄"));
+            onView(withId(R.id.records_method_simple_chip)).check(matches(isChecked()));
+            waitForExists(withText("保留篩選 簡易紀錄"));
             onView(withText("保留篩選 金錢紀錄")).check(doesNotExist());
         }
     }

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     tools:context=".ui.OnboardingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,32 +33,26 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <TextView
+            <View
                 android:id="@id/onboarding_dot_daily"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:gravity="center"
-                android:text="●"
-                android:textColor="@color/ic_gold"
-                android:textSize="18sp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/bg_onboarding_indicator_dot" />
 
-            <TextView
+            <View
                 android:id="@id/onboarding_dot_question"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:gravity="center"
-                android:text="·"
-                android:textColor="@color/ic_text_muted"
-                android:textSize="22sp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/bg_onboarding_indicator_dot" />
 
-            <TextView
+            <View
                 android:id="@id/onboarding_dot_records"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:gravity="center"
-                android:text="·"
-                android:textColor="@color/ic_text_muted"
-                android:textSize="22sp" />
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginHorizontal="8dp"
+                android:background="@drawable/bg_onboarding_indicator_dot" />
         </LinearLayout>
 
         <TextView

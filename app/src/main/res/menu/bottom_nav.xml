@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/bottom_nav_daily"
+        android:icon="@drawable/ic_today_24"
+        android:title="今日" />
+    <item
+        android:id="@id/bottom_nav_divination"
+        android:icon="@drawable/ic_auto_awesome_24"
+        android:title="占卜" />
+    <item
+        android:id="@id/bottom_nav_records"
+        android:icon="@drawable/ic_history_24"
+        android:title="紀錄" />
+    <item
+        android:id="@id/bottom_nav_learn"
+        android:icon="@drawable/ic_menu_book_24"
+        android:title="學習" />
+    <item
+        android:id="@id/bottom_nav_profile"
+        android:icon="@drawable/ic_person_24"
+        android:title="我的" />
+</menu>

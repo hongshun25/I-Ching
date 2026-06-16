@@ -1,0 +1,191 @@
+[
+  {
+    "name": "Noto Sans TC Variable",
+    "type": "font",
+    "sourceUrl": "https://github.com/google/fonts/blob/main/ofl/notosanstc/NotoSansTC%5Bwght%5D.ttf",
+    "license": "SIL Open Font License 1.1",
+    "targetPath": "app/src/main/res/font/noto_sans_tc.ttf",
+    "transform": "Copied unchanged from upstream Google Fonts repository.",
+    "checksumSha256": "864727d210d54f2537bbe23b3a839436c3992af72de9322af5270897246bd44f"
+  },
+  {
+    "name": "Noto Serif CJK TC Regular",
+    "type": "font",
+    "sourceUrl": "https://github.com/notofonts/noto-cjk/blob/main/Serif/OTF/TraditionalChinese/NotoSerifCJKtc-Regular.otf",
+    "license": "SIL Open Font License 1.1",
+    "targetPath": "app/src/main/res/font/noto_serif_cjk_tc_regular.otf",
+    "transform": "Copied unchanged from upstream Noto CJK repository.",
+    "checksumSha256": "234301038e76e7c35c43113785024700c4e4fe7bdce1d1fbbc42fca7e6683798"
+  },
+  {
+    "name": "Paper001 Light Texture",
+    "type": "texture",
+    "sourceUrl": "https://ambientCG.com/get?file=Paper001_1K-JPG.zip",
+    "license": "CC0 1.0 Universal",
+    "targetPath": "app/src/main/res/drawable-nodpi/bg_paper_texture_light.webp",
+    "transform": "Extracted Paper001_1K-JPG_Color.jpg, center-cropped to 720px square, converted to WebP quality 72.",
+    "checksumSha256": "ac575325688e28898563cffe9acd269364f3b0687946c5381d893802df7a17d8"
+  },
+  {
+    "name": "Paper001 Dark Texture",
+    "type": "texture",
+    "sourceUrl": "https://ambientCG.com/get?file=Paper001_1K-JPG.zip",
+    "license": "CC0 1.0 Universal",
+    "targetPath": "app/src/main/res/drawable-nodpi/bg_paper_texture_dark.webp",
+    "transform": "Extracted Paper001_1K-JPG_Color.jpg, center-cropped to 720px square, darkened/desaturated, converted to WebP quality 72.",
+    "checksumSha256": "e61e44f107742bff932ca68c855314c77df2f46dac59a73f89e0195c7eb3ccf9"
+  },
+  {
+    "name": "Scholar Viewing A Waterfall",
+    "type": "image",
+    "sourceUrl": "https://images.metmuseum.org/CRDImages/as/web-large/DP154090.jpg",
+    "license": "Public Domain / The Met Open Access",
+    "targetPath": "app/src/main/res/drawable-nodpi/art_scholar_waterfall.webp",
+    "transform": "Downloaded web-large JPEG, center-cropped to 900px square, converted to WebP quality 78.",
+    "checksumSha256": "0708bb258b6cec9c8c1c060b72dc20fb93140f90760e61082409a8e023f732d9"
+  },
+  {
+    "name": "Material Menu Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_menu_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "f523cd2c6c02134cf2e6cb2e8fa8342cf222c11c8cdbb11b530d9a812ea144b7"
+  },
+  {
+    "name": "Material Settings Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_settings_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "def59afcf9506c526c8473f8315bb45bc32cf283043fd90afe5df65efd39098f"
+  },
+  {
+    "name": "Material Arrow Back Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_arrow_back_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "3e87e50ea74bdeb2ee3303e8fb3bf8fddd6744166ff81161592bd741bf757927"
+  },
+  {
+    "name": "Material Arrow Forward Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_arrow_forward_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "46754d2d7e5cf93d76c2ebd5c847e74b917e2fd731dd4f22d5e04bd1da53570c"
+  },
+  {
+    "name": "Material Check Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_check_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "60b8bb8f6077b7847d4c03c1925645b3d2635f4dfbc8c8ee3a77faa29dd74481"
+  },
+  {
+    "name": "Material Favorite Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_favorite_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "09b6722596dbc97a6da00f15611565be5b92cbbc02e88c874b2610474f610330"
+  },
+  {
+    "name": "Material Favorite Border Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_favorite_border_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "89e97217d93d190cc60deeec6ca35abcf9cd933e5c246b99b3862b6f245a7977"
+  },
+  {
+    "name": "Material Today Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_today_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "8f9fed03c3cf565f19344c55359c6c1d31d39c0755ab51e6784744f03bc1c1b1"
+  },
+  {
+    "name": "Material Auto Awesome Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_auto_awesome_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "9db621805457e38b1228132a9559ad2c564337c223a12e4eb6bda5bd3313aee2"
+  },
+  {
+    "name": "Material History Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_history_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "cce1f93d9cc16bc36e5f966aa2052046cb0898aee05b8fe85622fe9a2615be95"
+  },
+  {
+    "name": "Material Menu Book Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_menu_book_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "576b3806495f275753f75b102ed9b4ab023d6ae3ec33d6e4aa0d44ff959d504e"
+  },
+  {
+    "name": "Material Person Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_person_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "a1680b28db4b18933d44e3ca8001491fc723efd7908b613029da1e4d301be283"
+  },
+  {
+    "name": "Coins Method Icon",
+    "type": "icon",
+    "sourceUrl": "project://self",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable/ic_coins_24.xml",
+    "transform": "VectorDrawable authored for this app.",
+    "checksumSha256": "571e5133068e254de5369fbae0f69c9e63a06863d6bff8ccdc524b79177a33b0"
+  },
+  {
+    "name": "Yarrow Method Icon",
+    "type": "icon",
+    "sourceUrl": "project://self",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable/ic_yarrow_24.xml",
+    "transform": "VectorDrawable authored for this app.",
+    "checksumSha256": "64c8876bf63b39213800c800c8954740c9b239089e543fac00c97422872ecb8e"
+  },
+  {
+    "name": "Simple Hexagram Method Icon",
+    "type": "icon",
+    "sourceUrl": "project://self",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable/ic_simple_hexagram_24.xml",
+    "transform": "VectorDrawable authored for this app.",
+    "checksumSha256": "2c972b4dbe8609e2916045d1a54e21a1ffca4c3884f2dd2639a30b3d5bc96de1"
+  },
+  {
+    "name": "Ritual Focus Icon",
+    "type": "icon",
+    "sourceUrl": "project://self",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable/ic_ritual_focus.xml",
+    "transform": "VectorDrawable authored for this app.",
+    "checksumSha256": "0e5ac0431257d47c90a0dee6fa8e6e9149be219cfa439014329dc4831236cf2c"
+  }
+]

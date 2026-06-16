@@ -2,6 +2,7 @@ package fcu.app.i_ching.ui.presentation;
 
 import org.junit.Test;
 
+import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.HexagramRepository;
 
@@ -26,8 +27,10 @@ public class Beta3PresentationTest {
                 MethodOptionPresentation.from(DivinationMethod.SIMPLE, DivinationMethod.COINS);
 
         assertTrue(selected.selected);
+        assertEquals(R.drawable.ic_coins_24, selected.iconRes);
         assertEquals("三枚銅錢，已選擇", selected.contentDescription);
         assertFalse(unselected.selected);
+        assertEquals(R.drawable.ic_simple_hexagram_24, unselected.iconRes);
         assertEquals("簡易占法，未選擇", unselected.contentDescription);
     }
 
@@ -54,7 +57,8 @@ public class Beta3PresentationTest {
         assertEquals("謙", item.nameText);
         assertTrue(item.trigramsText.contains("上坤"));
         assertEquals("開啟第15卦地山謙詳情", item.openContentDescription);
-        assertEquals("♥", item.favoriteSymbol);
+        assertTrue(item.favorite);
+        assertEquals(R.drawable.ic_favorite_24, item.favoriteIconRes);
         assertEquals("取消收藏第15卦", item.favoriteContentDescription);
     }
 
@@ -65,7 +69,8 @@ public class Beta3PresentationTest {
 
         assertEquals("第15卦｜謙", detail.titleText);
         assertEquals("地山謙", detail.primaryChipText);
-        assertEquals("♡", detail.favoriteSymbol);
+        assertFalse(detail.favorite);
+        assertEquals(R.drawable.ic_favorite_border_24, detail.favoriteIconRes);
         assertEquals(6, detail.sections.size());
         assertEquals("六爻爻辭", detail.sections.get(4).title);
         assertTrue(detail.sections.get(4).body.contains("初六"));

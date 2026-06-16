@@ -6,10 +6,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import com.google.android.material.chip.Chip;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
@@ -33,7 +35,7 @@ public class LearnCenterFragment extends Fragment {
     private static final String STATE_FILTER = "filter";
     private static final String STATE_QUERY = "query";
 
-    private final List<TextView> filterChips = new ArrayList<>();
+    private final List<Chip> filterChips = new ArrayList<>();
     private String activeFilter = HexagramRepository.FILTER_ALL;
     private FragmentLearnCenterBinding binding;
     private HexagramAdapter adapter;
@@ -109,7 +111,7 @@ public class LearnCenterFragment extends Fragment {
         bindFilterChip(binding.learnFilterFavoritesChip, HexagramRepository.FILTER_FAVORITES, activity);
     }
 
-    private void bindFilterChip(TextView chip, String label, MainActivity activity) {
+    private void bindFilterChip(Chip chip, String label, MainActivity activity) {
         chip.setContentDescription("篩選" + label);
         chip.setTag(label);
         chip.setOnClickListener(v -> {
@@ -121,10 +123,9 @@ public class LearnCenterFragment extends Fragment {
     }
 
     private void updateChipStyles() {
-        for (TextView chip : filterChips) {
+        for (Chip chip : filterChips) {
             boolean selected = activeFilter.equals(chip.getTag());
-            chip.setTextColor(Ui.color(requireContext(), selected ? R.color.ic_background : R.color.ic_text_muted));
-            chip.setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip);
+            chip.setChecked(selected);
             chip.setSelected(selected);
         }
     }
@@ -185,8 +186,9 @@ public class LearnCenterFragment extends Fragment {
             holder.binding.hexagramItemTrigrams.setText(presentation.trigramsText);
             holder.binding.hexagramItemTags.setText(presentation.tagsText);
             holder.itemView.setContentDescription(presentation.openContentDescription);
-            holder.binding.hexagramItemFavorite.setText(presentation.favoriteSymbol);
-            holder.binding.hexagramItemFavorite.setTextColor(Ui.color(holder.itemView.getContext(),
+            holder.binding.hexagramItemFavorite.setImageResource(presentation.favoriteIconRes);
+            holder.binding.hexagramItemFavorite.setSelected(favorite);
+            holder.binding.hexagramItemFavorite.setColorFilter(ContextCompat.getColor(holder.itemView.getContext(),
                     favorite ? R.color.ic_gold : R.color.ic_outline_strong));
             holder.binding.hexagramItemFavorite.setContentDescription(presentation.favoriteContentDescription);
             holder.binding.hexagramItemFavorite.setOnClickListener(v -> {

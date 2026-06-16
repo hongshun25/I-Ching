@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -60,16 +61,23 @@ public class MethodFragment extends Fragment {
     }
 
     private void bindMethodCards() {
-        bindCard(binding.methodSimpleCard, binding.methodSimpleStatus, DivinationMethod.SIMPLE);
-        bindCard(binding.methodCoinsCard, binding.methodCoinsStatus, DivinationMethod.COINS);
-        bindCard(binding.methodYarrowCard, binding.methodYarrowStatus, DivinationMethod.YARROW);
+        bindCard(binding.methodSimpleCard, binding.methodSimpleIcon, binding.methodSimpleTitle,
+                binding.methodSimpleDetail, binding.methodSimpleStatus, DivinationMethod.SIMPLE);
+        bindCard(binding.methodCoinsCard, binding.methodCoinsIcon, binding.methodCoinsTitle,
+                binding.methodCoinsDetail, binding.methodCoinsStatus, DivinationMethod.COINS);
+        bindCard(binding.methodYarrowCard, binding.methodYarrowIcon, binding.methodYarrowTitle,
+                binding.methodYarrowDetail, binding.methodYarrowStatus, DivinationMethod.YARROW);
     }
 
-    private void bindCard(LinearLayout card, TextView status, DivinationMethod method) {
+    private void bindCard(LinearLayout card, ImageView icon, TextView title, TextView detail,
+                          TextView status, DivinationMethod method) {
         MethodOptionPresentation presentation = MethodOptionPresentation.from(method, selected);
         card.setSelected(presentation.selected);
         card.setBackgroundResource(presentation.selected ? R.drawable.bg_card_selected : R.drawable.bg_card);
         card.setContentDescription(presentation.contentDescription);
+        icon.setImageResource(presentation.iconRes);
+        title.setText(presentation.titleText);
+        detail.setText(presentation.detailText);
         status.setVisibility(presentation.selected ? View.VISIBLE : View.GONE);
         card.setOnClickListener(v -> {
             selected = method;

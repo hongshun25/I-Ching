@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     android:fillViewport="true"
     tools:context=".ui.MethodFragment">
 
@@ -46,25 +46,45 @@
             android:clickable="true"
             android:focusable="true">
 
-            <TextView
-                android:id="@id/method_simple_status"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/method_selected"
-                android:textColor="@color/ic_gold"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@id/method_simple_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_simple_hexagram_24" />
+
+                <TextView
+                    android:id="@id/method_simple_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:text="簡易占法"
+                    android:textColor="@color/ic_ink"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@id/method_simple_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_check_24"
+                    android:drawablePadding="4dp"
+                    android:text="@string/method_selected"
+                    android:textColor="@color/ic_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:typeface="serif"
-                android:text="簡易占法"
-                android:textColor="@color/ic_ink"
-                android:textSize="24sp" />
-
-            <TextView
+                android:id="@id/method_simple_detail"
                 style="@style/IChingBodyText"
                 android:layout_marginTop="6dp"
                 android:text="適合快速反思，直接得出一卦，無變爻。" />
@@ -78,25 +98,45 @@
             android:clickable="true"
             android:focusable="true">
 
-            <TextView
-                android:id="@id/method_coins_status"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/method_selected"
-                android:textColor="@color/ic_gold"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="visible" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@id/method_coins_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_coins_24" />
+
+                <TextView
+                    android:id="@id/method_coins_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:text="三枚銅錢"
+                    android:textColor="@color/ic_ink"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@id/method_coins_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_check_24"
+                    android:drawablePadding="4dp"
+                    android:text="@string/method_selected"
+                    android:textColor="@color/ic_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:typeface="serif"
-                android:text="三枚銅錢"
-                android:textColor="@color/ic_ink"
-                android:textSize="24sp" />
-
-            <TextView
+                android:id="@id/method_coins_detail"
                 style="@style/IChingBodyText"
                 android:layout_marginTop="6dp"
                 android:text="模擬傳統銅錢占法，六次投擲，可產生變爻，體現事物變動之機。" />
@@ -109,25 +149,45 @@
             android:clickable="true"
             android:focusable="true">
 
-            <TextView
-                android:id="@id/method_yarrow_status"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/method_selected"
-                android:textColor="@color/ic_gold"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@id/method_yarrow_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_yarrow_24" />
+
+                <TextView
+                    android:id="@id/method_yarrow_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:text="蓍草靈感模式"
+                    android:textColor="@color/ic_ink"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@id/method_yarrow_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_check_24"
+                    android:drawablePadding="4dp"
+                    android:text="@string/method_selected"
+                    android:textColor="@color/ic_gold"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:typeface="serif"
-                android:text="蓍草靈感模式"
-                android:textColor="@color/ic_ink"
-                android:textSize="24sp" />
-
-            <TextView
+                android:id="@id/method_yarrow_detail"
                 style="@style/IChingBodyText"
                 android:layout_marginTop="6dp"
                 android:text="節奏較慢，十八變而成卦。適合重大決策前的深度提問與冥想沉澱。" />
@@ -137,6 +197,9 @@
             android:id="@id/method_next_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="10dp"
+            android:drawableEnd="@drawable/ic_arrow_forward_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/ic_background"
             android:text="@string/method_next" />
     </LinearLayout>
 </ScrollView>

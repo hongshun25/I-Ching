@@ -7,12 +7,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.chip.Chip;
+
+import fcu.app.i_ching.R;
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.databinding.FragmentQuestionBinding;
 import fcu.app.i_ching.ui.presentation.QuestionPresetPresentation;
@@ -60,7 +62,8 @@ public class QuestionFragment extends Fragment {
         });
         binding.questionPresets.removeAllViews();
         for (QuestionPresetPresentation preset : QuestionPresetPresentation.all()) {
-            TextView chip = Ui.chip(requireContext(), preset.label);
+            Chip chip = (Chip) getLayoutInflater().inflate(R.layout.item_filter_chip, binding.questionPresets, false);
+            chip.setText(preset.label);
             chip.setContentDescription("套用提問主題：" + preset.label);
             chip.setOnClickListener(v -> binding.questionInput.setText(preset.question));
             binding.questionPresets.addView(chip);

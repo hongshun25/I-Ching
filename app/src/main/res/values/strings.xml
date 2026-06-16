@@ -5,11 +5,6 @@
     <string name="onboarding_start">開始使用</string>
     <string name="onboarding_local_mode">以本機模式使用</string>
     <string name="onboarding_indicator">第 %1$d 頁，共 %2$d 頁</string>
-    <string-array name="onboarding_page_symbols">
-        <item>◯</item>
-        <item>◌</item>
-        <item>≋</item>
-    </string-array>
     <string-array name="onboarding_page_titles">
         <item>每日靜心</item>
         <item>專注提問</item>
@@ -30,11 +25,12 @@
     <string name="nav_settings">設定</string>
     <string name="records_empty_title">你的占卜紀錄會出現在這裡</string>
     <string name="records_empty_body">靜心凝神，透過易經尋求指引，記錄下每一次的智慧對話。</string>
-    <string name="records_empty_action">✦ 開始第一次占卜</string>
+    <string name="records_empty_action">開始第一次占卜</string>
     <string name="records_search_hint">搜尋問題、筆記、卦名或標籤...</string>
     <string name="records_no_results">沒有符合的占卜紀錄</string>
     <string name="record_edit_note">編輯筆記</string>
     <string name="record_delete">刪除</string>
+    <string name="record_note_hint">補充這次占卜的反思...</string>
     <string name="result_note_label">這個結果讓你想到什麼？</string>
     <string name="result_note_hint">寫下你的靈感或打算採取的行動...</string>
     <string name="result_save_new">儲存至紀錄</string>
@@ -43,23 +39,23 @@
     <string name="settings_row_placeholder">未設定</string>
     <string name="daily_reflection_label">今日靜思</string>
     <string name="daily_reflection_hint">今天有什麼事情值得慢下來？</string>
-    <string name="daily_cast">✦ 開始占卜</string>
-    <string name="daily_records">↺ 查看紀錄</string>
-    <string name="daily_learn">書 學習此卦</string>
+    <string name="daily_cast">開始占卜</string>
+    <string name="daily_records">查看紀錄</string>
+    <string name="daily_learn">學習此卦</string>
     <string name="question_step">Step 1</string>
     <string name="question_title">你想問什麼？</string>
     <string name="question_body">試著問一個你真正想理解的情境。</string>
     <string name="question_hint">我目前在工作上最需要調整的是什麼？</string>
     <string name="question_presets_label">或選擇常見主題</string>
-    <string name="question_next">確認提問 →</string>
+    <string name="question_next">確認提問</string>
     <string name="method_step">STEP 2 / 4</string>
     <string name="method_title">選擇占法</string>
     <string name="method_body">請選擇最適合當下心境的卜筮方式。不同的方式將引導出不同的沉浸體驗與變爻機率。</string>
-    <string name="method_next">開始靜心 →</string>
-    <string name="method_selected">✓ 已選擇</string>
+    <string name="method_next">開始靜心</string>
+    <string name="method_selected">已選擇</string>
     <string name="ritual_header">請深呼吸，將注意力放回你的問題。\n長按螢幕，直到光圈合一。</string>
     <string name="ritual_header_reduce_motion">請深呼吸，將注意力放回你的問題。\n輕觸螢幕，完成靜心。</string>
-    <string name="ritual_focus_symbol">◌</string>
+    <string name="ritual_focus_description">靜心光圈</string>
     <string name="ritual_skip">略過儀式</string>
     <string name="learn_title">六十四卦</string>
     <string name="learn_body">探索易經六十四卦的深層智慧，每一卦皆象徵自然與人生的變化規律。</string>

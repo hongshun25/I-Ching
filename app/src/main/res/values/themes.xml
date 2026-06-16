@@ -1,11 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.IChing" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:colorAccent">@color/ic_gold</item>
+        <item name="android:fontFamily">@font/noto_sans_tc</item>
         <item name="android:navigationBarColor">@color/ic_surface</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@drawable/bg_page</item>
         <item name="colorPrimary">@color/ic_ink</item>
         <item name="colorSecondary">@color/ic_gold</item>
         <item name="colorSurface">@color/ic_surface</item>
+        <item name="fontFamily">@font/noto_sans_tc</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
@@ -60,10 +63,60 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="IChingFilterChip" parent="Widget.Material3.Chip.Filter">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="chipMinHeight">48dp</item>
+        <item name="chipStrokeColor">@color/chip_stroke_color</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipSurfaceColor">@color/ic_surface_container_low</item>
+        <item name="ensureMinTouchTargetSize">true</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.IChing.Chip</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+    </style>
+
+    <style name="ShapeAppearance.IChing.Chip" parent="ShapeAppearance.Material3.Corner.Full">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TextAppearance.IChing.TopBarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>
+    </style>
+
+    <style name="TextAppearance.IChing.Headline" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>
+    </style>
+
+    <style name="TextAppearance.IChing.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:textColor">@color/ic_text_muted</item>
+        <item name="fontFamily">@font/noto_sans_tc</item>
+    </style>
+
+    <style name="TextAppearance.IChing.Label" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:textColor">@color/ic_text_muted</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/noto_sans_tc</item>
+    </style>
+
     <style name="IChingPageTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:typeface">serif</item>
+        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">36sp</item>
     </style>
@@ -71,6 +124,7 @@
     <style name="IChingBodyText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/noto_sans_tc</item>
         <item name="android:textColor">@color/ic_text_muted</item>
         <item name="android:textSize">16sp</item>
     </style>

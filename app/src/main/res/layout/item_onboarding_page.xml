@@ -11,15 +11,14 @@
     android:paddingBottom="180dp"
     tools:showIn="@layout/fragment_onboarding">
 
-    <TextView
+    <ImageView
         android:id="@id/onboarding_page_art"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:typeface="serif"
-        android:gravity="center"
-        android:textColor="@color/ic_outline_strong"
-        android:textSize="130sp"
-        tools:text="◯" />
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="centerInside"
+        tools:src="@drawable/art_scholar_waterfall" />
 
     <TextView
         android:id="@id/onboarding_page_title"
@@ -27,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:layout_marginBottom="8dp"
-        android:typeface="serif"
+        android:fontFamily="@font/noto_serif_cjk_tc_regular"
         android:gravity="center"
         android:textColor="@color/ic_ink"
         android:textSize="30sp"

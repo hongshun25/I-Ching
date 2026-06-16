@@ -8,18 +8,21 @@ public final class HexagramListItemPresentation {
     public final String trigramsText;
     public final String tagsText;
     public final String openContentDescription;
-    public final String favoriteSymbol;
+    public final boolean favorite;
+    public final int favoriteIconRes;
     public final String favoriteContentDescription;
 
     private HexagramListItemPresentation(String numberText, String nameText, String trigramsText,
                                          String tagsText, String openContentDescription,
-                                         String favoriteSymbol, String favoriteContentDescription) {
+                                         boolean favorite, int favoriteIconRes,
+                                         String favoriteContentDescription) {
         this.numberText = numberText;
         this.nameText = nameText;
         this.trigramsText = trigramsText;
         this.tagsText = tagsText;
         this.openContentDescription = openContentDescription;
-        this.favoriteSymbol = favoriteSymbol;
+        this.favorite = favorite;
+        this.favoriteIconRes = favoriteIconRes;
         this.favoriteContentDescription = favoriteContentDescription;
     }
 
@@ -32,7 +35,8 @@ public final class HexagramListItemPresentation {
                 "上" + hexagram.upper + "　下" + hexagram.lower,
                 String.join("　", hexagram.tags),
                 "開啟第" + hexagram.number + "卦" + hexagram.fullName + "詳情",
-                favoritePresentation.symbol,
+                favoritePresentation.favorite,
+                favoritePresentation.iconRes,
                 favoritePresentation.contentDescription
         );
     }

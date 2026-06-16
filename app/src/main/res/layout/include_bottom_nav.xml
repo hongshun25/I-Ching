@@ -1,90 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.bottomnavigation.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@id/bottom_navigation"
     android:layout_width="match_parent"
     android:layout_height="78dp"
     android:background="@drawable/bg_bottom_nav"
-    android:gravity="center"
-    android:orientation="horizontal"
     android:paddingStart="6dp"
-    android:paddingTop="8dp"
+    android:paddingTop="4dp"
     android:paddingEnd="6dp"
-    android:paddingBottom="10dp"
-    tools:showIn="@layout/fragment_daily">
-
-    <LinearLayout
-        android:id="@id/bottom_nav_daily"
-        style="@style/BottomNavItem"
-        android:background="@drawable/bg_bottom_tab_selected">
-
-        <TextView
-            style="@style/BottomNavIcon"
-            android:text="◎"
-            android:textColor="@color/ic_gold" />
-
-        <TextView
-            style="@style/BottomNavLabel"
-            android:text="今日"
-            android:textColor="@color/ic_gold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@id/bottom_nav_divination"
-        style="@style/BottomNavItem">
-
-        <TextView
-            style="@style/BottomNavIcon"
-            android:text="✦"
-            android:textColor="@color/ic_text_muted" />
-
-        <TextView
-            style="@style/BottomNavLabel"
-            android:text="占卜"
-            android:textColor="@color/ic_text_muted" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@id/bottom_nav_records"
-        style="@style/BottomNavItem">
-
-        <TextView
-            style="@style/BottomNavIcon"
-            android:text="↺"
-            android:textColor="@color/ic_text_muted" />
-
-        <TextView
-            style="@style/BottomNavLabel"
-            android:text="紀錄"
-            android:textColor="@color/ic_text_muted" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@id/bottom_nav_learn"
-        style="@style/BottomNavItem">
-
-        <TextView
-            style="@style/BottomNavIcon"
-            android:text="書"
-            android:textColor="@color/ic_text_muted" />
-
-        <TextView
-            style="@style/BottomNavLabel"
-            android:text="學習"
-            android:textColor="@color/ic_text_muted" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@id/bottom_nav_profile"
-        style="@style/BottomNavItem">
-
-        <TextView
-            style="@style/BottomNavIcon"
-            android:text="人"
-            android:textColor="@color/ic_text_muted" />
-
-        <TextView
-            style="@style/BottomNavLabel"
-            android:text="我的"
-            android:textColor="@color/ic_text_muted" />
-    </LinearLayout>
-</LinearLayout>
+    android:paddingBottom="6dp"
+    app:itemBackground="@drawable/bg_bottom_nav_item"
+    app:itemIconTint="@color/bottom_nav_item_color"
+    app:itemTextColor="@color/bottom_nav_item_color"
+    app:labelVisibilityMode="labeled"
+    app:menu="@menu/bottom_nav"
+    tools:showIn="@layout/fragment_daily" />

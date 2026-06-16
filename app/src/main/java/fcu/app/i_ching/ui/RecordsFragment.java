@@ -7,8 +7,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +24,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.textfield.TextInputEditText;
+
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.DivinationMethod;
@@ -33,6 +34,7 @@ import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.Hexagram;
 import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.data.LocalRecordStore;
+import fcu.app.i_ching.databinding.DialogEditNoteBinding;
 import fcu.app.i_ching.databinding.FragmentRecordsBinding;
 import fcu.app.i_ching.databinding.ItemRecordBinding;
 import fcu.app.i_ching.ui.presentation.RecordCardPresentation;
@@ -43,8 +45,8 @@ public class RecordsFragment extends Fragment {
     private static final String STATE_CHANGE_FILTER = "changeFilter";
     private static final String METHOD_ALL = "ALL";
 
-    private final List<TextView> methodChips = new ArrayList<>();
-    private final List<TextView> changeChips = new ArrayList<>();
+    private final List<Chip> methodChips = new ArrayList<>();
+    private final List<Chip> changeChips = new ArrayList<>();
     private String activeMethod = METHOD_ALL;
     private LocalRecordStore.ChangeFilter activeChangeFilter = LocalRecordStore.ChangeFilter.ALL;
     private List<DivinationRecord> allRecords = new ArrayList<>();
@@ -123,7 +125,7 @@ public class RecordsFragment extends Fragment {
             }
         });
         binding.recordsList.setLayoutManager(new LinearLayoutManager(requireContext()));
-        binding.recordsList.addItemDecoration(new VerticalSpacingDecoration(Ui.dp(requireContext(), 14)));
+        binding.recordsList.addItemDecoration(new VerticalSpacingDecoration(dp(14)));
         binding.recordsList.setAdapter(adapter);
         binding.recordsList.setHasFixedSize(false);
         binding.recordsEmptyState.emptyStateAction.setOnClickListener(v -> activity.showQuestion());
@@ -151,7 +153,7 @@ public class RecordsFragment extends Fragment {
         bindChangeChip(binding.recordsChangeWithoutChip, LocalRecordStore.ChangeFilter.WITHOUT_CHANGES, activity);
     }
 
-    private void bindMethodChip(TextView chip, String methodName, MainActivity activity) {
+    private void bindMethodChip(Chip chip, String methodName, MainActivity activity) {
         chip.setContentDescription("篩選" + chip.getText() + "紀錄");
         chip.setTag(methodName);
         chip.setOnClickListener(v -> {
@@ -162,7 +164,7 @@ public class RecordsFragment extends Fragment {
         methodChips.add(chip);
     }
 
-    private void bindChangeChip(TextView chip, LocalRecordStore.ChangeFilter filter, MainActivity activity) {
+    private void bindChangeChip(Chip chip, LocalRecordStore.ChangeFilter filter, MainActivity activity) {
         chip.setContentDescription("篩選" + filter.label + "紀錄");
         chip.setTag(filter);
         chip.setOnClickListener(v -> {
@@ -174,17 +176,16 @@ public class RecordsFragment extends Fragment {
     }
 
     private void updateChipStyles() {
-        for (TextView chip : methodChips) {
+        for (Chip chip : methodChips) {
             setChipSelected(chip, activeMethod.equals(chip.getTag()));
         }
-        for (TextView chip : changeChips) {
+        for (Chip chip : changeChips) {
             setChipSelected(chip, activeChangeFilter == chip.getTag());
         }
     }
 
-    private void setChipSelected(TextView chip, boolean selected) {
-        chip.setTextColor(Ui.color(requireContext(), selected ? R.color.ic_background : R.color.ic_text_muted));
-        chip.setBackgroundResource(selected ? R.drawable.bg_chip_selected : R.drawable.bg_chip);
+    private void setChipSelected(Chip chip, boolean selected) {
+        chip.setChecked(selected);
         chip.setSelected(selected);
     }
 
@@ -226,15 +227,20 @@ public class RecordsFragment extends Fragment {
     }
 
     private void showEditDialog(DivinationRecord record) {
-        EditText input = Ui.bottomInput(requireContext(), "補充這次占卜的反思...", 4);
+        DialogEditNoteBinding dialogBinding = DialogEditNoteBinding.inflate(getLayoutInflater());
+        TextInputEditText input = dialogBinding.editNoteInput;
         input.setText(record.note == null ? "" : record.note);
         input.setSelection(input.getText().length());
         new AlertDialog.Builder(requireContext())
                 .setTitle("編輯筆記")
-                .setView(input)
+                .setView(dialogBinding.getRoot())
                 .setNegativeButton("取消", null)
                 .setPositiveButton("儲存", (dialog, which) -> viewModel.updateNote(record.id, input.getText().toString()))
                 .show();
+    }
+
+    private int dp(int value) {
+        return Math.round(value * getResources().getDisplayMetrics().density);
     }
 
     private void confirmDelete(DivinationRecord record) {

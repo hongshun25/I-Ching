@@ -49,6 +49,8 @@
     <item name="bottom_nav_records" type="id" />
     <item name="bottom_nav_learn" type="id" />
     <item name="bottom_nav_profile" type="id" />
+    <item name="top_bar_toolbar" type="id" />
+    <item name="bottom_navigation" type="id" />
     <item name="top_bar_left_action" type="id" />
     <item name="top_bar_title" type="id" />
     <item name="top_bar_right_action" type="id" />
@@ -98,6 +100,15 @@
     <item name="method_simple_status" type="id" />
     <item name="method_coins_status" type="id" />
     <item name="method_yarrow_status" type="id" />
+    <item name="method_simple_icon" type="id" />
+    <item name="method_coins_icon" type="id" />
+    <item name="method_yarrow_icon" type="id" />
+    <item name="method_simple_title" type="id" />
+    <item name="method_coins_title" type="id" />
+    <item name="method_yarrow_title" type="id" />
+    <item name="method_simple_detail" type="id" />
+    <item name="method_coins_detail" type="id" />
+    <item name="method_yarrow_detail" type="id" />
     <item name="ritual_header" type="id" />
     <item name="ritual_progress" type="id" />
     <item name="ritual_focus" type="id" />
@@ -124,4 +135,5 @@
     <item name="detail_section_title" type="id" />
     <item name="detail_section_body" type="id" />
     <item name="records_empty_state" type="id" />
+    <item name="edit_note_input" type="id" />
 </resources>

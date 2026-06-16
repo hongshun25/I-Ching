@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     android:orientation="vertical"
     tools:context=".ui.HexagramDetailFragment">
 
@@ -32,22 +33,22 @@
                 android:layout_width="130dp"
                 android:layout_height="wrap_content" />
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
                 android:id="@id/hex_detail_chips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:gravity="center"
-                android:orientation="horizontal">
+                app:singleLine="true">
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="地山謙" />
 
-                <TextView
-                    style="@style/RecordsFilterChip"
+                <com.google.android.material.chip.Chip
+                    style="@style/IChingFilterChip"
                     android:text="吉卦" />
-            </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
 
             <TextView
                 android:id="@id/hex_detail_title"
@@ -79,7 +80,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="卦象組成"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -97,7 +98,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="主旨核心"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -115,7 +116,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="適宜情境"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -133,7 +134,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="《易經》原文"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -151,7 +152,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="六爻爻辭"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -169,7 +170,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:typeface="serif"
+                        android:fontFamily="/noto_serif_cjk_tc_regular"
                         android:text="現代解析"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />

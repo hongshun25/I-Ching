@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     tools:context=".ui.SplashFragment">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:id="@id/splash_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:typeface="serif"
+            android:fontFamily="/noto_serif_cjk_tc_regular"
             android:gravity="center"
             android:letterSpacing="0.16"
             android:text="@string/brand_title"

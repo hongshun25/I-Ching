@@ -12,18 +12,20 @@ public final class HexagramDetailPresentation {
     public final String summaryText;
     public final String primaryChipText;
     public final String secondaryChipText;
-    public final String favoriteSymbol;
+    public final boolean favorite;
+    public final int favoriteIconRes;
     public final String favoriteContentDescription;
     public final List<Section> sections;
 
     private HexagramDetailPresentation(String titleText, String summaryText, String primaryChipText,
-                                       String secondaryChipText, String favoriteSymbol,
+                                       String secondaryChipText, boolean favorite, int favoriteIconRes,
                                        String favoriteContentDescription, List<Section> sections) {
         this.titleText = titleText;
         this.summaryText = summaryText;
         this.primaryChipText = primaryChipText;
         this.secondaryChipText = secondaryChipText;
-        this.favoriteSymbol = favoriteSymbol;
+        this.favorite = favorite;
+        this.favoriteIconRes = favoriteIconRes;
         this.favoriteContentDescription = favoriteContentDescription;
         this.sections = Collections.unmodifiableList(new ArrayList<>(sections));
     }
@@ -43,7 +45,8 @@ public final class HexagramDetailPresentation {
                 hexagram.summary,
                 hexagram.fullName,
                 hexagram.tags.contains("吉卦") ? "吉卦" : hexagram.tags.get(0),
-                favoritePresentation.symbol,
+                favoritePresentation.favorite,
+                favoritePresentation.iconRes,
                 favoritePresentation.contentDescription,
                 sections
         );

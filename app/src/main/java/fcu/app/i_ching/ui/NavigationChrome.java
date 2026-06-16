@@ -1,10 +1,11 @@
 package fcu.app.i_ching.ui;
 
-import android.content.Context;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.MenuItem;
 
-import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
@@ -22,36 +23,66 @@ final class NavigationChrome {
 
     static void bind(MainActivity activity, IncludeTopBarBinding topBar,
                      IncludeBottomNavBinding bottomNav, String activeTab) {
-        topBar.topBarLeftAction.setText("☰");
-        topBar.topBarLeftAction.setContentDescription(activity.getString(R.string.nav_menu));
-        topBar.topBarLeftAction.setOnClickListener(v -> {});
-        topBar.topBarTitle.setText(R.string.brand_title);
-        topBar.topBarRightAction.setText("⚙");
-        topBar.topBarRightAction.setContentDescription(activity.getString(R.string.nav_settings));
-        topBar.topBarRightAction.setOnClickListener(v -> activity.showProfile());
-
-        bindTab(activity, bottomNav.bottomNavDaily, TAB_DAILY, "◎",
-                TAB_DAILY.equals(activeTab), () -> activity.showDaily(false));
-        bindTab(activity, bottomNav.bottomNavDivination, TAB_DIVINATION, "✦",
-                TAB_DIVINATION.equals(activeTab), activity::showQuestion);
-        bindTab(activity, bottomNav.bottomNavRecords, TAB_RECORDS, "↺",
-                TAB_RECORDS.equals(activeTab), activity::showRecords);
-        bindTab(activity, bottomNav.bottomNavLearn, TAB_LEARN, "書",
-                TAB_LEARN.equals(activeTab), activity::showLearnCenter);
-        bindTab(activity, bottomNav.bottomNavProfile, TAB_PROFILE, "人",
-                TAB_PROFILE.equals(activeTab), activity::showProfile);
+        bindTopBar(activity, topBar);
+        bindBottomNav(activity, bottomNav, activeTab);
     }
 
-    private static void bindTab(Context context, LinearLayout item, String label, String icon,
-                                boolean selected, Runnable action) {
-        TextView iconView = (TextView) item.getChildAt(0);
-        TextView labelView = (TextView) item.getChildAt(1);
-        item.setBackground(selected ? ContextCompat.getDrawable(context, R.drawable.bg_bottom_tab_selected) : null);
-        iconView.setText(icon);
-        iconView.setTextColor(Ui.color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
-        labelView.setText(label);
-        labelView.setTextColor(Ui.color(context, selected ? R.color.ic_gold : R.color.ic_text_muted));
-        item.setContentDescription(label + (selected ? "，目前分頁" : "分頁"));
-        item.setOnClickListener(v -> action.run());
+    private static void bindTopBar(MainActivity activity, IncludeTopBarBinding topBar) {
+        MaterialToolbar toolbar = topBar.getRoot();
+        toolbar.setTitle(R.string.brand_title);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_24);
+        toolbar.setNavigationContentDescription(R.string.nav_menu);
+        toolbar.setNavigationOnClickListener(v -> {});
+        toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.top_bar_settings);
+        MenuItem settings = toolbar.getMenu().findItem(R.id.top_bar_right_action);
+        if (settings != null) {
+            MenuItemCompat.setContentDescription(settings, activity.getString(R.string.nav_settings));
+        }
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.top_bar_right_action) {
+                activity.showProfile();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private static void bindBottomNav(MainActivity activity, IncludeBottomNavBinding bottomNav,
+                                      String activeTab) {
+        BottomNavigationView navigation = bottomNav.getRoot();
+        navigation.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.bottom_nav_daily) {
+                if (!TAB_DAILY.equals(activeTab)) activity.showDaily(false);
+                return true;
+            }
+            if (id == R.id.bottom_nav_divination) {
+                if (!TAB_DIVINATION.equals(activeTab)) activity.showQuestion();
+                return true;
+            }
+            if (id == R.id.bottom_nav_records) {
+                if (!TAB_RECORDS.equals(activeTab)) activity.showRecords();
+                return true;
+            }
+            if (id == R.id.bottom_nav_learn) {
+                if (!TAB_LEARN.equals(activeTab)) activity.showLearnCenter();
+                return true;
+            }
+            if (id == R.id.bottom_nav_profile) {
+                if (!TAB_PROFILE.equals(activeTab)) activity.showProfile();
+                return true;
+            }
+            return false;
+        });
+        navigation.setSelectedItemId(tabId(activeTab));
+    }
+
+    private static int tabId(String activeTab) {
+        if (TAB_DIVINATION.equals(activeTab)) return R.id.bottom_nav_divination;
+        if (TAB_RECORDS.equals(activeTab)) return R.id.bottom_nav_records;
+        if (TAB_LEARN.equals(activeTab)) return R.id.bottom_nav_learn;
+        if (TAB_PROFILE.equals(activeTab)) return R.id.bottom_nav_profile;
+        return R.id.bottom_nav_daily;
     }
 }

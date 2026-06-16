@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@id/hexagram_item_card"
     android:layout_width="match_parent"
@@ -41,7 +42,7 @@
                 android:id="@id/hexagram_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:typeface="serif"
+                android:fontFamily="/noto_serif_cjk_tc_regular"
                 android:textColor="@color/ic_ink"
                 android:textSize="24sp"
                 tools:text="地山謙" />
@@ -55,14 +56,16 @@
                 tools:text="上坤 · 下艮" />
         </LinearLayout>
 
-        <TextView
-            android:id="@id/hexagram_item_favorite"
-            android:layout_width="@dimen/touch_target"
-            android:layout_height="@dimen/touch_target"
-            android:gravity="center"
-            android:textColor="@color/ic_outline_strong"
-            android:textSize="26sp"
-            tools:text="♡" />
+            <ImageButton
+                android:id="@id/hexagram_item_favorite"
+                android:layout_width="@dimen/touch_target"
+                android:layout_height="@dimen/touch_target"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="加入收藏"
+                android:padding="10dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_favorite_border_24"
+                app:tint="@color/favorite_tint" />
     </LinearLayout>
 
     <TextView

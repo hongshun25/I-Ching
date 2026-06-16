@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +20,11 @@ import fcu.app.i_ching.databinding.ItemOnboardingPageBinding;
 public class OnboardingFragment extends Fragment {
     private final PagerSnapHelper snapHelper = new PagerSnapHelper();
     private FragmentOnboardingBinding binding;
+    private final int[] artDrawables = {
+            R.drawable.art_scholar_waterfall,
+            R.drawable.ic_auto_awesome_24,
+            R.drawable.ic_history_24
+    };
 
     @Nullable
     @Override
@@ -31,7 +35,6 @@ public class OnboardingFragment extends Fragment {
         binding.onboardingRecycler.setLayoutManager(
                 new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         binding.onboardingRecycler.setAdapter(new Adapter(
-                getResources().getStringArray(R.array.onboarding_page_symbols),
                 getResources().getStringArray(R.array.onboarding_page_titles),
                 getResources().getStringArray(R.array.onboarding_page_bodies)
         ));
@@ -67,32 +70,28 @@ public class OnboardingFragment extends Fragment {
 
     private void updateIndicator(int position) {
         if (binding == null) return;
-        TextView[] dots = {
+        View[] dots = {
                 binding.onboardingDotDaily,
                 binding.onboardingDotQuestion,
                 binding.onboardingDotRecords
         };
         for (int i = 0; i < dots.length; i++) {
             boolean selected = i == position;
-            dots[i].setText(selected ? "●" : "·");
-            dots[i].setTextColor(Ui.color(requireContext(), selected ? R.color.ic_gold : R.color.ic_text_muted));
-            dots[i].setTextSize(selected ? 18 : 22);
+            dots[i].setSelected(selected);
         }
         binding.onboardingIndicator.setContentDescription(
                 getString(R.string.onboarding_indicator, position + 1, dots.length));
     }
 
     private class Adapter extends RecyclerView.Adapter<Adapter.Holder> {
-        private final String[] symbols;
         private final String[] titles;
         private final String[] bodies;
         private final int itemCount;
 
-        Adapter(String[] symbols, String[] titles, String[] bodies) {
-            this.symbols = symbols;
+        Adapter(String[] titles, String[] bodies) {
             this.titles = titles;
             this.bodies = bodies;
-            this.itemCount = Math.min(symbols.length, Math.min(titles.length, bodies.length));
+            this.itemCount = Math.min(artDrawables.length, Math.min(titles.length, bodies.length));
         }
 
         @NonNull
@@ -108,7 +107,7 @@ public class OnboardingFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull Holder holder, int position) {
-            holder.binding.onboardingPageArt.setText(symbols[position]);
+            holder.binding.onboardingPageArt.setImageResource(artDrawables[position]);
             holder.binding.onboardingPageTitle.setText(titles[position]);
             holder.binding.onboardingPageBody.setText(bodies[position]);
             holder.itemView.setContentDescription(titles[position] + "。" + bodies[position]);

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/ic_background"
+    android:background="@drawable/bg_page"
     android:orientation="vertical"
     tools:context=".ui.LearnCenterFragment">
 
@@ -11,96 +12,99 @@
         android:id="@id/top_bar"
         layout="@layout/include_top_bar" />
 
-    <ScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="24dp">
+
+        <TextView
+            style="@style/IChingPageTitle"
+            android:text="@string/learn_title"
+            android:textSize="38sp" />
+
+        <TextView
+            style="@style/IChingBodyText"
+            android:text="@string/learn_body" />
+
+        <EditText
+            android:id="@id/learn_search_input"
+            style="@style/IChingInput"
+            android:layout_height="54dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="14dp"
+            android:hint="@string/learn_search_hint"
+            android:inputType="text"
+            android:minLines="1"
+            tools:text="謙" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/learn_filter_chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@id/learn_filter_all_chip"
+                    style="@style/IChingFilterChip"
+                    android:checked="true"
+                    android:text="全部" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@id/learn_filter_upper_chip"
+                    style="@style/IChingFilterChip"
+                    android:text="上經" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@id/learn_filter_lower_chip"
+                    style="@style/IChingFilterChip"
+                    android:text="下經" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@id/learn_filter_favorites_chip"
+                    style="@style/IChingFilterChip"
+                    android:text="我的收藏" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:paddingStart="24dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="18dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@id/learn_no_results"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="24dp"
-            android:paddingTop="24dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="24dp">
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/learn_no_results"
+            android:textColor="@color/ic_text_muted"
+            android:textSize="16sp"
+            android:visibility="gone" />
 
-            <TextView
-                style="@style/IChingPageTitle"
-                android:text="@string/learn_title"
-                android:textSize="38sp" />
-
-            <TextView
-                style="@style/IChingBodyText"
-                android:text="@string/learn_body" />
-
-            <EditText
-                android:id="@id/learn_search_input"
-                style="@style/IChingInput"
-                android:layout_height="54dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="14dp"
-                android:hint="@string/learn_search_hint"
-                android:inputType="text"
-                android:minLines="1"
-                tools:text="謙" />
-
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@id/learn_filter_all_chip"
-                        style="@style/RecordsFilterChip"
-                        android:background="@drawable/bg_chip_selected"
-                        android:textColor="@color/ic_background"
-                        android:text="全部" />
-
-                    <TextView
-                        android:id="@id/learn_filter_upper_chip"
-                        style="@style/RecordsFilterChip"
-                        android:text="上經" />
-
-                    <TextView
-                        android:id="@id/learn_filter_lower_chip"
-                        style="@style/RecordsFilterChip"
-                        android:text="下經" />
-
-                    <TextView
-                        android:id="@id/learn_filter_favorites_chip"
-                        style="@style/RecordsFilterChip"
-                        android:text="我的收藏" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <TextView
-                android:id="@id/learn_no_results"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:gravity="center"
-                android:text="@string/learn_no_results"
-                android:textColor="@color/ic_text_muted"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@id/learn_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                tools:itemCount="5"
-                tools:listitem="@layout/item_hexagram" />
-        </LinearLayout>
-    </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@id/learn_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="8dp"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_hexagram" />
+    </FrameLayout>
 
     <include
         android:id="@id/bottom_nav"

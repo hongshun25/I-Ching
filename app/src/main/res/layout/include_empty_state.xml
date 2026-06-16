@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,20 +9,20 @@
     android:paddingTop="28dp"
     tools:showIn="@layout/fragment_records">
 
-    <TextView
+    <ImageView
         android:id="@id/empty_state_art"
         android:layout_width="match_parent"
         android:layout_height="112dp"
-        android:gravity="center"
-        android:text="↺"
-        android:textColor="@color/ic_outline_strong"
-        android:textSize="72sp" />
+        android:contentDescription="@string/records_empty_title"
+        android:scaleType="center"
+        android:src="@drawable/ic_history_24"
+        app:tint="@color/ic_outline_strong" />
 
     <TextView
         android:id="@id/empty_state_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:typeface="serif"
+        android:fontFamily="@font/noto_serif_cjk_tc_regular"
         android:gravity="center"
         android:text="@string/records_empty_title"
         android:textColor="@color/ic_ink"
@@ -41,5 +42,8 @@
         android:id="@id/empty_state_action"
         style="@style/IChingPrimaryButton"
         android:layout_marginTop="28dp"
+        android:drawableStart="@drawable/ic_auto_awesome_24"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/ic_background"
         android:text="@string/records_empty_action" />
 </LinearLayout>

@@ -1,16 +1,18 @@
 package fcu.app.i_ching.ui;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.chip.Chip;
 
 import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.R;
@@ -63,29 +65,33 @@ public class HexagramDetailFragment extends Fragment {
     }
 
     private void bindTopBar(HexagramDetailPresentation presentation) {
-        binding.hexDetailTopBar.topBarLeftAction.setText("←");
-        binding.hexDetailTopBar.topBarLeftAction.setContentDescription(getString(R.string.nav_back));
-        binding.hexDetailTopBar.topBarLeftAction.setOnClickListener(v ->
+        MaterialToolbar toolbar = binding.hexDetailTopBar.getRoot();
+        toolbar.setTitle(getString(R.string.brand_title));
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24);
+        toolbar.setNavigationContentDescription(R.string.nav_back);
+        toolbar.setNavigationOnClickListener(v ->
                 requireActivity().getOnBackPressedDispatcher().onBackPressed());
-        binding.hexDetailTopBar.topBarTitle.setText(getString(R.string.brand_title));
-        binding.hexDetailTopBar.topBarRightAction.setText(presentation.favoriteSymbol);
-        binding.hexDetailTopBar.topBarRightAction.setContentDescription(presentation.favoriteContentDescription);
-        binding.hexDetailTopBar.topBarRightAction.setOnClickListener(v -> {
+        toolbar.getMenu().clear();
+        MenuItem favoriteItem = toolbar.getMenu()
+                .add(presentation.favoriteContentDescription)
+                .setIcon(presentation.favoriteIconRes);
+        favoriteItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setContentDescription(favoriteItem, presentation.favoriteContentDescription);
+        toolbar.setOnMenuItemClickListener(item -> {
             boolean favorite = ((fcu.app.i_ching.MainActivity) requireActivity())
                     .settings().toggleFavorite(hexagram.number);
             HexagramDetailPresentation updated = HexagramDetailPresentation.from(hexagram, favorite);
-            binding.hexDetailTopBar.topBarRightAction.setText(updated.favoriteSymbol);
-            binding.hexDetailTopBar.topBarRightAction.setContentDescription(updated.favoriteContentDescription);
+            item.setTitle(updated.favoriteContentDescription);
+            item.setIcon(updated.favoriteIconRes);
+            MenuItemCompat.setContentDescription(item, updated.favoriteContentDescription);
+            return true;
         });
     }
 
     private void addChip(String label) {
-        TextView chip = Ui.chip(requireContext(), label);
-        chip.setTypeface(Typeface.SANS_SERIF, Typeface.BOLD);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-2, -2);
-        params.setMargins(Ui.dp(requireContext(), 4), Ui.dp(requireContext(), 4),
-                Ui.dp(requireContext(), 4), Ui.dp(requireContext(), 4));
-        binding.hexDetailChips.addView(chip, params);
+        Chip chip = (Chip) getLayoutInflater().inflate(R.layout.item_filter_chip, binding.hexDetailChips, false);
+        chip.setText(label);
+        binding.hexDetailChips.addView(chip);
     }
 
     private void addSection(HexagramDetailPresentation.Section section) {

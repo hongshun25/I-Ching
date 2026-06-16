@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="4dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="4dp"
+    app:boxBackgroundMode="outline"
+    app:boxStrokeColor="@color/ic_outline_strong"
+    app:hintTextColor="@color/ic_outline_strong">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@id/edit_note_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|start"
+        android:hint="@string/record_note_hint"
+        android:inputType="textMultiLine|textCapSentences"
+        android:minLines="4"
+        android:textColor="@color/ic_ink"
+        android:textColorHint="@color/ic_outline_strong"
+        android:textSize="16sp" />
+</com.google.android.material.textfield.TextInputLayout>
