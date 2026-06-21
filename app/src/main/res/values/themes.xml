@@ -88,7 +88,7 @@
 
     <style name="TextAppearance.IChing.TopBarTitle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
-        <item name="android:letterSpacing">0.08</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">24sp</item>
         <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>

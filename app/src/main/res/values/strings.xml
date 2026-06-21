@@ -73,6 +73,13 @@
     <string name="ritual_header_reduce_motion">請深呼吸，將注意力放回你的問題。\n輕觸螢幕，完成靜心。</string>
     <string name="ritual_focus_description">靜心光圈</string>
     <string name="ritual_skip">略過儀式</string>
+    <string name="yarrow_title">蓍草十八變</string>
+    <string name="yarrow_body">依序完成六爻，每爻三變。每一步都只處理當下這一變。</string>
+    <string name="yarrow_next">完成此變</string>
+    <string name="yarrow_quick">快速完成</string>
+    <string name="daily_reminder_channel">每日靜心提醒</string>
+    <string name="daily_reminder_title">今日一卦已準備好</string>
+    <string name="daily_reminder_body">花一分鐘回到你的問題與節奏。</string>
     <string name="learn_title">六十四卦</string>
     <string name="learn_body">探索易經六十四卦的深層智慧，每一卦皆象徵自然與人生的變化規律。</string>
     <string name="learn_search_hint">搜尋卦名或關鍵字...</string>

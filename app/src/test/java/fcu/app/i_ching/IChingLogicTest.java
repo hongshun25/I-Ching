@@ -29,11 +29,11 @@ public class IChingLogicTest {
     }
 
     @Test
-    public void yarrowLineValuesUseSlowMethodBuckets() {
+    public void yarrowLineValuesUseTraditionalBuckets() {
         assertEquals(6, new DivinationEngine(new FixedRandom(0)).castLineValue(DivinationMethod.YARROW));
-        assertEquals(9, new DivinationEngine(new FixedRandom(4)).castLineValue(DivinationMethod.YARROW));
-        assertEquals(7, new DivinationEngine(new FixedRandom(11)).castLineValue(DivinationMethod.YARROW));
-        assertEquals(8, new DivinationEngine(new FixedRandom(15)).castLineValue(DivinationMethod.YARROW));
+        assertEquals(7, new DivinationEngine(new FixedRandom(5)).castLineValue(DivinationMethod.YARROW));
+        assertEquals(8, new DivinationEngine(new FixedRandom(12)).castLineValue(DivinationMethod.YARROW));
+        assertEquals(9, new DivinationEngine(new FixedRandom(15)).castLineValue(DivinationMethod.YARROW));
     }
 
     @Test

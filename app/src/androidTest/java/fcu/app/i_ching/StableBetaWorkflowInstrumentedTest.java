@@ -85,7 +85,7 @@ public class StableBetaWorkflowInstrumentedTest {
             waitFor(withId(R.id.local_mode_button));
             onView(withId(R.id.local_mode_button)).perform(click());
 
-            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitFor(withId(R.id.daily_title));
             onView(withId(R.id.bottom_nav_daily)).check(matches(isDisplayed()));
         }
     }
@@ -99,7 +99,7 @@ public class StableBetaWorkflowInstrumentedTest {
             waitForExists(withId(R.id.auth_skip_button));
             onView(withId(R.id.auth_skip_button)).perform(scrollTo(), callOnClick());
 
-            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitFor(withId(R.id.daily_title));
             assertTrue(AccountStore.get(context).isGuest());
         }
     }
@@ -120,7 +120,7 @@ public class StableBetaWorkflowInstrumentedTest {
             closeSoftKeyboard();
             onView(withId(R.id.auth_register_button)).perform(callOnClick());
 
-            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitFor(withId(R.id.daily_title));
             waitForRecordsCount(1);
             assertTrue(!AccountStore.get(context).isGuest());
 
@@ -138,7 +138,7 @@ public class StableBetaWorkflowInstrumentedTest {
             closeSoftKeyboard();
             onView(withId(R.id.auth_login_button)).perform(callOnClick());
 
-            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitFor(withId(R.id.daily_title));
             waitForRecordsCount(1);
         }
     }
@@ -196,6 +196,37 @@ public class StableBetaWorkflowInstrumentedTest {
             waitFor(withText("刪除紀錄？"));
             onView(withText("刪除")).perform(click());
             waitForRecordsCount(0);
+        }
+    }
+
+    @Test
+    public void methodInitialSelectionFollowsDefaultMethodSetting() {
+        SettingsStore settings = new SettingsStore(context);
+        settings.setOnboardingComplete(true);
+        settings.setDefaultMethod(DivinationMethod.YARROW);
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            waitFor(withId(R.id.daily_title));
+            scenario.onActivity(activity -> activity.showMethod("近期自我成長的重點"));
+
+            waitFor(withId(R.id.method_yarrow_status));
+            onView(withId(R.id.method_yarrow_status)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void yarrowQuickCompleteFlowShowsResultAndAutoSaves() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            waitFor(withId(R.id.daily_title));
+            scenario.onActivity(activity -> activity.showYarrowCasting("近期自我成長的重點"));
+
+            waitFor(withId(R.id.yarrow_step_title));
+            onView(withId(R.id.yarrow_quick_button)).perform(scrollTo(), callOnClick());
+
+            waitFor(withId(R.id.result_title));
+            waitForRecordsCount(1);
         }
     }
 

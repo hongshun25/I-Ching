@@ -22,6 +22,7 @@ import fcu.app.i_ching.ui.presentation.ResultPresentation;
 public class ResultFragment extends Fragment {
     private static final String STATE_RECORD_ID = "recordId";
     private static final String STATE_NOTE = "note";
+    private static final String STATE_CLASSICAL_EXPANDED = "classicalExpanded";
     public static final long NO_RECORD_ID = NavigationArgs.NO_RECORD_ID;
 
     private DivinationResult result;
@@ -29,6 +30,7 @@ public class ResultFragment extends Fragment {
     private ResultViewModel viewModel;
     private ResultPresentation presentation;
     private FragmentResultBinding binding;
+    private boolean classicalExpanded;
 
     public static ResultFragment newInstance(DivinationResult value) {
         ResultFragment fragment = new ResultFragment();
@@ -42,6 +44,7 @@ public class ResultFragment extends Fragment {
         result = readResult();
         presentation = ResultPresentation.from(result);
         savedRecordId = readRecordId(savedInstanceState);
+        classicalExpanded = savedInstanceState != null && savedInstanceState.getBoolean(STATE_CLASSICAL_EXPANDED, false);
         viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
         binding = FragmentResultBinding.inflate(inflater, container, false);
 
@@ -71,6 +74,7 @@ public class ResultFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(STATE_RECORD_ID, savedRecordId);
+        outState.putBoolean(STATE_CLASSICAL_EXPANDED, classicalExpanded);
         if (binding != null) outState.putString(STATE_NOTE, binding.resultNoteInput.getText().toString());
     }
 
@@ -87,8 +91,13 @@ public class ResultFragment extends Fragment {
         binding.resultChangedLines.setVisibility(presentation.changedLineText.isEmpty() ? View.GONE : View.VISIBLE);
         binding.resultDoItems.setText(String.join("\n", result.hexagram.doItems));
         binding.resultAvoidItems.setText(String.join("\n", result.hexagram.avoidItems));
-        binding.resultBlindSpot.setText("你可能低估了局勢中的沉默訊號。先確認對方真正擔心的事，再決定下一步。");
+        binding.resultBlindSpot.setText(presentation.blindSpotText);
         binding.resultClassicalText.setText(result.hexagram.judgment + "\n\n" + result.hexagram.classicalText);
+        updateClassicalVisibility();
+        binding.resultClassicalCard.setOnClickListener(v -> {
+            classicalExpanded = !classicalExpanded;
+            updateClassicalVisibility();
+        });
         binding.resultSharePreview.setText(presentation.shareText);
         String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);
         if (restoredNote != null) {
@@ -141,6 +150,12 @@ public class ResultFragment extends Fragment {
     private void rememberRecordId(long recordId) {
         savedRecordId = recordId;
         NavigationArgs.putRecordId(getArguments(), recordId);
+    }
+
+    private void updateClassicalVisibility() {
+        if (binding == null) return;
+        binding.resultClassicalText.setVisibility(classicalExpanded ? View.VISIBLE : View.GONE);
+        binding.resultClassicalTitle.setText(classicalExpanded ? "古典卦象解釋" : "古典卦象解釋（點按展開）");
     }
 
     private void shareResult() {

@@ -13,10 +13,12 @@ import static org.junit.Assert.assertTrue;
 public class Beta3PresentationTest {
     @Test
     public void questionPresetsExposeStableLabelsAndQuestions() {
-        assertEquals(8, QuestionPresetPresentation.all().size());
+        assertEquals(9, QuestionPresetPresentation.all().size());
         assertEquals("職涯", QuestionPresetPresentation.all().get(0).label);
         assertEquals("職涯發展的方向", QuestionPresetPresentation.all().get(0).question);
-        assertEquals("決策", QuestionPresetPresentation.all().get(7).label);
+        assertEquals("自我成長", QuestionPresetPresentation.all().get(7).label);
+        assertEquals("近期自我成長的重點", QuestionPresetPresentation.all().get(7).question);
+        assertEquals("決策", QuestionPresetPresentation.all().get(8).label);
     }
 
     @Test
@@ -36,14 +38,14 @@ public class Beta3PresentationTest {
 
     @Test
     public void dailyPresentationUsesNightSpecificCopyAndSizing() {
-        DailyCardPresentation light = DailyCardPresentation.from(HexagramRepository.get(15), false);
-        DailyCardPresentation night = DailyCardPresentation.from(HexagramRepository.get(29), true);
+        DailyCardPresentation light = DailyCardPresentation.from(HexagramRepository.get(15), "2026年6月21日 星期日", false);
+        DailyCardPresentation night = DailyCardPresentation.from(HexagramRepository.get(29), "2026年6月21日 星期日", true);
 
-        assertEquals("早安，今天想安靜一下嗎？", light.greetingText);
-        assertEquals("「謙卑自守，則吉無不利。」", light.judgmentText);
+        assertEquals("2026年6月21日 星期日", light.greetingText);
+        assertEquals(HexagramRepository.get(15).judgment, light.judgmentText);
         assertFalse(light.centeredGreeting);
         assertEquals(72, light.hexagramWidthDp);
-        assertEquals("甲辰年 壬申月 丁卯日", night.greetingText);
+        assertEquals("2026年6月21日 星期日", night.greetingText);
         assertTrue(night.centeredGreeting);
         assertEquals(128, night.hexagramWidthDp);
     }

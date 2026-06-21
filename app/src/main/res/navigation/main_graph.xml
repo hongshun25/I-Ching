@@ -59,6 +59,16 @@
     </fragment>
 
     <fragment
+        android:id="@+id/yarrowCastingFragment"
+        android:name="fcu.app.i_ching.ui.YarrowCastingFragment"
+        android:label="Yarrow Casting">
+        <argument
+            android:name="question"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
+
+    <fragment
         android:id="@+id/resultFragment"
         android:name="fcu.app.i_ching.ui.ResultFragment"
         android:label="Result">

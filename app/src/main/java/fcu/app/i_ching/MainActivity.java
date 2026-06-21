@@ -1,5 +1,7 @@
 package fcu.app.i_ching;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -23,6 +25,14 @@ import fcu.app.i_ching.data.AccountStore;
 public class MainActivity extends AppCompatActivity {
     private SettingsStore settingsStore;
     private AccountStore accountStore;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        SettingsStore store = new SettingsStore(newBase);
+        Configuration configuration = new Configuration(newBase.getResources().getConfiguration());
+        configuration.fontScale = configuration.fontScale * store.fontScale().multiplier;
+        super.attachBaseContext(newBase.createConfigurationContext(configuration));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
         navigate(R.id.ritualFragment, NavigationArgs.ritual(question, method));
     }
 
+    public void showYarrowCasting(String question) {
+        navigate(R.id.yarrowCastingFragment, NavigationArgs.method(question));
+    }
+
     public void showResult() {
         showResult(NavigationArgs.DEFAULT_QUESTION, DivinationMethod.COINS);
     }
@@ -100,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
                 NavigationArgs.normalizeQuestion(question),
                 method == null ? DivinationMethod.COINS : method
         );
+        navigate(R.id.resultFragment, NavigationArgs.result(result));
+    }
+
+    public void showResult(DivinationResult result) {
         navigate(R.id.resultFragment, NavigationArgs.result(result));
     }
 

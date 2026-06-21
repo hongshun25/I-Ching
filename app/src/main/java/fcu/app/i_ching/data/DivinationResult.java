@@ -38,6 +38,14 @@ public class DivinationResult {
         return new DivinationEngine().cast(question, method);
     }
 
+    public static DivinationResult fromLineValues(String question, DivinationMethod method, int[] lineValues, long createdAt) {
+        boolean[] lines = HexagramRepository.linesFromValues(lineValues);
+        List<Integer> changing = HexagramRepository.changingLinesFromValues(lineValues);
+        Hexagram hexagram = HexagramRepository.fromLines(lines);
+        Hexagram relating = HexagramRepository.relatingFrom(lines, changing);
+        return new DivinationResult(question, method, hexagram, relating, lineValues, changing, createdAt);
+    }
+
     public JSONObject toJson() throws JSONException {
         JSONObject object = new JSONObject();
         object.put("question", question);

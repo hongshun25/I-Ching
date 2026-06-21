@@ -4,7 +4,7 @@
 
 ## Overview
 
-本專案目前是原生 Android 本機 Beta。主要流程已可離線完成：onboarding、本機帳號登入/註冊與 Guest 略過、每日一卦、三步驟占卜、結果頁、本卦/變爻/之卦、紀錄保存與搜尋篩選、學習中心、卦象詳情、收藏、深色模式、SAF 匯出與刪除目前帳號紀錄。
+本專案目前是原生 Android 本機 Beta。主要流程已可離線完成：onboarding、本機帳號登入/註冊與 Guest 略過、日期驅動每日一卦、三步驟占卜、蓍草十八變互動流程、結果頁、本卦/變爻/之卦、紀錄保存與搜尋篩選、學習中心、卦象詳情、收藏、深色模式、字體大小、預設占法、本機每日提醒、SAF 匯出與刪除目前帳號紀錄。
 
 本輪完成本機帳號 MVP。專案仍維持 Java、Fragment、Navigation Component、Room、Material/AppCompat、XML/ViewBinding；未導入 Compose、WebView、後端、遠端 auth/sync、DataStore 或 runtime network assets。
 
@@ -14,10 +14,13 @@
 - `NavigationArgs` 仍是 question、method、result JSON、hexagram number、record id fallback 的單一 Fragment argument contract。
 - `AuthFragment` 實作本機登入/註冊/Guest 略過；credential 由 `AccountStore` 以 salted PBKDF2 verifier 保存在 app-private `SharedPreferences`，不保存明文密碼。
 - `HexagramRepository` 保存 64 卦 explicit pattern map、上下卦、卦辭、六爻爻辭、標籤、摘要與行動建議；invalid input fallback 仍為第 15 卦。
-- `DivinationEngine` 支援 `SIMPLE`、`COINS`、`YARROW`，並由同一 line values/changing-line helper 推導本卦與之卦。
+- `DivinationEngine` 支援 `SIMPLE`、`COINS`、`YARROW`，並由同一 line values/changing-line helper 推導本卦與之卦；Yarrow line value bucket 為傳統 6=1/16、7=5/16、8=7/16、9=3/16。
+- `YarrowCastingSession` 提供 6 爻 × 3 變的純 Java state，`YarrowCastingFragment` 可逐步完成十八變或快速完成後進入結果頁。
+- `DailyInsightProvider` 以本機日期/time zone 產生每日穩定卦象與 Gregorian Traditional Chinese 日期文案。
 - `RecordRepository` 是 UI 紀錄入口，Room v2 schema 保存於 `app/schemas/`；`divination_records` 以 `accountId + id` 作為主鍵。
 - 舊 `i_ching_records.records` JSON 可一次性匯入 Guest；migration flag 防止重複匯入。
-- `SettingsStore` / `SharedPreferences` 保存 onboarding、dark mode、reduce motion、auto save、favorites；onboarding 是裝置層級，其餘依 active account 隔離。
+- `SettingsStore` / `SharedPreferences` 保存 onboarding、dark mode、reduce motion、auto save、font scale、default method、daily reminder、favorites；onboarding 是裝置層級，其餘依 active account 隔離。
+- `ReminderScheduler` 使用本機 `AlarmManager`、notification channel、`POST_NOTIFICATIONS` runtime permission 與 `RECEIVE_BOOT_COMPLETED` receiver，不加入網路或同步。
 - Guest 與本機帳號資料隔離；首次註冊本機帳號時，Guest records/settings/favorites 會移入新帳號。
 - JSON/text 匯出走 Storage Access Framework；不要求 broad storage permission。
 - Auto Backup / Data Extraction rules 排除本機帳號 credential prefs、舊 records preferences 與 Room DB/WAL/SHM。
@@ -37,6 +40,7 @@
 - Bundled typography 已導入 Noto Sans TC 與 Noto Serif CJK TC。
 - Light/night paper page background 已導入 committed WebP texture。
 - Splash / onboarding / local entry / daily / ritual / result / records / profile 已進一步對齊 Stitch 的品牌層級、紙張卡片、pill、wrap chips、宜忌 cards、question bubble、changing-line highlight 與 settings row rhythm。
+- Daily / Result 的行動建議在窄螢幕預設垂直堆疊；Result 的盲點提醒由 presentation 產生，古典文字可收合。
 
 ## Asset Pipeline
 
@@ -64,7 +68,8 @@ JVM tests 覆蓋：
 - Divination result / record JSON persistence 與舊 JSON fallback。
 - `AccountStore` register/login/duplicate email/password validation/change password/logout/delete account behavior。
 - Room entity mapper、export JSON/text、legacy migration、account filtering、Guest transfer、Room v2 schema。
-- Settings defaults/toggles/favorites、account isolation、Guest transfer。
+- Settings defaults/toggles/font scale/default method/daily reminder/favorites、account isolation、Guest transfer。
+- Daily insight provider date stability/date text and Yarrow 18-step session/distribution/result derivation。
 - Backup/data-extraction XML rules。
 - Record search/filter 與 learning-center filters。
 - Presentation mappers：result、record card、favorite icon state、daily、question presets、method options、ritual reduce-motion、hexagram list/detail。
@@ -75,7 +80,7 @@ Instrumentation tests 覆蓋：
 
 - App context smoke test。
 - Room DAO account-scoped insert/update/delete-all/Guest transfer。
-- Stable workflow：onboarding → local daily、auth skip、register/login with Guest record transfer、divination auto-save → records、method selected state、result recreate no duplicate auto-save、records search/filter state retention、note edit/delete、learning search/detail/favorite、dark mode、SAF export contracts、provider-backed writes、delete-all confirm/cancel。
+- Stable workflow：onboarding → local daily、auth skip、register/login with Guest record transfer、divination auto-save → records、default method selected state、Yarrow quick-complete result auto-save、result recreate no duplicate auto-save、records search/filter state retention、note edit/delete、learning search/detail/favorite、dark mode、SAF export contracts、provider-backed writes、delete-all confirm/cancel。
 
 ## Verification
 
@@ -88,16 +93,23 @@ Instrumentation tests 覆蓋：
 
 `connectedDebugAndroidTest` 仍需要外部實機或 emulator。
 
-本機帳號 MVP verification（2026-06-21）：
+本機帳號 MVP verification（2026-06-21，上一輪）：
 
 - `./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` passed.
-- `./gradlew pixel2Api35DebugAndroidTest` passed 17/17. AGP still prints the known `testedAbi` warning during managed-device setup.
+- `./gradlew pixel2Api35DebugAndroidTest` passed 17/17.
+
+Stitch alignment reinforcement verification（2026-06-21）：
+
+- `./gradlew testDebugUnitTest` passed.
+- `./gradlew lintDebug` passed.
+- `./gradlew assembleDebug` passed.
+- `./gradlew assembleDebugAndroidTest` passed.
+- `./gradlew pixel2Api35DebugAndroidTest` passed 19/19. AGP still prints the known `testedAbi` warning during managed-device setup.
 
 ## Known Gaps
 
 - 無遠端帳號、同步、忘記密碼、email 驗證、後端、加密資料庫、DataStore、Safe Args。
 - 無 release signing、privacy policy、analytics、crash reporting。
-- 蓍草模式不是互動十八變流程。
 - 現代解析仍是 Beta 版內容，未完整納入彖傳、象傳、文言、互卦、綜卦、錯卦。
 - Accessibility 尚需人工驗收 TalkBack、focus order、font scale、contrast。
 - 尚未建立 screenshot regression。

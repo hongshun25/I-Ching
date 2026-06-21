@@ -15,7 +15,7 @@
 - Icons：toolbar、bottom nav、favorite、method cards、empty state、ritual focus、button prefix/arrow affordances 改為 VectorDrawable/ImageView/ImageButton。
 - Typography：打包 Noto Sans TC / Noto Serif CJK TC，theme/styles 使用 committed font resources。
 - Texture/image：打包 light/night paper texture 與 Met Open Access artwork；build 不依賴網路。
-- Stitch alignment pass：補上 project-owned onboarding ink-wash assets、較平的 paper card radius、wrap chips、question/result pill hierarchy、result blind-spot card、daily 宜忌卡與原生 ritual focus view。
+- Stitch alignment pass：補上 project-owned onboarding ink-wash assets、較平的 paper card radius、wrap chips、question/result pill hierarchy、result blind-spot card、daily 宜忌卡、日期驅動每日一卦、原生 ritual focus view 與蓍草十八變步進畫面。
 - `Ui.java`：已刪除。`HexagramView` 保留，並內聚 dp/color behavior 與 XML attrs。
 - Dialog：record note edit 改用 `dialog_edit_note.xml`。
 - Guards：新增 `UiDebtGuardTest` 與 `AssetManifestTest`。
@@ -38,15 +38,15 @@
 | Splash | XML/ViewBinding + bundled font/page texture + native hexagram mark | Brand lockup follows Stitch splash hierarchy. |
 | Onboarding | RecyclerView pages use committed circular ink-wash WebP art; indicator is stateful View dots | Project-owned Stitch-assisted assets are documented in the manifest. |
 | Local Entry | XML/ViewBinding, local-first copy in login/register-inspired card | Keeps product divergence from Stitch auth; no fake login. |
-| Daily | Material toolbar/bottom nav, ChipGroup trigrams, drawable-backed buttons, daily 宜忌 guide cards | Light/night page texture applied; dark mode still selects hexagram 29. |
+| Daily | Material toolbar/bottom nav, ChipGroup trigrams, drawable-backed buttons, daily 宜忌 guide cards | Uses local-date-driven `DailyInsightProvider`; light/night only changes styling. |
 | Question | Material preset chips, drawable arrow button affordance | No text-symbol icons remain. |
 | Method | Drawable-backed method cards and selected state | Presentation exposes icon resource ids. |
-| Ritual | Custom native `RitualFocusView` draws ambient wash, ring, progress, and center mark | Reduce-motion behavior remains covered by tests. |
-| Result | Question pill, lighter hero, changing-line highlight, guide cards, blind-spot card | Semantic relation arrows in reading text remain allowed. |
+| Ritual / Yarrow | Custom native `RitualFocusView`; Yarrow method then enters an 18-step XML/ViewBinding screen | Reduce-motion behavior and Yarrow session logic remain covered by tests. |
+| Result | Question pill, lighter hero, changing-line highlight, stacked guide cards, presentation-driven blind-spot card, collapsible classical text | Semantic relation arrows in reading text remain allowed. |
 | Records | Header/filter + weighted RecyclerView content area + mini hexagram cards | Empty state art and action icon are drawables. |
 | Learn Center | Header/filter + weighted RecyclerView content area | Favorite state is ImageButton drawable state. |
 | Hexagram Detail | MaterialToolbar back/favorite menu, Material chips | Favorite state uses drawable resource id. |
-| Profile/Settings | XML rows retained | Auth/account rows intentionally omitted. |
+| Profile/Settings | XML rows for account, appearance, divination preferences, local reminder, exports, deletion | Font size/default method/reminder rows are interactive and account-scoped. |
 
 ## Verification
 
@@ -60,7 +60,12 @@ Previous baseline:
 Current Stitch-alignment pass (2026-06-21):
 
 - `./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` passed.
-- `./gradlew pixel2Api35DebugAndroidTest` passed 15/15. AGP still prints the known `testedAbi` warning during managed-device setup.
+- Stitch alignment reinforcement:
+  - `./gradlew testDebugUnitTest` passed.
+  - `./gradlew lintDebug` passed.
+  - `./gradlew assembleDebug` passed.
+  - `./gradlew assembleDebugAndroidTest` passed.
+  - `./gradlew pixel2Api35DebugAndroidTest` passed 19/19. AGP still prints the known `testedAbi` warning during managed-device setup.
 
 ## Asset Sources
 

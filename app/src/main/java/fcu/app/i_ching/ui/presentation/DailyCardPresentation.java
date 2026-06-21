@@ -23,15 +23,19 @@ public final class DailyCardPresentation {
         this.centeredGreeting = centeredGreeting;
     }
 
-    public static DailyCardPresentation from(Hexagram hexagram, boolean night) {
+    public static DailyCardPresentation from(Hexagram hexagram, String dateText, boolean night) {
         return new DailyCardPresentation(
-                night ? "甲辰年 壬申月 丁卯日" : "早安，今天想安靜一下嗎？",
+                dateText == null || dateText.isEmpty() ? "今日一卦" : dateText,
                 "第" + hexagram.number + "卦｜" + hexagram.fullName,
-                night ? hexagram.judgment : "「謙卑自守，則吉無不利。」",
+                hexagram.judgment,
                 hexagram.summary,
                 night ? 128 : 72,
                 night ? 11 : 8,
                 night
         );
+    }
+
+    public static DailyCardPresentation from(Hexagram hexagram, boolean night) {
+        return from(hexagram, "今日一卦", night);
     }
 }

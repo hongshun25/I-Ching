@@ -10,16 +10,18 @@ public final class ResultPresentation {
     public final String relationText;
     public final String changingSummary;
     public final String changedLineText;
+    public final String blindSpotText;
     public final String shareText;
 
     private ResultPresentation(String questionText, String titleText, String tagText, String relationText,
-                               String changingSummary, String changedLineText, String shareText) {
+                               String changingSummary, String changedLineText, String blindSpotText, String shareText) {
         this.questionText = questionText;
         this.titleText = titleText;
         this.tagText = tagText;
         this.relationText = relationText;
         this.changingSummary = changingSummary;
         this.changedLineText = changedLineText;
+        this.blindSpotText = blindSpotText;
         this.shareText = shareText;
     }
 
@@ -33,6 +35,7 @@ public final class ResultPresentation {
                         + "  →  之卦 第" + result.relatingHexagramNumber + "卦｜" + result.relatingHexagram.fullName,
                 changingSummary,
                 changedLineText(result),
+                blindSpotText(result),
                 shareText(result, changingSummary)
         );
     }
@@ -67,6 +70,18 @@ public final class ResultPresentation {
                 + changingSummary + "\n"
                 + "之卦：第" + result.relatingHexagramNumber + "卦｜" + result.relatingHexagram.fullName + "\n"
                 + "啟示：" + result.hexagram.summary;
+    }
+
+    private static String blindSpotText(DivinationResult result) {
+        if (result.changingLines.isEmpty()) {
+            return "本卦沒有變爻，容易把穩定誤認為停滯。先確認哪些條件已經足夠，再決定是否需要推進。";
+        }
+        if (result.changingLines.size() >= 3) {
+            return "變爻較多，表示局勢同時牽動多個層面。先找出最容易失衡的一爻，不要一次處理所有問題。";
+        }
+        String tag = result.hexagram.tags.isEmpty() ? result.hexagram.name : result.hexagram.tags.get(0);
+        return "變爻顯示轉折正在形成。留意你忽略的小訊號，尤其是與「"
+                + tag + "」相關的行動節奏。";
     }
 
     static String positionName(int position) {

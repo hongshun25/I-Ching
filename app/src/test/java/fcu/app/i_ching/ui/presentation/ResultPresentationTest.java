@@ -30,6 +30,7 @@ public class ResultPresentationTest {
         assertEquals("變爻：初爻、四爻", presentation.changingSummary);
         assertTrue(presentation.changedLineText.contains("初六"));
         assertTrue(presentation.changedLineText.contains("六四"));
+        assertTrue(presentation.blindSpotText.contains("變爻顯示轉折"));
         assertTrue(presentation.shareText.contains("本卦：第15卦｜地山謙"));
         assertTrue(presentation.shareText.contains("之卦：第55卦｜雷火豐"));
     }
@@ -50,6 +51,7 @@ public class ResultPresentationTest {
 
         assertEquals("本次無變爻，之卦與本卦相同。", presentation.changingSummary);
         assertEquals("", presentation.changedLineText);
+        assertTrue(presentation.blindSpotText.contains("穩定"));
         assertTrue(presentation.shareText.contains("本次無變爻，之卦與本卦相同。"));
     }
 }

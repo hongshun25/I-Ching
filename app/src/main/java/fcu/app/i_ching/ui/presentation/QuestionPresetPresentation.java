@@ -25,6 +25,7 @@ public final class QuestionPresetPresentation {
             new QuestionPresetPresentation("學業", "學業上的挑戰與突破"),
             new QuestionPresetPresentation("家庭", "家庭關係的調和"),
             new QuestionPresetPresentation("健康", "健康狀態的保養建議"),
+            new QuestionPresetPresentation("自我成長", "近期自我成長的重點"),
             new QuestionPresetPresentation("決策", "面對這個選擇，我該如何決定")
     ));
 }

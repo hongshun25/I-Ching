@@ -51,8 +51,15 @@
     <item name="records_change_without_chip" type="id" />
     <item name="records_no_results" type="id" />
     <item name="profile_dark_mode_switch" type="id" />
+    <item name="profile_font_size" type="id" />
+    <item name="profile_font_size_value" type="id" />
     <item name="profile_reduce_motion_switch" type="id" />
+    <item name="profile_default_method" type="id" />
+    <item name="profile_default_method_value" type="id" />
     <item name="profile_auto_save_switch" type="id" />
+    <item name="profile_reminder_switch" type="id" />
+    <item name="profile_reminder_time" type="id" />
+    <item name="profile_reminder_time_value" type="id" />
     <item name="profile_export_json" type="id" />
     <item name="profile_export_text" type="id" />
     <item name="profile_delete_all" type="id" />
@@ -105,6 +112,8 @@
     <item name="result_blind_spot" type="id" />
     <item name="result_do_items" type="id" />
     <item name="result_avoid_items" type="id" />
+    <item name="result_classical_card" type="id" />
+    <item name="result_classical_title" type="id" />
     <item name="result_classical_text" type="id" />
     <item name="result_share_preview" type="id" />
     <item name="daily_greeting" type="id" />
@@ -138,6 +147,14 @@
     <item name="ritual_header" type="id" />
     <item name="ritual_progress" type="id" />
     <item name="ritual_focus" type="id" />
+    <item name="yarrow_top_bar" type="id" />
+    <item name="yarrow_bottom_nav" type="id" />
+    <item name="yarrow_step_title" type="id" />
+    <item name="yarrow_step_body" type="id" />
+    <item name="yarrow_progress" type="id" />
+    <item name="yarrow_line_values" type="id" />
+    <item name="yarrow_next_button" type="id" />
+    <item name="yarrow_quick_button" type="id" />
     <item name="learn_search_input" type="id" />
     <item name="learn_filter_all_chip" type="id" />
     <item name="learn_filter_upper_chip" type="id" />

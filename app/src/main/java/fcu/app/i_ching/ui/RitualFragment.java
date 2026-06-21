@@ -61,8 +61,8 @@ public class RitualFragment extends Fragment {
         binding.ritualHeader.setText(getString(presentation.reduceMotion
                 ? R.string.ritual_header_reduce_motion
                 : R.string.ritual_header));
-        binding.ritualSkipButton.setOnClickListener(v -> activity.showResult(question, method));
-        finishRunnable = () -> activity.showResult(question, method);
+        binding.ritualSkipButton.setOnClickListener(v -> finishRitual(activity));
+        finishRunnable = () -> finishRitual(activity);
         binding.getRoot().setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 beginPress();
@@ -120,5 +120,13 @@ public class RitualFragment extends Fragment {
         progressAnimator.addUpdateListener(animation ->
                 binding.ritualFocus.setProgressFraction((float) animation.getAnimatedValue()));
         progressAnimator.start();
+    }
+
+    private void finishRitual(MainActivity activity) {
+        if (method == DivinationMethod.YARROW) {
+            activity.showYarrowCasting(question);
+        } else {
+            activity.showResult(question, method);
+        }
     }
 }

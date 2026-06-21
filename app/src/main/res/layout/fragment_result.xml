@@ -139,12 +139,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <LinearLayout
                 style="@style/IChingSectionCard"
-                android:layout_width="0dp"
-                android:layout_weight="1">
+                android:layout_width="match_parent">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -166,9 +165,8 @@
 
             <LinearLayout
                 style="@style/IChingSectionCard"
-                android:layout_width="0dp"
-                android:layout_marginStart="12dp"
-                android:layout_weight="1">
+                android:layout_width="match_parent"
+                android:layout_marginTop="12dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -212,10 +210,15 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@id/result_classical_card"
             style="@style/ResultCard"
+            android:clickable="true"
+            android:contentDescription="古典卦象解釋"
+            android:focusable="true"
             android:layout_marginTop="16dp">
 
             <TextView
+                android:id="@id/result_classical_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/noto_serif_cjk_tc_regular"
@@ -281,11 +284,17 @@
             android:layout_marginTop="22dp"
             android:layout_marginBottom="10dp"
             android:contentDescription="儲存占卜結果筆記至紀錄"
+            android:drawableStart="@drawable/ic_check_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/ic_background"
             android:text="@string/result_save_new" />
 
         <TextView
             android:id="@id/result_share_button"
             style="@style/IChingSecondaryButton"
+            android:drawableStart="@drawable/ic_arrow_forward_24"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/ic_ink"
             android:text="@string/result_share" />
     </LinearLayout>
 </ScrollView>

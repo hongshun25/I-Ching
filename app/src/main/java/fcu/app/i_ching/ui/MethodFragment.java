@@ -30,12 +30,13 @@ public class MethodFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        MainActivity activity = (MainActivity) requireActivity();
         question = NavigationArgs.question(getArguments());
-        selected = readSelected(savedInstanceState);
+        selected = readSelected(savedInstanceState, activity.settings().defaultMethod());
         binding = FragmentMethodBinding.inflate(inflater, container, false);
         bindMethodCards();
         binding.methodNextButton.setOnClickListener(v ->
-                ((MainActivity) requireActivity()).showRitual(question, selected));
+                activity.showRitual(question, selected));
         return binding.getRoot();
     }
 
@@ -51,12 +52,13 @@ public class MethodFragment extends Fragment {
         outState.putString(STATE_SELECTED, selected.name());
     }
 
-    private DivinationMethod readSelected(@Nullable Bundle savedInstanceState) {
-        if (savedInstanceState == null) return DivinationMethod.COINS;
+    private DivinationMethod readSelected(@Nullable Bundle savedInstanceState, DivinationMethod fallback) {
+        DivinationMethod defaultMethod = fallback == null ? DivinationMethod.COINS : fallback;
+        if (savedInstanceState == null) return defaultMethod;
         try {
-            return DivinationMethod.valueOf(savedInstanceState.getString(STATE_SELECTED, DivinationMethod.COINS.name()));
+            return DivinationMethod.valueOf(savedInstanceState.getString(STATE_SELECTED, defaultMethod.name()));
         } catch (IllegalArgumentException e) {
-            return DivinationMethod.COINS;
+            return defaultMethod;
         }
     }
 

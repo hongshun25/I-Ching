@@ -16,8 +16,8 @@ import com.google.android.material.chip.Chip;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.R;
+import fcu.app.i_ching.data.DailyInsightProvider;
 import fcu.app.i_ching.data.Hexagram;
-import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.databinding.FragmentDailyBinding;
 import fcu.app.i_ching.ui.presentation.DailyCardPresentation;
 
@@ -32,9 +32,10 @@ public class DailyFragment extends Fragment {
         binding = FragmentDailyBinding.inflate(inflater, container, false);
         boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;
-        Hexagram hexagram = HexagramRepository.get(night ? 29 : 15);
+        DailyInsightProvider.DailyInsight insight = new DailyInsightProvider().today();
+        Hexagram hexagram = insight.hexagram;
         NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_DAILY);
-        bindDaily(activity, hexagram, DailyCardPresentation.from(hexagram, night));
+        bindDaily(activity, hexagram, DailyCardPresentation.from(hexagram, insight.dateText, night));
         return binding.getRoot();
     }
 

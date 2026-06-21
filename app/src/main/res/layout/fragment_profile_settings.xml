@@ -197,15 +197,29 @@
                         android:minHeight="48dp" />
                 </LinearLayout>
 
-                <LinearLayout style="@style/SettingsRow">
+                <LinearLayout
+                    android:id="@id/profile_font_size"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="調整字體大小"
+                    android:focusable="true">
 
                     <TextView
                         style="@style/SettingsRowLabel"
                         android:text="字體大小" />
 
                     <TextView
+                        android:id="@id/profile_font_size_value"
                         style="@style/SettingsRowValue"
                         android:text="適中" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
                 </LinearLayout>
 
                 <LinearLayout style="@style/SettingsRow">
@@ -232,15 +246,29 @@
                 android:id="@id/profile_divination_group"
                 style="@style/ProfileSettingsCard">
 
-                <LinearLayout style="@style/SettingsRow">
+                <LinearLayout
+                    android:id="@id/profile_default_method"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="選擇預設占法"
+                    android:focusable="true">
 
                     <TextView
                         style="@style/SettingsRowLabel"
                         android:text="預設占法" />
 
                     <TextView
+                        android:id="@id/profile_default_method_value"
                         style="@style/SettingsRowValue"
                         android:text="三枚銅錢" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
                 </LinearLayout>
 
                 <LinearLayout style="@style/SettingsRow">
@@ -262,11 +290,40 @@
 
                     <TextView
                         style="@style/SettingsRowLabel"
-                        android:text="提醒通知" />
+                        android:text="每日提醒" />
+
+                    <Switch
+                        android:id="@id/profile_reminder_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="每日提醒"
+                        android:minWidth="48dp"
+                        android:minHeight="48dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_reminder_time"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="調整每日提醒時間"
+                    android:focusable="true">
 
                     <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="提醒時間" />
+
+                    <TextView
+                        android:id="@id/profile_reminder_time_value"
                         style="@style/SettingsRowValue"
-                        android:text="未啟用" />
+                        android:text="09:00" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
                 </LinearLayout>
             </LinearLayout>
 

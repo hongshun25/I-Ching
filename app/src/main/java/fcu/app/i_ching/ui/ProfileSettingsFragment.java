@@ -1,6 +1,9 @@
 package fcu.app.i_ching.ui;
 
+import android.Manifest;
+import android.app.TimePickerDialog;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +26,10 @@ import java.nio.charset.StandardCharsets;
 
 import fcu.app.i_ching.MainActivity;
 import fcu.app.i_ching.data.AccountStore;
+import fcu.app.i_ching.data.AppSettings;
+import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.RecordRepository;
+import fcu.app.i_ching.data.ReminderScheduler;
 import fcu.app.i_ching.data.SettingsStore;
 import fcu.app.i_ching.databinding.DialogChangePasswordBinding;
 import fcu.app.i_ching.databinding.FragmentProfileSettingsBinding;
@@ -31,10 +37,12 @@ import fcu.app.i_ching.databinding.FragmentProfileSettingsBinding;
 public class ProfileSettingsFragment extends Fragment {
     private ActivityResultLauncher<String> exportJsonLauncher;
     private ActivityResultLauncher<String> exportTextLauncher;
+    private ActivityResultLauncher<String> reminderPermissionLauncher;
     private ProfileSettingsViewModel viewModel;
     private String pendingExportContent;
     private String pendingExportLabel;
     private FragmentProfileSettingsBinding binding;
+    private boolean updatingReminderSwitch;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +50,17 @@ public class ProfileSettingsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(ProfileSettingsViewModel.class);
         exportJsonLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/json"), uri -> writeExport(uri));
         exportTextLauncher = registerForActivityResult(new ActivityResultContracts.CreateDocument("text/plain"), uri -> writeExport(uri));
+        reminderPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+            MainActivity activity = (MainActivity) requireActivity();
+            if (Boolean.TRUE.equals(granted)) {
+                enableDailyReminder(activity, activity.settings());
+            } else {
+                activity.settings().setDailyReminderEnabled(false);
+                new ReminderScheduler(requireContext()).cancel();
+                updateReminderViews(activity.settings());
+                Toast.makeText(requireContext(), "未允許通知，已關閉每日提醒。", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Nullable
@@ -96,6 +115,27 @@ public class ProfileSettingsFragment extends Fragment {
         binding.profileAutoSaveSwitch.setChecked(settings.isAutoSave());
         binding.profileAutoSaveSwitch.setOnCheckedChangeListener((buttonView, checked) ->
                 settings.setAutoSave(checked));
+        binding.profileFontSizeValue.setText(settings.fontScale().label);
+        binding.profileFontSize.setOnClickListener(v -> showFontScaleDialog(activity, settings));
+        binding.profileDefaultMethodValue.setText(settings.defaultMethod().label);
+        binding.profileDefaultMethod.setOnClickListener(v -> showDefaultMethodDialog(settings));
+        updateReminderViews(settings);
+        binding.profileReminderSwitch.setOnCheckedChangeListener((buttonView, checked) -> {
+            if (updatingReminderSwitch) return;
+            if (checked) {
+                ReminderScheduler scheduler = new ReminderScheduler(requireContext());
+                if (scheduler.canPostNotifications()) {
+                    enableDailyReminder(activity, settings);
+                } else if (Build.VERSION.SDK_INT >= 33) {
+                    reminderPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+                }
+            } else {
+                settings.setDailyReminderEnabled(false);
+                new ReminderScheduler(requireContext()).cancel();
+                updateReminderViews(settings);
+            }
+        });
+        binding.profileReminderTime.setOnClickListener(v -> showReminderTimeDialog(settings));
 
         binding.profileExportJson.setOnClickListener(v -> startJsonExport());
         binding.profileExportText.setOnClickListener(v -> startTextExport());
@@ -122,6 +162,75 @@ public class ProfileSettingsFragment extends Fragment {
 
     private void startJsonExport() {
         viewModel.exportJson();
+    }
+
+    private void showFontScaleDialog(MainActivity activity, SettingsStore settings) {
+        AppSettings.FontScale[] values = AppSettings.FontScale.values();
+        String[] labels = new String[values.length];
+        for (int i = 0; i < values.length; i++) labels[i] = values[i].label;
+        new AlertDialog.Builder(requireContext())
+                .setTitle("字體大小")
+                .setItems(labels, (dialog, which) -> {
+                    settings.setFontScale(values[which]);
+                    activity.recreate();
+                })
+                .show();
+    }
+
+    private void showDefaultMethodDialog(SettingsStore settings) {
+        DivinationMethod[] values = new DivinationMethod[]{
+                DivinationMethod.SIMPLE,
+                DivinationMethod.COINS,
+                DivinationMethod.YARROW
+        };
+        String[] labels = new String[values.length];
+        for (int i = 0; i < values.length; i++) labels[i] = values[i].label;
+        new AlertDialog.Builder(requireContext())
+                .setTitle("預設占法")
+                .setItems(labels, (dialog, which) -> {
+                    settings.setDefaultMethod(values[which]);
+                    if (binding != null) binding.profileDefaultMethodValue.setText(values[which].label);
+                })
+                .show();
+    }
+
+    private void showReminderTimeDialog(SettingsStore settings) {
+        TimePickerDialog dialog = new TimePickerDialog(
+                requireContext(),
+                (view, hourOfDay, minute) -> {
+                    settings.setDailyReminderTime(hourOfDay, minute);
+                    if (settings.isDailyReminderEnabled()) {
+                        new ReminderScheduler(requireContext()).schedule(hourOfDay, minute);
+                    }
+                    updateReminderViews(settings);
+                },
+                settings.dailyReminderHour(),
+                settings.dailyReminderMinute(),
+                true
+        );
+        dialog.show();
+    }
+
+    private void enableDailyReminder(MainActivity activity, SettingsStore settings) {
+        ReminderScheduler scheduler = new ReminderScheduler(requireContext());
+        settings.setDailyReminderEnabled(true);
+        scheduler.schedule(settings.dailyReminderHour(), settings.dailyReminderMinute());
+        updateReminderViews(settings);
+        Toast.makeText(requireContext(), "每日提醒已啟用", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateReminderViews(SettingsStore settings) {
+        if (binding == null) return;
+        updatingReminderSwitch = true;
+        binding.profileReminderSwitch.setChecked(settings.isDailyReminderEnabled());
+        updatingReminderSwitch = false;
+        binding.profileReminderTimeValue.setText(formatTime(settings.dailyReminderHour(), settings.dailyReminderMinute()));
+        binding.profileReminderTime.setEnabled(settings.isDailyReminderEnabled());
+        binding.profileReminderTime.setAlpha(settings.isDailyReminderEnabled() ? 1f : 0.55f);
+    }
+
+    private String formatTime(int hour, int minute) {
+        return String.format(java.util.Locale.TAIWAN, "%02d:%02d", hour, minute);
     }
 
     private void startTextExport() {

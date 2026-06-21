@@ -99,12 +99,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
                     style="@style/IChingSectionCard"
-                    android:layout_width="0dp"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent">
 
                     <TextView
                         style="@style/TextAppearance.IChing.Label"
@@ -122,9 +121,8 @@
 
                 <LinearLayout
                     style="@style/IChingSectionCard"
-                    android:layout_width="0dp"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1">
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="12dp">
 
                     <TextView
                         style="@style/TextAppearance.IChing.Label"

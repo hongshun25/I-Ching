@@ -42,9 +42,6 @@ public class DivinationEngine {
             if (roll <= 8) return 7;
             return 8;
         }
-        if (roll == 0) return 6;
-        if (roll <= 4) return 9;
-        if (roll <= 11) return 7;
-        return 8;
+        return YarrowCastingSession.lineValueFromRoll(roll);
     }
 }
