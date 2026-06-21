@@ -13,7 +13,7 @@
         android:id="@id/settings_row_value"
         style="@style/SettingsRowValue"
         android:text="@string/settings_row_placeholder"
-        tools:text="適中 ›" />
+        tools:text="適中" />
 
     <Switch
         android:id="@id/settings_row_toggle"

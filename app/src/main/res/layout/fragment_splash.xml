@@ -15,11 +15,18 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp">
 
+        <fcu.app.i_ching.ui.HexagramView
+            android:id="@id/splash_hexagram"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:contentDescription="@string/brand_title" />
+
         <TextView
             android:id="@id/splash_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="/noto_serif_cjk_tc_regular"
+            android:fontFamily="@font/noto_serif_cjk_tc_regular"
             android:gravity="center"
             android:letterSpacing="0.16"
             android:text="@string/brand_title"
@@ -37,4 +44,16 @@
             android:textColor="@color/ic_text_muted"
             android:textSize="16sp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="48dp"
+        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+        android:gravity="center"
+        android:letterSpacing="0.08"
+        android:text="易經"
+        android:textColor="@color/ic_text_subtle"
+        android:textSize="18sp" />
 </FrameLayout>

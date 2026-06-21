@@ -1,5 +1,6 @@
 package fcu.app.i_ching.ui;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +27,7 @@ public class RitualFragment extends Fragment {
     private DivinationMethod method = DivinationMethod.COINS;
     private FragmentRitualBinding binding;
     private RitualPresentation presentation;
+    private ValueAnimator progressAnimator;
 
     @Nullable
     @Override
@@ -42,6 +44,10 @@ public class RitualFragment extends Fragment {
     @Override
     public void onDestroyView() {
         handler.removeCallbacksAndMessages(null);
+        if (progressAnimator != null) {
+            progressAnimator.cancel();
+            progressAnimator = null;
+        }
         binding = null;
         super.onDestroyView();
     }
@@ -72,6 +78,7 @@ public class RitualFragment extends Fragment {
 
     private void beginPress() {
         binding.ritualHeader.setAlpha(presentation.pressedHeaderAlpha);
+        animateProgress();
         binding.ritualFocus.animate()
                 .scaleX(presentation.pressedFocusScale)
                 .scaleY(presentation.pressedFocusScale)
@@ -85,6 +92,10 @@ public class RitualFragment extends Fragment {
     private void endPress() {
         if (presentation.cancelOnRelease) {
             handler.removeCallbacks(finishRunnable);
+            if (progressAnimator != null) {
+                progressAnimator.cancel();
+            }
+            binding.ritualFocus.setProgressFraction(0f);
         }
         binding.ritualHeader.setAlpha(1f);
         binding.ritualFocus.animate()
@@ -93,5 +104,21 @@ public class RitualFragment extends Fragment {
                 .alpha(1f)
                 .setDuration(presentation.releaseAnimationMs)
                 .start();
+    }
+
+    private void animateProgress() {
+        if (progressAnimator != null) {
+            progressAnimator.cancel();
+        }
+        if (presentation.reduceMotion) {
+            binding.ritualFocus.setProgressFraction(1f);
+            return;
+        }
+        binding.ritualFocus.setProgressFraction(0f);
+        progressAnimator = ValueAnimator.ofFloat(0f, 1f);
+        progressAnimator.setDuration(presentation.finishDelayMs);
+        progressAnimator.addUpdateListener(animation ->
+                binding.ritualFocus.setProgressFraction((float) animation.getAnimatedValue()));
+        progressAnimator.start();
     }
 }

@@ -1,6 +1,6 @@
 # Asset Licenses
 
-更新日期：2026-06-17
+更新日期：2026-06-21
 
 This document summarizes production asset sources. The machine-checked target list and checksums live in `tools/assets/asset_manifest.json`.
 
@@ -37,6 +37,10 @@ This document summarizes production asset sources. The machine-checked target li
   - `ic_history_24.xml`
   - `ic_menu_book_24.xml`
   - `ic_person_24.xml`
+  - `ic_chevron_right_24.xml`
+  - `ic_search_24.xml`
+  - `ic_cloud_off_24.xml`
+  - `ic_file_download_24.xml`
 - Source: Google Material Design Icons repository.
 - License: Apache License 2.0.
 - Use: toolbar, bottom navigation, favorite state, action affordances.
@@ -73,6 +77,17 @@ This document summarizes production asset sources. The machine-checked target li
 - License/status: Public Domain / The Met Open Access.
 - Use: onboarding artwork.
 
+### Project-Owned Stitch-Assisted Onboarding Artwork
+
+- Targets:
+  - `app/src/main/res/drawable-nodpi/art_onboarding_daily.webp`
+  - `app/src/main/res/drawable-nodpi/art_onboarding_question.webp`
+  - `app/src/main/res/drawable-nodpi/art_onboarding_records.webp`
+- Source: `project://self/stitch-assisted`.
+- License/status: project-owned.
+- Transform: procedural circular ink-wash WebP assets generated locally with ImageMagick, using the Stitch export as visual direction only.
+- Use: onboarding carousel artwork.
+
 ## Explicit Non-Sources
 
-The Stitch export under `design/stitch_export/` remains reference material only. Production assets must not be copied from `lh3.googleusercontent.com/aida-public/...` URLs because their redistribution license is not verified in this repo.
+The Stitch export under `design/stitch_export/` remains reference material only. Project-owned Stitch-assisted artwork is allowed when generated or authored for this project, committed under `res/`, and recorded in `tools/assets/asset_manifest.json`. Production assets must not be copied from `lh3.googleusercontent.com/aida-public/...` URLs because their redistribution license is not verified in this repo.

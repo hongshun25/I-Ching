@@ -6,5 +6,7 @@
         <attr name="hexagramGoldLines" format="boolean" />
         <attr name="hexagramLineColor" format="color|reference" />
         <attr name="hexagramChangingLineColor" format="color|reference" />
+        <attr name="hexagramLineGapDp" format="integer" />
+        <attr name="hexagramInkStyle" format="boolean" />
     </declare-styleable>
 </resources>

@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="24dp"
-        android:paddingTop="24dp"
+        android:paddingTop="16dp"
         android:paddingEnd="24dp">
 
         <TextView
@@ -26,36 +26,28 @@
             android:fontFamily="@font/noto_serif_cjk_tc_regular"
             android:text="占卜紀錄"
             android:textColor="@color/ic_ink"
-            android:textSize="36sp" />
+            android:textSize="30sp" />
 
         <EditText
             android:id="@id/records_search_input"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/bg_input_underline"
-            android:gravity="top|start"
+            style="@style/IChingInput"
+            android:layout_height="50dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:drawableStart="@drawable/ic_search_24"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical|start"
             android:hint="@string/records_search_hint"
             android:inputType="text"
             android:minLines="1"
-            android:padding="8dp"
-            android:textColor="@color/ic_ink"
-            android:textColorHint="@color/ic_outline_strong"
-            android:textSize="16sp"
             tools:text="工作" />
 
-        <HorizontalScrollView
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/records_method_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/records_method_chip_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true">
+            app:singleLine="false"
+            app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@id/records_method_all_chip"
@@ -77,21 +69,15 @@
                     android:id="@id/records_method_simple_chip"
                     style="@style/IChingFilterChip"
                     android:text="簡易占法" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+        </com.google.android.material.chip.ChipGroup>
 
-        <HorizontalScrollView
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/records_change_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/records_change_chip_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true">
+            app:singleLine="false"
+            app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@id/records_change_all_chip"
@@ -108,8 +94,7 @@
                     android:id="@id/records_change_without_chip"
                     style="@style/IChingFilterChip"
                     android:text="無變爻" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+        </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
     <FrameLayout
@@ -117,7 +102,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingStart="24dp"
-        android:paddingTop="18dp"
+        android:paddingTop="12dp"
         android:paddingEnd="24dp"
         android:paddingBottom="18dp">
 

@@ -75,17 +75,12 @@
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <HorizontalScrollView
+        <com.google.android.material.chip.ChipGroup
+            android:id="@id/question_presets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@id/question_presets"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                app:singleLine="true">
+            android:gravity="center"
+            app:singleLine="false">
 
                 <com.google.android.material.chip.Chip
                     style="@style/IChingFilterChip"
@@ -118,8 +113,7 @@
                 <com.google.android.material.chip.Chip
                     style="@style/IChingFilterChip"
                     android:text="決策" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+        </com.google.android.material.chip.ChipGroup>
 
         <TextView
             android:id="@id/question_next_button"

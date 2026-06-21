@@ -10,6 +10,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import java.util.List;
+
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.data.Hexagram;
 
@@ -20,9 +22,12 @@ public class HexagramView extends View {
     private Hexagram hexagram;
     private int widthDp = 72;
     private int lineHeightDp = 8;
+    private int lineGapDp = 6;
     private boolean gold;
+    private boolean inkStyle;
     private int lineColor;
     private int changingLineColor;
+    private final boolean[] changingLinePositions = new boolean[6];
 
     public HexagramView(Context context) {
         super(context);
@@ -52,7 +57,9 @@ public class HexagramView extends View {
             TypedArray values = getContext().obtainStyledAttributes(attrs, R.styleable.HexagramView);
             widthDp = values.getInt(R.styleable.HexagramView_hexagramWidthDp, widthDp);
             lineHeightDp = values.getInt(R.styleable.HexagramView_hexagramLineHeightDp, lineHeightDp);
+            lineGapDp = values.getInt(R.styleable.HexagramView_hexagramLineGapDp, lineGapDp);
             gold = values.getBoolean(R.styleable.HexagramView_hexagramGoldLines, gold);
+            inkStyle = values.getBoolean(R.styleable.HexagramView_hexagramInkStyle, inkStyle);
             lineColor = values.getColor(R.styleable.HexagramView_hexagramLineColor, lineColor);
             changingLineColor = values.getColor(R.styleable.HexagramView_hexagramChangingLineColor, changingLineColor);
             values.recycle();
@@ -66,6 +73,9 @@ public class HexagramView extends View {
         this.widthDp = widthDp;
         this.lineHeightDp = lineHeightDp;
         this.gold = gold;
+        for (int i = 0; i < changingLinePositions.length; i++) {
+            changingLinePositions[i] = false;
+        }
         if (value != null) {
             setContentDescription("第" + value.number + "卦 " + value.fullName);
         }
@@ -73,10 +83,44 @@ public class HexagramView extends View {
         invalidate();
     }
 
+    public void setChangingLines(@Nullable List<Integer> positionsBottomToTop) {
+        boolean[] mask = changingLineMask(positionsBottomToTop);
+        for (int i = 0; i < changingLinePositions.length; i++) {
+            changingLinePositions[i] = mask[i];
+        }
+        invalidate();
+    }
+
+    public void clearChangingLines() {
+        setChangingLines(null);
+    }
+
+    boolean isChangingLineHighlightedForTest(int positionBottomToTop) {
+        return positionBottomToTop >= 1
+                && positionBottomToTop <= changingLinePositions.length
+                && changingLinePositions[positionBottomToTop - 1];
+    }
+
+    static boolean[] changingLineMaskForTest(@Nullable List<Integer> positionsBottomToTop) {
+        return changingLineMask(positionsBottomToTop);
+    }
+
+    private static boolean[] changingLineMask(@Nullable List<Integer> positionsBottomToTop) {
+        boolean[] mask = new boolean[6];
+        if (positionsBottomToTop != null) {
+            for (Integer position : positionsBottomToTop) {
+                if (position != null && position >= 1 && position <= 6) {
+                    mask[position - 1] = true;
+                }
+            }
+        }
+        return mask;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int desiredWidth = dp(widthDp);
-        int desiredHeight = dp(8 + (lineHeightDp + 6) * 6);
+        int desiredHeight = dp(8 + (lineHeightDp + lineGapDp) * 6);
         setMeasuredDimension(resolveSize(desiredWidth, widthMeasureSpec), resolveSize(desiredHeight, heightMeasureSpec));
     }
 
@@ -88,15 +132,16 @@ public class HexagramView extends View {
             lines = EDIT_MODE_LINES;
         }
         if (lines == null) return;
-        paint.setColor(gold ? changingLineColor : lineColor);
         float targetWidth = Math.min(getWidth(), dp(widthDp));
         float left = (getWidth() - targetWidth) / 2f;
         float lineHeight = dp(lineHeightDp);
-        float gap = dp(6);
+        float gap = dp(lineGapDp);
         float y = dp(4);
-        float radius = dp(2);
+        float radius = dp(inkStyle ? 3 : 2);
         float brokenGap = Math.max(dp(8), targetWidth / 5f);
         for (int i = 5; i >= 0; i--) {
+            paint.setColor(gold || changingLinePositions[i] ? changingLineColor : lineColor);
+            paint.setAlpha(inkStyle ? 225 : 255);
             boolean yang = lines[i];
             if (yang) {
                 canvas.drawRoundRect(left, y, left + targetWidth, y + lineHeight, radius, radius, paint);
@@ -107,6 +152,7 @@ public class HexagramView extends View {
             }
             y += lineHeight + gap;
         }
+        paint.setAlpha(255);
     }
 
     private int color(int colorRes) {

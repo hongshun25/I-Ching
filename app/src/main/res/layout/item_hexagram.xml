@@ -42,7 +42,7 @@
                 android:id="@id/hexagram_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_cjk_tc_regular"
                 android:textColor="@color/ic_ink"
                 android:textSize="24sp"
                 tools:text="地山謙" />

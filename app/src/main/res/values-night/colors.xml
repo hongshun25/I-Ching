@@ -5,9 +5,12 @@
     <color name="ic_surface_container">#1E1A17</color>
     <color name="ic_surface_container_low">#161311</color>
     <color name="ic_surface_container_high">#241F1A</color>
+    <color name="ic_surface_input">#211D19</color>
     <color name="ic_ink">#F4EFE7</color>
     <color name="ic_text_muted">#B8B0A6</color>
+    <color name="ic_text_subtle">#8B8176</color>
     <color name="ic_outline">#3D352D</color>
+    <color name="ic_outline_variant">#4D4338</color>
     <color name="ic_outline_strong">#8B8176</color>
     <color name="ic_gold">#C6A15B</color>
     <color name="ic_gold_container">#2A231C</color>

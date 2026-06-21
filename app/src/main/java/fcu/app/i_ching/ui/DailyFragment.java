@@ -62,6 +62,8 @@ public class DailyFragment extends Fragment {
         binding.dailyJudgment.setText(presentation.judgmentText);
         binding.dailyJudgment.setTextSize(presentation.centeredGreeting ? 18 : 24);
         binding.dailySummary.setText(presentation.summaryText);
+        binding.dailyDoItems.setText(String.join("\n", hexagram.doItems));
+        binding.dailyAvoidItems.setText(String.join("\n", hexagram.avoidItems));
 
         binding.dailyCastButton.setOnClickListener(v -> activity.showQuestion());
         binding.dailyRecordsButton.setOnClickListener(v -> activity.showRecords());

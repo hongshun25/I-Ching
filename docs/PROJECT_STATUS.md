@@ -1,12 +1,12 @@
 # Project Status
 
-更新日期：2026-06-17
+更新日期：2026-06-21
 
 ## Overview
 
 本專案目前是原生 Android 本機 Beta。主要流程已可離線完成：onboarding、本機模式入口、每日一卦、三步驟占卜、結果頁、本卦/變爻/之卦、紀錄保存與搜尋篩選、學習中心、卦象詳情、收藏、深色模式、SAF 匯出與刪除全部紀錄。
 
-本輪完成 UI 技術債與 asset pipeline 重構。專案仍維持 Java、Fragment、Navigation Component、Room、Material/AppCompat、XML/ViewBinding；未導入 Compose、WebView、後端、auth/sync、DataStore、Room schema v2 或 runtime network assets。
+本輪完成 UI 技術債與 asset pipeline 重構，並進一步執行 Stitch native high-fidelity alignment pass。專案仍維持 Java、Fragment、Navigation Component、Room、Material/AppCompat、XML/ViewBinding；未導入 Compose、WebView、後端、auth/sync、DataStore、Room schema v2 或 runtime network assets。
 
 ## Implemented
 
@@ -34,6 +34,7 @@
 - `Ui.java` 已刪除；`HexagramView` 內聚 dp/color helper 並支援 XML attrs。
 - Bundled typography 已導入 Noto Sans TC 與 Noto Serif CJK TC。
 - Light/night paper page background 已導入 committed WebP texture。
+- Splash / onboarding / local entry / daily / ritual / result / records / profile 已進一步對齊 Stitch 的品牌層級、紙張卡片、pill、wrap chips、宜忌 cards、question bubble、changing-line highlight 與 settings row rhythm。
 
 ## Asset Pipeline
 
@@ -49,8 +50,9 @@ Production assets 皆 commit 到 repo，Gradle build 不依賴網路。新增 as
 - Apache-2.0 Material icons。
 - CC0 / Public Domain images or textures。
 - Project-authored vectors/placeholders。
+- Project-owned Stitch-assisted artwork generated or authored for this repository。
 
-Stitch 匯出的 `lh3.googleusercontent.com/aida-public/...` 圖資不允許作為 production asset，除非能另行取得可驗證授權。
+Stitch 匯出的 `lh3.googleusercontent.com/aida-public/...` 圖資不允許直接作為 production asset，除非能另行取得可驗證授權。Project-owned Stitch-assisted artwork may be used only when committed to `res/`, documented, and checksummed.
 
 ## Test Coverage
 
@@ -74,7 +76,7 @@ Instrumentation tests 覆蓋：
 
 ## Verification
 
-本輪已驗證（2026-06-17）：
+上一輪已驗證（2026-06-17）：
 
 - `./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` 通過。
 - `./gradlew pixel2Api35DebugAndroidTest` 通過 15/15。
@@ -82,6 +84,11 @@ Instrumentation tests 覆蓋：
 備註：AGP 仍會在 managed-device setup 印出 `testedAbi` 提醒，但任務可完成。
 
 `connectedDebugAndroidTest` 仍需要外部實機或 emulator。
+
+Stitch alignment pass verification（2026-06-21）：
+
+- `./gradlew testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest` passed.
+- `./gradlew pixel2Api35DebugAndroidTest` passed 15/15. AGP still prints the known `testedAbi` warning during managed-device setup.
 
 ## Known Gaps
 

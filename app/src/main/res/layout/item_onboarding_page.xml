@@ -13,23 +13,23 @@
 
     <ImageView
         android:id="@id/onboarding_page_art"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
-        android:scaleType="centerInside"
-        tools:src="@drawable/art_scholar_waterfall" />
+        android:scaleType="fitCenter"
+        tools:src="@drawable/art_onboarding_daily" />
 
     <TextView
         android:id="@id/onboarding_page_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="40dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/noto_serif_cjk_tc_regular"
         android:gravity="center"
         android:textColor="@color/ic_ink"
-        android:textSize="30sp"
+        android:textSize="28sp"
         tools:text="每日靜心" />
 
     <TextView

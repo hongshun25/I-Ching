@@ -1,6 +1,6 @@
 # Asset Pipeline
 
-更新日期：2026-06-17
+更新日期：2026-06-21
 
 ## Policy
 
@@ -12,6 +12,7 @@ Allowed sources:
 - Apache-2.0 Material icons.
 - CC0 / Public Domain images and textures.
 - Project-authored vectors/placeholders.
+- Project-owned Stitch-assisted artwork that is generated or authored for this repository, committed under `res/`, and documented with transform notes/checksums.
 
 Disallowed without separate written verification:
 
@@ -41,6 +42,9 @@ Every production font/icon/image/texture must be listed in `tools/assets/asset_m
   - `app/src/main/res/drawable-nodpi/bg_paper_texture_dark.webp`
 - Artwork:
   - `app/src/main/res/drawable-nodpi/art_scholar_waterfall.webp`
+  - `app/src/main/res/drawable-nodpi/art_onboarding_daily.webp`
+  - `app/src/main/res/drawable-nodpi/art_onboarding_question.webp`
+  - `app/src/main/res/drawable-nodpi/art_onboarding_records.webp`
 - Icons:
   - `app/src/main/res/drawable/ic_*.xml`
 
@@ -87,6 +91,17 @@ convert /tmp/iching_assets/met_scholar_waterfall.jpg \
   -resize 900x900^ -gravity center -extent 900x900 -quality 78 \
   app/src/main/res/drawable-nodpi/art_scholar_waterfall.webp
 ```
+
+Onboarding ink-wash artwork was generated locally as project-owned Stitch-assisted visual material:
+
+```bash
+convert -size 640x640 xc:none -fill 'rgba(166,124,55,0.10)' \
+  -draw 'circle 320,320 320,48' \
+  -fill 'rgba(26,26,26,0.07)' -draw 'circle 318,320 318,126' \
+  -quality 82 app/src/main/res/drawable-nodpi/art_onboarding_daily.webp
+```
+
+The question and records variants use the same procedural approach with different line/card motifs.
 
 After changing any target file, update the manifest checksum:
 

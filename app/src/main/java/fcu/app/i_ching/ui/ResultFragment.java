@@ -77,6 +77,7 @@ public class ResultFragment extends Fragment {
     private void bindResult(@Nullable Bundle savedInstanceState) {
         binding.resultQuestionText.setText(presentation.questionText);
         binding.resultHexagram.configure(result.hexagram, 96, 8, false);
+        binding.resultHexagram.setChangingLines(result.changingLines);
         binding.resultTitle.setText(presentation.titleText);
         binding.resultTags.setText(presentation.tagText);
         binding.resultInsight.setText(result.hexagram.summary);
@@ -86,6 +87,7 @@ public class ResultFragment extends Fragment {
         binding.resultChangedLines.setVisibility(presentation.changedLineText.isEmpty() ? View.GONE : View.VISIBLE);
         binding.resultDoItems.setText(String.join("\n", result.hexagram.doItems));
         binding.resultAvoidItems.setText(String.join("\n", result.hexagram.avoidItems));
+        binding.resultBlindSpot.setText("你可能低估了局勢中的沉默訊號。先確認對方真正擔心的事，再決定下一步。");
         binding.resultClassicalText.setText(result.hexagram.judgment + "\n\n" + result.hexagram.classicalText);
         binding.resultSharePreview.setText(presentation.shareText);
         String restoredNote = savedInstanceState == null ? null : savedInstanceState.getString(STATE_NOTE);

@@ -35,22 +35,20 @@
             android:layout_height="54dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="14dp"
+            android:drawableStart="@drawable/ic_search_24"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical|start"
             android:hint="@string/learn_search_hint"
             android:inputType="text"
             android:minLines="1"
             tools:text="謙" />
 
-        <HorizontalScrollView
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/learn_filter_chip_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="none">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/learn_filter_chip_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:singleLine="true"
-                app:singleSelection="true">
+            app:singleLine="false"
+            app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@id/learn_filter_all_chip"
@@ -72,8 +70,7 @@
                     android:id="@id/learn_filter_favorites_chip"
                     style="@style/IChingFilterChip"
                     android:text="我的收藏" />
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+        </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
     <FrameLayout

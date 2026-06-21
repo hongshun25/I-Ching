@@ -7,17 +7,40 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:padding="22dp"
+    android:padding="16dp"
     tools:showIn="@layout/fragment_records">
 
-    <TextView
-        android:id="@id/record_item_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="/noto_serif_cjk_tc_regular"
-        android:textColor="@color/ic_ink"
-        android:textSize="22sp"
-        tools:text="第十五卦｜地山謙" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <fcu.app.i_ching.ui.HexagramView
+            android:id="@id/record_item_hexagram"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp" />
+
+        <TextView
+            android:id="@id/record_item_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/noto_serif_cjk_tc_regular"
+            android:textColor="@color/ic_ink"
+            android:textSize="22sp"
+            tools:text="第十五卦｜地山謙" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@id/record_item_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/ic_text_muted"
+        android:textSize="16sp"
+        tools:text="我目前在工作上最需要調整的是什麼？" />
 
     <TextView
         android:id="@id/record_item_relation"
@@ -35,14 +58,6 @@
         android:textColor="@color/ic_outline_strong"
         android:textSize="13sp"
         tools:text="變爻：初六、六二" />
-
-    <TextView
-        android:id="@id/record_item_question"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/ic_text_muted"
-        android:textSize="16sp"
-        tools:text="我目前在工作上最需要調整的是什麼？" />
 
     <TextView
         android:id="@id/record_item_meta"

@@ -21,9 +21,9 @@ public class OnboardingFragment extends Fragment {
     private final PagerSnapHelper snapHelper = new PagerSnapHelper();
     private FragmentOnboardingBinding binding;
     private final int[] artDrawables = {
-            R.drawable.art_scholar_waterfall,
-            R.drawable.ic_auto_awesome_24,
-            R.drawable.ic_history_24
+            R.drawable.art_onboarding_daily,
+            R.drawable.art_onboarding_question,
+            R.drawable.art_onboarding_records
     };
 
     @Nullable

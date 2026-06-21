@@ -290,6 +290,8 @@ public class RecordsFragment extends Fragment {
             DivinationRecord record = getItem(position);
             Hexagram hex = HexagramRepository.get(record.hexagramNumber);
             RecordCardPresentation presentation = RecordCardPresentation.from(record);
+            holder.binding.recordItemHexagram.configure(hex, 34, 4, false);
+            holder.binding.recordItemHexagram.setChangingLines(record.changingLines);
             holder.binding.recordItemTitle.setText(presentation.titleText);
             holder.binding.recordItemRelation.setText(presentation.relationText);
             holder.binding.recordItemChanging.setText(presentation.changingText);

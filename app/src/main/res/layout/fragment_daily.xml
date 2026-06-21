@@ -70,7 +70,7 @@
                     android:id="@id/daily_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
                     android:gravity="center"
                     android:textColor="@color/ic_ink"
                     android:textSize="26sp"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="12dp"
-                    android:fontFamily="/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
                     android:gravity="center"
                     android:textColor="@color/ic_gold"
                     android:textSize="24sp"
@@ -93,6 +93,53 @@
                     style="@style/IChingBodyText"
                     android:gravity="center"
                     tools:text="在高處仍保留餘地，先傾聽與補足資訊，讓今日的選擇更穩。" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    style="@style/IChingSectionCard"
+                    android:layout_width="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/TextAppearance.IChing.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="宜" />
+
+                    <TextView
+                        android:id="@id/daily_do_items"
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:textSize="15sp"
+                        tools:text="先聽完對方需求&#10;拆解小步驟" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/IChingSectionCard"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/TextAppearance.IChing.Label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="忌"
+                        android:textColor="@color/ic_error" />
+
+                    <TextView
+                        android:id="@id/daily_avoid_items"
+                        style="@style/IChingBodyText"
+                        android:layout_marginTop="8dp"
+                        android:textSize="15sp"
+                        tools:text="情緒化決定&#10;承諾過多" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView

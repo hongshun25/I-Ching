@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.data.HexagramRepository;
 import fcu.app.i_ching.databinding.FragmentSplashBinding;
 
 public class SplashFragment extends Fragment {
@@ -23,6 +24,7 @@ public class SplashFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSplashBinding.inflate(inflater, container, false);
+        binding.splashHexagram.configure(HexagramRepository.get(15), 92, 9, false);
         handler.postDelayed(() -> {
             if (isAdded()) ((MainActivity) requireActivity()).routeAfterSplash();
         }, 3500);

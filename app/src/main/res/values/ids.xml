@@ -13,6 +13,7 @@
     <item name="local_entry_daily_preview_button" type="id" />
     <item name="splash_title" type="id" />
     <item name="splash_subtitle" type="id" />
+    <item name="splash_hexagram" type="id" />
     <item name="top_bar" type="id" />
     <item name="bottom_nav" type="id" />
     <item name="question_input" type="id" />
@@ -59,6 +60,7 @@
     <item name="empty_state_body" type="id" />
     <item name="empty_state_action" type="id" />
     <item name="record_item_title" type="id" />
+    <item name="record_item_hexagram" type="id" />
     <item name="record_item_relation" type="id" />
     <item name="record_item_changing" type="id" />
     <item name="record_item_question" type="id" />
@@ -79,6 +81,7 @@
     <item name="result_relation" type="id" />
     <item name="result_changing_summary" type="id" />
     <item name="result_changed_lines" type="id" />
+    <item name="result_blind_spot" type="id" />
     <item name="result_do_items" type="id" />
     <item name="result_avoid_items" type="id" />
     <item name="result_classical_text" type="id" />
@@ -90,6 +93,8 @@
     <item name="daily_title" type="id" />
     <item name="daily_judgment" type="id" />
     <item name="daily_summary" type="id" />
+    <item name="daily_do_items" type="id" />
+    <item name="daily_avoid_items" type="id" />
     <item name="daily_reflection_input" type="id" />
     <item name="daily_cast_button" type="id" />
     <item name="daily_records_button" type="id" />

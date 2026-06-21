@@ -45,6 +45,33 @@
     "checksumSha256": "0708bb258b6cec9c8c1c060b72dc20fb93140f90760e61082409a8e023f732d9"
   },
   {
+    "name": "Onboarding Daily Ink Wash",
+    "type": "image",
+    "sourceUrl": "project://self/stitch-assisted",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable-nodpi/art_onboarding_daily.webp",
+    "transform": "Procedural circular ink-wash WebP generated with ImageMagick for the native onboarding carousel.",
+    "checksumSha256": "8eb9af51c6c02f6782b1d37dbf6b18bbc51672fca8a0bfd20d46f1f3d0f44022"
+  },
+  {
+    "name": "Onboarding Question Ink Wash",
+    "type": "image",
+    "sourceUrl": "project://self/stitch-assisted",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable-nodpi/art_onboarding_question.webp",
+    "transform": "Procedural circular ink-wash WebP generated with ImageMagick for the native onboarding carousel.",
+    "checksumSha256": "85ae6802b7c5360ef950d94cdfbb21182445ed1f5df9f4533d45af6950085fae"
+  },
+  {
+    "name": "Onboarding Records Ink Wash",
+    "type": "image",
+    "sourceUrl": "project://self/stitch-assisted",
+    "license": "Project-authored",
+    "targetPath": "app/src/main/res/drawable-nodpi/art_onboarding_records.webp",
+    "transform": "Procedural circular ink-wash WebP generated with ImageMagick for the native onboarding carousel.",
+    "checksumSha256": "55795db34bdbe79e80aab838c73cb4a9f70f388e9c554bb90843c4a5e61355ea"
+  },
+  {
     "name": "Material Menu Icon",
     "type": "icon",
     "sourceUrl": "https://github.com/google/material-design-icons",
@@ -151,6 +178,42 @@
     "targetPath": "app/src/main/res/drawable/ic_person_24.xml",
     "transform": "VectorDrawable path adapted for project colors.",
     "checksumSha256": "a1680b28db4b18933d44e3ca8001491fc723efd7908b613029da1e4d301be283"
+  },
+  {
+    "name": "Material Chevron Right Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_chevron_right_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "96dc6c8fd1b4a52fad8e797aa939b0d54e1f77c44f639e6446d98665ab94c0fa"
+  },
+  {
+    "name": "Material Search Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_search_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "c0732c177d69e1bfb368c0523be8a2e4d61591902534d4fe2c8e9aa157ad14eb"
+  },
+  {
+    "name": "Material Cloud Off Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_cloud_off_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "066f775f6610692e760f7b90cea0e376da117485ce4ddc28d21c15c1527efa2c"
+  },
+  {
+    "name": "Material File Download Icon",
+    "type": "icon",
+    "sourceUrl": "https://github.com/google/material-design-icons",
+    "license": "Apache License 2.0",
+    "targetPath": "app/src/main/res/drawable/ic_file_download_24.xml",
+    "transform": "VectorDrawable path adapted for project colors.",
+    "checksumSha256": "4ceb16996517c0edf6bb3a3796e037b7cae378e405c8d53c250e68f93bb5e995"
   },
   {
     "name": "Coins Method Icon",

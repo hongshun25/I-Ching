@@ -4,9 +4,10 @@
     <dimen name="space_gutter">16dp</dimen>
     <dimen name="space_margin">24dp</dimen>
     <dimen name="space_stack_lg">48dp</dimen>
-    <dimen name="corner_card">20dp</dimen>
+    <dimen name="corner_card">8dp</dimen>
     <dimen name="corner_pill">999dp</dimen>
     <dimen name="control_height">52dp</dimen>
     <dimen name="touch_target">48dp</dimen>
-    <dimen name="card_padding">22dp</dimen>
+    <dimen name="card_padding">18dp</dimen>
+    <dimen name="section_padding">16dp</dimen>
 </resources>

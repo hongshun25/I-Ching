@@ -7,9 +7,12 @@
     <color name="ic_surface_container">#EFEDED</color>
     <color name="ic_surface_container_low">#F5F3F3</color>
     <color name="ic_surface_container_high">#E9E8E7</color>
+    <color name="ic_surface_input">#F0EDE7</color>
     <color name="ic_ink">#1A1A1A</color>
     <color name="ic_text_muted">#444748</color>
+    <color name="ic_text_subtle">#747878</color>
     <color name="ic_outline">#D8D2C8</color>
+    <color name="ic_outline_variant">#C4C7C7</color>
     <color name="ic_outline_strong">#747878</color>
     <color name="ic_gold">#A67C37</color>
     <color name="ic_gold_container">#FFDDAD</color>

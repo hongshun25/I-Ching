@@ -37,13 +37,13 @@ Use the Gradle wrapper from the repository root:
 - `./gradlew assembleDebugAndroidTest` builds the debug instrumentation APK.
 - `./gradlew pixel2Api35DebugAndroidTest` runs instrumentation tests on the configured Gradle managed device when the local Android SDK has the required emulator/system image installed.
 
-Current known verification state after the UI debt / asset pipeline refactor:
+Current known verification state after the Stitch native alignment pass on 2026-06-21:
 
 - `./gradlew testDebugUnitTest` passes.
 - `./gradlew lintDebug` passes.
 - `./gradlew assembleDebug` passes.
 - `./gradlew assembleDebugAndroidTest` passes.
-- `./gradlew pixel2Api35DebugAndroidTest` passes 15/15 in an environment with the managed-device system image installed. AGP 9.2 may still print a `testedAbi` setup warning.
+- `./gradlew pixel2Api35DebugAndroidTest` passes 15/15 in this environment. AGP may still print a `testedAbi` setup warning.
 - `./gradlew connectedDebugAndroidTest` builds the app/test APK but cannot run without an attached device or emulator; the current environment reports `No connected devices!`.
 - `./gradlew pixel2Api35DebugAndroidTest` is the preferred no-physical-device instrumentation command when managed-device prerequisites are installed.
 
@@ -62,7 +62,8 @@ Prefer existing local patterns before adding new ones:
 - Use Material `Chip`/`ChipGroup` or `item_filter_chip.xml` for chips. Do not create TextView chips by hand.
 - Do not use icon-like text glyphs for UI controls, including `☰`, `⚙`, `◎`, `✦`, `↺`, `♡`, `♥`, `✓`, `◯`, `◌`, or `●`. Use VectorDrawable, ImageView/ImageButton, selectors, or custom views instead. Semantic reading text such as 「本卦 → 之卦」 may remain when it is content, not an icon.
 - New production icon/font/image/texture assets must be committed under `res/`, listed in `tools/assets/asset_manifest.json`, and documented in `docs/ASSET_LICENSES.md` / `docs/ASSET_PIPELINE.md`. Include source URL, license, transform notes, target path, and SHA-256 checksum.
-- Do not use Stitch-exported `lh3.googleusercontent.com/aida-public/...` images as production assets unless a separate verifiable redistribution license is added to the asset docs.
+- Project-owned Stitch-assisted artwork is allowed only when generated or authored for this repository, committed under `res/`, listed in the asset manifest, documented in the asset docs, and checksummed.
+- Do not copy Stitch-exported `lh3.googleusercontent.com/aida-public/...` images into production assets unless a separate verifiable redistribution license is added to the asset docs. Never load those URLs at runtime.
 - Keep major XML screens and reusable item/include layouts previewable in Android Studio: add `tools:` sample text/hints, `tools:listitem`/`tools:itemCount` for RecyclerViews, `tools:showIn` where useful, and edit-mode fallbacks for custom Views that would otherwise render blank.
 - Keep user-facing copy in Traditional Chinese unless there is a product reason to do otherwise.
 - Keep all production behavior local-first until a backend/API integration is explicitly scoped.
