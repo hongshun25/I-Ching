@@ -32,7 +32,12 @@
     <fragment
         android:id="@+id/questionFragment"
         android:name="fcu.app.i_ching.ui.QuestionFragment"
-        android:label="Question" />
+        android:label="Question">
+        <argument
+            android:name="question"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/methodFragment"

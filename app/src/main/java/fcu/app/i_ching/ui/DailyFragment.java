@@ -66,7 +66,8 @@ public class DailyFragment extends Fragment {
         binding.dailyDoItems.setText(String.join("\n", hexagram.doItems));
         binding.dailyAvoidItems.setText(String.join("\n", hexagram.avoidItems));
 
-        binding.dailyCastButton.setOnClickListener(v -> activity.showQuestion());
+        binding.dailyCastButton.setOnClickListener(v ->
+                activity.showQuestion(binding.dailyReflectionInput.getText().toString()));
         binding.dailyRecordsButton.setOnClickListener(v -> activity.showRecords());
         binding.dailyLearnButton.setOnClickListener(v -> activity.showHexagramDetail(hexagram.number));
     }

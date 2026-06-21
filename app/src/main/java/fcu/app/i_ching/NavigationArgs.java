@@ -20,6 +20,12 @@ public final class NavigationArgs {
 
     private NavigationArgs() {}
 
+    public static Bundle questionDraft(String draft) {
+        Bundle args = new Bundle();
+        args.putString(ARG_QUESTION, normalizeDraftQuestion(draft));
+        return args;
+    }
+
     public static Bundle method(String question) {
         Bundle args = new Bundle();
         args.putString(ARG_QUESTION, normalizeQuestion(question));
@@ -46,6 +52,10 @@ public final class NavigationArgs {
 
     public static String question(@Nullable Bundle args) {
         return normalizeQuestion(args == null ? null : args.getString(ARG_QUESTION));
+    }
+
+    public static String draftQuestion(@Nullable Bundle args) {
+        return normalizeDraftQuestion(args == null ? null : args.getString(ARG_QUESTION));
     }
 
     public static DivinationMethod method(@Nullable Bundle args) {
@@ -82,6 +92,10 @@ public final class NavigationArgs {
 
     public static String normalizeQuestion(String question) {
         return question == null || question.trim().isEmpty() ? DEFAULT_QUESTION : question.trim();
+    }
+
+    private static String normalizeDraftQuestion(String question) {
+        return question == null ? "" : question.trim();
     }
 
     private static DivinationMethod normalizeMethod(@Nullable DivinationMethod method) {

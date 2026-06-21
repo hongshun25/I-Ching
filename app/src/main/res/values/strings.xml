@@ -53,10 +53,10 @@
     <string name="result_save_existing">更新紀錄筆記</string>
     <string name="result_share">分享啟示</string>
     <string name="settings_row_placeholder">未設定</string>
-    <string name="daily_reflection_label">今日靜思</string>
-    <string name="daily_reflection_hint">今天有什麼事情值得慢下來？</string>
+    <string name="daily_reflection_label">今日想問</string>
+    <string name="daily_reflection_hint">例如：近期自我成長的重點</string>
     <string name="daily_cast">開始占卜</string>
-    <string name="daily_records">查看紀錄</string>
+    <string name="daily_records">查看過去紀錄</string>
     <string name="daily_learn">學習此卦</string>
     <string name="question_step">Step 1</string>
     <string name="question_title">你想問什麼？</string>

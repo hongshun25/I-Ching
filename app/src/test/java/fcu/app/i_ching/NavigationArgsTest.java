@@ -27,6 +27,16 @@ public class NavigationArgsTest {
     }
 
     @Test
+    public void questionDraftArgsDoNotFallbackForBlankDraft() {
+        Bundle args = NavigationArgs.questionDraft("  近期自我成長的重點  ");
+        Bundle blank = NavigationArgs.questionDraft("  ");
+
+        assertEquals("近期自我成長的重點", NavigationArgs.draftQuestion(args));
+        assertEquals("", NavigationArgs.draftQuestion(blank));
+        assertEquals("", NavigationArgs.draftQuestion(null));
+    }
+
+    @Test
     public void ritualArgsFallbackToCoinsForMissingMethod() {
         Bundle args = NavigationArgs.method("想確認接下來的節奏");
 

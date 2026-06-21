@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class UiDebtGuardTest {
@@ -46,9 +48,26 @@ public class UiDebtGuardTest {
         }
     }
 
+    @Test
+    public void sharedChromeAvoidsDeadMenuAndSelectedTabBackground() throws Exception {
+        String topBarXml = read("app/src/main/res/layout/include_top_bar.xml");
+        String bottomNavXml = read("app/src/main/res/layout/include_bottom_nav.xml");
+        String chromeJava = read("app/src/main/java/fcu/app/i_ching/ui/NavigationChrome.java");
+
+        assertFalse(topBarXml.contains("navigationIcon=\"@drawable/ic_menu_24\""));
+        assertFalse(topBarXml.contains("navigationContentDescription=\"@string/nav_menu\""));
+        assertFalse(chromeJava.contains("setNavigationIcon(R.drawable.ic_menu_24)"));
+        assertFalse(bottomNavXml.contains("@drawable/bg_bottom_nav_item"));
+        assertTrue(bottomNavXml.contains("itemActiveIndicatorStyle=\"@null\""));
+    }
+
     private static File repoFile(String path) {
         File fromRoot = new File(path);
         if (fromRoot.exists()) return fromRoot;
         return new File(".." + File.separator + path);
+    }
+
+    private static String read(String path) throws Exception {
+        return Files.readString(repoFile(path).toPath(), StandardCharsets.UTF_8);
     }
 }

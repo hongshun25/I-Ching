@@ -1,17 +1,17 @@
 # Project Status
 
-更新日期：2026-06-21
+更新日期：2026-06-22
 
 ## Overview
 
 本專案目前是原生 Android 本機 Beta。主要流程已可離線完成：onboarding、本機帳號登入/註冊與 Guest 略過、日期驅動每日一卦、三步驟占卜、蓍草十八變互動流程、結果頁、本卦/變爻/之卦、紀錄保存與搜尋篩選、學習中心、卦象詳情、收藏、深色模式、字體大小、預設占法、本機每日提醒、SAF 匯出與刪除目前帳號紀錄。
 
-本輪完成本機帳號 MVP。專案仍維持 Java、Fragment、Navigation Component、Room、Material/AppCompat、XML/ViewBinding；未導入 Compose、WebView、後端、遠端 auth/sync、DataStore 或 runtime network assets。
+本輪完成首頁提問草稿與 shared chrome UX refinement。專案仍維持 Java、Fragment、Navigation Component、Room、Material/AppCompat、XML/ViewBinding；未導入 Compose、WebView、後端、遠端 auth/sync、DataStore 或 runtime network assets。
 
 ## Implemented
 
 - `MainActivity` 維持單 Activity + `NavController` 導覽。
-- `NavigationArgs` 仍是 question、method、result JSON、hexagram number、record id fallback 的單一 Fragment argument contract。
+- `NavigationArgs` 仍是 question、method、result JSON、hexagram number、record id fallback 的單一 Fragment argument contract；首頁提問草稿使用同一 `question` argument，但 draft read helper 不會把空白草稿 fallback 成預設問題。
 - `AuthFragment` 實作本機登入/註冊/Guest 略過；credential 由 `AccountStore` 以 salted PBKDF2 verifier 保存在 app-private `SharedPreferences`，不保存明文密碼。
 - `HexagramRepository` 保存 64 卦 explicit pattern map、上下卦、卦辭、六爻爻辭、標籤、摘要與行動建議；invalid input fallback 仍為第 15 卦。
 - `DivinationEngine` 支援 `SIMPLE`、`COINS`、`YARROW`，並由同一 line values/changing-line helper 推導本卦與之卦；Yarrow line value bucket 為傳統 6=1/16、7=5/16、8=7/16、9=3/16。
@@ -29,7 +29,8 @@
 
 - Top bar 改為 `MaterialToolbar`。
 - Bottom nav 改為 `BottomNavigationView` + `res/menu/bottom_nav.xml`。
-- `NavigationChrome` 只負責 toolbar/bottom navigation selection 與 route binding。
+- `NavigationChrome` 負責 top-level toolbar/bottom navigation route binding、active tab selection、status/navigation bar inset padding；top-level toolbar 不顯示無功能 hamburger。
+- Bottom nav active state 改以 icon/label tint 呈現，不再使用大面積 selected background。
 - Records / Learn 已移除 `RecyclerView` inside `ScrollView`，改為 header/filter + weighted content area。
 - Filter/preset/trigram chips 使用 Material `Chip` / `ChipGroup` 或 `item_filter_chip.xml` inflation。
 - Favorite controls 使用 drawable-backed state，不再輸出 `♥/♡` presentation 字串。
@@ -40,7 +41,8 @@
 - Bundled typography 已導入 Noto Sans TC 與 Noto Serif CJK TC。
 - Light/night paper page background 已導入 committed WebP texture。
 - Splash / onboarding / local entry / daily / ritual / result / records / profile 已進一步對齊 Stitch 的品牌層級、紙張卡片、pill、wrap chips、宜忌 cards、question bubble、changing-line highlight 與 settings row rhythm。
-- Daily / Result 的行動建議在窄螢幕預設垂直堆疊；Result 的盲點提醒由 presentation 產生，古典文字可收合。
+- Daily 「今日想問」改為占卜提問草稿，點「開始占卜」會帶入 Step 1；空白草稿仍保持 Step 1 空白，不新增每日筆記資料模型。
+- Daily / Result 的行動建議保持精簡層級；Result 的盲點提醒由 presentation 產生，古典文字可收合。
 
 ## Asset Pipeline
 
@@ -74,13 +76,14 @@ JVM tests 覆蓋：
 - Record search/filter 與 learning-center filters。
 - Presentation mappers：result、record card、favorite icon state、daily、question presets、method options、ritual reduce-motion、hexagram list/detail。
 - `AssetManifestTest`：manifest target、license/source/checksum 與 committed file 一致性。
-- `UiDebtGuardTest`：production UI Java/XML/value resources 禁止回歸 icon-like text symbols。
+- `UiDebtGuardTest`：production UI Java/XML/value resources 禁止回歸 icon-like text symbols，並守住 top-level toolbar 無 dead menu、bottom nav 無 selected background contract。
 
 Instrumentation tests 覆蓋：
 
 - App context smoke test。
 - Room DAO account-scoped insert/update/delete-all/Guest transfer。
 - Stable workflow：onboarding → local daily、auth skip、register/login with Guest record transfer、divination auto-save → records、default method selected state、Yarrow quick-complete result auto-save、result recreate no duplicate auto-save、records search/filter state retention、note edit/delete、learning search/detail/favorite、dark mode、SAF export contracts、provider-backed writes、delete-all confirm/cancel。
+- Stable workflow 也覆蓋首頁提問草稿帶入 Step 1、空白草稿不 fallback、top-level chrome 不顯示 dead hamburger。
 
 ## Verification
 
@@ -105,6 +108,14 @@ Stitch alignment reinforcement verification（2026-06-21）：
 - `./gradlew assembleDebug` passed.
 - `./gradlew assembleDebugAndroidTest` passed.
 - `./gradlew pixel2Api35DebugAndroidTest` passed 19/19. AGP still prints the known `testedAbi` warning during managed-device setup.
+
+Native UX refinement verification（2026-06-22）：
+
+- `./gradlew testDebugUnitTest` passed.
+- `./gradlew lintDebug` passed.
+- `./gradlew assembleDebug` passed.
+- `./gradlew assembleDebugAndroidTest` passed.
+- `./gradlew pixel2Api35DebugAndroidTest` passed 22/22. AGP still prints the known `testedAbi` warning during managed-device setup.
 
 ## Known Gaps
 

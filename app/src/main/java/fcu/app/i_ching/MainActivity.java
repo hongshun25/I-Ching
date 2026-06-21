@@ -87,7 +87,11 @@ public class MainActivity extends AppCompatActivity {
         else navigateTopLevel(R.id.dailyFragment, null);
     }
 
-    public void showQuestion() { navigateTopLevel(R.id.questionFragment, null); }
+    public void showQuestion() { showQuestion(""); }
+
+    public void showQuestion(String draft) {
+        navigateTopLevel(R.id.questionFragment, NavigationArgs.questionDraft(draft));
+    }
 
     public void showMethod(String question) {
         navigate(R.id.methodFragment, NavigationArgs.method(question));

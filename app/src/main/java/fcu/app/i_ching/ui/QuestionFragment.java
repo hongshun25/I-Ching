@@ -16,6 +16,7 @@ import com.google.android.material.chip.Chip;
 
 import fcu.app.i_ching.R;
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.NavigationArgs;
 import fcu.app.i_ching.databinding.FragmentQuestionBinding;
 import fcu.app.i_ching.ui.presentation.QuestionPresetPresentation;
 
@@ -53,6 +54,8 @@ public class QuestionFragment extends Fragment {
         binding.questionInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_QUESTION_LENGTH)});
         if (savedInstanceState != null) {
             binding.questionInput.setText(savedInstanceState.getString(STATE_QUESTION, ""));
+        } else {
+            binding.questionInput.setText(NavigationArgs.draftQuestion(getArguments()));
         }
         updateCount(binding.questionInput.getText());
         binding.questionInput.addTextChangedListener(new TextWatcher() {

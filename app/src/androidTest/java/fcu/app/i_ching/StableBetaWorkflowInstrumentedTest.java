@@ -105,6 +105,46 @@ public class StableBetaWorkflowInstrumentedTest {
     }
 
     @Test
+    public void dailyDraftPrefillsQuestionStep() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            waitForExists(withId(R.id.daily_reflection_input));
+            onView(withId(R.id.daily_reflection_input))
+                    .perform(scrollTo(), replaceText("近期自我成長的重點"));
+            closeSoftKeyboard();
+            onView(withId(R.id.daily_cast_button)).perform(scrollTo(), callOnClick());
+
+            waitFor(withId(R.id.question_input));
+            onView(withId(R.id.question_input)).check(matches(withText("近期自我成長的重點")));
+        }
+    }
+
+    @Test
+    public void emptyDailyDraftKeepsQuestionStepEmpty() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            waitForExists(withId(R.id.daily_cast_button));
+            onView(withId(R.id.daily_cast_button)).perform(scrollTo(), callOnClick());
+
+            waitFor(withId(R.id.question_input));
+            onView(withId(R.id.question_input)).check(matches(withText("")));
+        }
+    }
+
+    @Test
+    public void topLevelChromeHasNoDeadMenuAction() {
+        new SettingsStore(context).setOnboardingComplete(true);
+
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            waitFor(withId(R.id.daily_title));
+            onView(withContentDescription(context.getString(R.string.nav_menu))).check(doesNotExist());
+            onView(withId(R.id.bottom_nav_daily)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
     public void registerTransfersGuestRecordsAndLoginRestoresAccountScope() {
         SettingsStore settings = new SettingsStore(context);
         settings.setOnboardingComplete(true);

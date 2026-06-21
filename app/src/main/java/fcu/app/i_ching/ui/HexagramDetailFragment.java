@@ -66,6 +66,7 @@ public class HexagramDetailFragment extends Fragment {
 
     private void bindTopBar(HexagramDetailPresentation presentation) {
         MaterialToolbar toolbar = binding.hexDetailTopBar.getRoot();
+        NavigationChrome.applyTopBarInsets(toolbar);
         toolbar.setTitle(getString(R.string.brand_title));
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_24);
         toolbar.setNavigationContentDescription(R.string.nav_back);
