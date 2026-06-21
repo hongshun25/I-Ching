@@ -22,7 +22,10 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 import fcu.app.i_ching.MainActivity;
+import fcu.app.i_ching.data.AccountStore;
+import fcu.app.i_ching.data.RecordRepository;
 import fcu.app.i_ching.data.SettingsStore;
+import fcu.app.i_ching.databinding.DialogChangePasswordBinding;
 import fcu.app.i_ching.databinding.FragmentProfileSettingsBinding;
 
 public class ProfileSettingsFragment extends Fragment {
@@ -48,7 +51,7 @@ public class ProfileSettingsFragment extends Fragment {
         SettingsStore settings = activity.settings();
         binding = FragmentProfileSettingsBinding.inflate(inflater, container, false);
         NavigationChrome.bind(activity, binding.topBar, binding.bottomNav, NavigationChrome.TAB_PROFILE);
-        bindRows(settings);
+        bindRows(activity, settings);
         return binding.getRoot();
     }
 
@@ -78,7 +81,8 @@ public class ProfileSettingsFragment extends Fragment {
         });
     }
 
-    private void bindRows(SettingsStore settings) {
+    private void bindRows(MainActivity activity, SettingsStore settings) {
+        bindAccountRows(activity);
         binding.profileDarkModeSwitch.setChecked(settings.isDarkMode());
         binding.profileDarkModeSwitch.setOnCheckedChangeListener((buttonView, checked) -> {
             settings.setDarkMode(checked);
@@ -96,6 +100,24 @@ public class ProfileSettingsFragment extends Fragment {
         binding.profileExportJson.setOnClickListener(v -> startJsonExport());
         binding.profileExportText.setOnClickListener(v -> startTextExport());
         binding.profileDeleteAll.setOnClickListener(v -> confirmDeleteAll());
+    }
+
+    private void bindAccountRows(MainActivity activity) {
+        AccountStore.Account account = activity.accounts().currentAccount();
+        boolean guest = account.isGuest();
+        binding.profileAccountModeValue.setText(guest ? "本機模式" : "本機帳號");
+        binding.profileAccountEmailValue.setText(guest ? "未登入" : account.email);
+        binding.profileAuthEntry.setVisibility(guest ? View.VISIBLE : View.GONE);
+        binding.profileChangePassword.setVisibility(guest ? View.GONE : View.VISIBLE);
+        binding.profileLogout.setVisibility(guest ? View.GONE : View.VISIBLE);
+        binding.profileDeleteAccount.setVisibility(guest ? View.GONE : View.VISIBLE);
+        binding.profileAuthEntry.setOnClickListener(v -> activity.showAuth());
+        binding.profileChangePassword.setOnClickListener(v -> showChangePasswordDialog(activity));
+        binding.profileLogout.setOnClickListener(v -> {
+            activity.accounts().useGuest();
+            activity.showAuth();
+        });
+        binding.profileDeleteAccount.setOnClickListener(v -> confirmDeleteAccount(activity));
     }
 
     private void startJsonExport() {
@@ -143,10 +165,44 @@ public class ProfileSettingsFragment extends Fragment {
     private void confirmDeleteAll() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("刪除全部紀錄？")
-                .setMessage("所有本機占卜紀錄與筆記都會被移除，此操作無法復原。")
+                .setMessage("目前帳號的占卜紀錄與筆記都會被移除，此操作無法復原。")
                 .setNegativeButton("取消", null)
                 .setPositiveButton("刪除全部", (dialog, which) -> {
                     viewModel.deleteAllRecords();
+                })
+                .show();
+    }
+
+    private void showChangePasswordDialog(MainActivity activity) {
+        DialogChangePasswordBinding dialogBinding = DialogChangePasswordBinding.inflate(getLayoutInflater());
+        new AlertDialog.Builder(requireContext())
+                .setTitle("更改密碼")
+                .setView(dialogBinding.getRoot())
+                .setNegativeButton("取消", null)
+                .setPositiveButton("儲存", (dialog, which) -> {
+                    AccountStore.AuthResult result = activity.accounts().changePassword(
+                            dialogBinding.changePasswordCurrent.getText().toString(),
+                            dialogBinding.changePasswordNew.getText().toString(),
+                            dialogBinding.changePasswordConfirm.getText().toString()
+                    );
+                    Toast.makeText(requireContext(), result.success ? "密碼已更新" : result.message, Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
+
+    private void confirmDeleteAccount(MainActivity activity) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("刪除帳號？")
+                .setMessage("此本機帳號、紀錄、收藏與設定都會從這台裝置移除，此操作無法復原。")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("刪除帳號", (dialog, which) -> {
+                    String accountId = activity.accounts().activeAccountId();
+                    activity.accounts().deleteCurrentAccount();
+                    activity.settings().clearAccount(accountId);
+                    RecordRepository.get(requireContext()).deleteAccountData(accountId, success -> {
+                        Toast.makeText(requireContext(), "本機帳號已刪除", Toast.LENGTH_SHORT).show();
+                        activity.showAuth();
+                    });
                 })
                 .show();
     }

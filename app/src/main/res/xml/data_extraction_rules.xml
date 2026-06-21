@@ -2,6 +2,7 @@
 <data-extraction-rules>
     <cloud-backup>
         <!-- Questions and notes can be sensitive, so records stay local in cloud backup. -->
+        <exclude domain="sharedpref" path="i_ching_accounts.xml" />
         <exclude domain="sharedpref" path="i_ching_records.xml" />
         <exclude domain="database" path="i_ching_records.db" />
         <exclude domain="database" path="i_ching_records.db-wal" />

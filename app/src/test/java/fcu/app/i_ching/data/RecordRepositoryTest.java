@@ -34,6 +34,7 @@ public class RecordRepositoryTest {
 
         DivinationRecord restored = DivinationRecordEntity.fromRecord(record).toRecord();
 
+        assertEquals(AccountStore.GUEST_ACCOUNT_ID, DivinationRecordEntity.fromRecord(record).accountId);
         assertEquals(record.id, restored.id);
         assertEquals(record.question, restored.question);
         assertEquals(record.hexagramNumber, restored.hexagramNumber);
@@ -119,24 +120,73 @@ public class RecordRepositoryTest {
         repository.migrateFromLegacyPrefsIfNeeded();
 
         assertTrue(migrationPrefs.getBoolean("roomMigrated", false));
-        assertEquals(1, dao.recordsNow().size());
-        assertEquals(7L, dao.recordsNow().get(0).id);
+        assertEquals(1, dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).size());
+        assertEquals(7L, dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).get(0).id);
         assertEquals(1, dao.upsertCount);
 
         repository.migrateFromLegacyPrefsIfNeeded();
 
-        assertEquals(1, dao.recordsNow().size());
+        assertEquals(1, dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).size());
         assertEquals(1, dao.upsertCount);
     }
 
     @Test
-    public void exportedSchemaPreservesVersionOneRecordTable() throws Exception {
+    public void repositoryOperationsUseCurrentAccountOnly() {
+        FakeDao dao = new FakeDao(Arrays.asList(
+                DivinationRecordEntity.fromRecord(sampleRecord(), AccountStore.GUEST_ACCOUNT_ID),
+                DivinationRecordEntity.fromRecord(new DivinationRecord(7L, "帳號紀錄", 29, 29,
+                        DivinationMethod.SIMPLE, new int[]{8, 7, 8, 8, 7, 8}, Collections.emptyList(),
+                        8L, ""), "account-a")
+        ));
+        RecordRepository repository = new RecordRepository(
+                dao,
+                null,
+                null,
+                AppExecutors.direct(),
+                () -> "account-a"
+        );
+
+        assertEquals(1, repository.recordsNow().size());
+        assertEquals("帳號紀錄", repository.recordsNow().get(0).question);
+        assertTrue(repository.updateNote(7L, "帳號筆記"));
+        assertEquals("先整理需求", dao.find(AccountStore.GUEST_ACCOUNT_ID, 7L).note);
+        assertEquals("帳號筆記", dao.find("account-a", 7L).note);
+
+        repository.deleteAll();
+
+        assertEquals(1, dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).size());
+        assertTrue(dao.recordsNow("account-a").isEmpty());
+    }
+
+    @Test
+    public void guestTransferMovesRecordsToNewAccount() {
+        FakeDao dao = new FakeDao(Collections.singletonList(
+                DivinationRecordEntity.fromRecord(sampleRecord(), AccountStore.GUEST_ACCOUNT_ID)
+        ));
+        RecordRepository repository = new RecordRepository(
+                dao,
+                null,
+                null,
+                AppExecutors.direct(),
+                () -> "account-a"
+        );
+
+        repository.transferGuestRecordsTo("account-a");
+
+        assertTrue(dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).isEmpty());
+        assertEquals(1, dao.recordsNow("account-a").size());
+    }
+
+    @Test
+    public void exportedSchemaPreservesVersionTwoAccountScopedRecordTable() throws Exception {
         JSONObject schema = new JSONObject(new String(Files.readAllBytes(schemaFile().toPath()), StandardCharsets.UTF_8));
         JSONObject database = schema.getJSONObject("database");
         JSONObject entity = database.getJSONArray("entities").getJSONObject(0);
 
-        assertEquals(1, database.getInt("version"));
+        assertEquals(2, database.getInt("version"));
         assertEquals("divination_records", entity.getString("tableName"));
+        assertTrue(entity.getString("createSql").contains("`accountId` TEXT NOT NULL"));
+        assertTrue(entity.getString("createSql").contains("PRIMARY KEY(`accountId`, `id`)"));
         assertTrue(entity.getString("createSql").contains("`relatingHexagramNumber` INTEGER NOT NULL"));
         assertTrue(entity.getString("createSql").contains("`lineValues` TEXT NOT NULL"));
         assertTrue(entity.getString("createSql").contains("`changingLines` TEXT NOT NULL"));
@@ -144,7 +194,8 @@ public class RecordRepositoryTest {
 
     @Test
     public void asyncExportJsonUsesCallback() throws Exception {
-        FakeDao dao = new FakeDao(Collections.singletonList(DivinationRecordEntity.fromRecord(sampleRecord())));
+        FakeDao dao = new FakeDao(Collections.singletonList(
+                DivinationRecordEntity.fromRecord(sampleRecord(), AccountStore.GUEST_ACCOUNT_ID)));
         RecordRepository repository = new RecordRepository(dao, null, null, AppExecutors.direct());
         final String[] callbackValue = new String[1];
 
@@ -161,9 +212,9 @@ public class RecordRepositoryTest {
     }
 
     private File schemaFile() {
-        File rootPath = new File("app/schemas/fcu.app.i_ching.data.IChingDatabase/1.json");
+        File rootPath = new File("app/schemas/fcu.app.i_ching.data.IChingDatabase/2.json");
         if (rootPath.isFile()) return rootPath;
-        return new File("schemas/fcu.app.i_ching.data.IChingDatabase/1.json");
+        return new File("schemas/fcu.app.i_ching.data.IChingDatabase/2.json");
     }
 
     private static class FakeDao implements DivinationRecordDao {
@@ -175,19 +226,23 @@ public class RecordRepositoryTest {
         }
 
         @Override
-        public LiveData<List<DivinationRecordEntity>> records() {
+        public LiveData<List<DivinationRecordEntity>> records(String accountId) {
             return null;
         }
 
         @Override
-        public List<DivinationRecordEntity> recordsNow() {
-            return records;
+        public List<DivinationRecordEntity> recordsNow(String accountId) {
+            List<DivinationRecordEntity> matches = new ArrayList<>();
+            for (DivinationRecordEntity entity : records) {
+                if (entity.accountId.equals(accountId)) matches.add(entity);
+            }
+            return matches;
         }
 
         @Override
-        public DivinationRecordEntity find(long id) {
+        public DivinationRecordEntity find(String accountId, long id) {
             for (DivinationRecordEntity entity : records) {
-                if (entity.id == id) return entity;
+                if (entity.accountId.equals(accountId) && entity.id == id) return entity;
             }
             return null;
         }
@@ -205,11 +260,11 @@ public class RecordRepositoryTest {
         }
 
         @Override
-        public int updateNote(long id, String note) {
+        public int updateNote(String accountId, long id, String note) {
             for (int i = 0; i < records.size(); i++) {
                 DivinationRecordEntity entity = records.get(i);
-                if (entity.id == id) {
-                    records.set(i, DivinationRecordEntity.fromRecord(entity.toRecord().withNote(note)));
+                if (entity.accountId.equals(accountId) && entity.id == id) {
+                    records.set(i, DivinationRecordEntity.fromRecord(entity.toRecord().withNote(note), accountId));
                     return 1;
                 }
             }
@@ -217,9 +272,10 @@ public class RecordRepositoryTest {
         }
 
         @Override
-        public int deleteById(long id) {
+        public int deleteById(String accountId, long id) {
             for (int i = 0; i < records.size(); i++) {
-                if (records.get(i).id == id) {
+                DivinationRecordEntity entity = records.get(i);
+                if (entity.accountId.equals(accountId) && entity.id == id) {
                     records.remove(i);
                     return 1;
                 }
@@ -230,6 +286,25 @@ public class RecordRepositoryTest {
         @Override
         public void deleteAll() {
             records.clear();
+        }
+
+        @Override
+        public void deleteAll(String accountId) {
+            for (int i = records.size() - 1; i >= 0; i--) {
+                if (records.get(i).accountId.equals(accountId)) records.remove(i);
+            }
+        }
+
+        @Override
+        public int moveAccount(String sourceAccountId, String targetAccountId) {
+            int count = 0;
+            for (DivinationRecordEntity entity : records) {
+                if (entity.accountId.equals(sourceAccountId)) {
+                    entity.accountId = targetAccountId;
+                    count++;
+                }
+            }
+            return count;
         }
     }
 }

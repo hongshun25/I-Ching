@@ -22,6 +22,9 @@ public class SettingsStoreTest {
     public void setUp() {
         context = RuntimeEnvironment.getApplication();
         context.getSharedPreferences("i_ching_settings", Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(AccountStore.PREFS, Context.MODE_PRIVATE).edit().clear().commit();
+        AccountStore.resetForTests();
+        AccountStore.get(context).useGuest();
         store = new SettingsStore(context);
     }
 
@@ -52,5 +55,50 @@ public class SettingsStoreTest {
         assertTrue(store.isFavorite(15));
         assertFalse(store.toggleFavorite(15));
         assertFalse(store.isFavorite(15));
+    }
+
+    @Test
+    public void accountScopedSettingsAreIsolated() {
+        AccountStore accounts = AccountStore.get(context);
+        store.setDarkMode(true);
+        store.setAutoSave(false);
+        assertTrue(store.toggleFavorite(15));
+
+        AccountStore.AuthResult first = accounts.register("first@example.com", "password123", "password123");
+        store.transferGuestSettingsTo(first.account.id);
+
+        assertTrue(store.isDarkMode());
+        assertFalse(store.isAutoSave());
+        assertTrue(store.isFavorite(15));
+
+        AccountStore.AuthResult second = accounts.register("second@example.com", "password123", "password123");
+        assertTrue(second.success);
+        store.setDarkMode(false);
+        store.setAutoSave(true);
+        assertFalse(store.isFavorite(15));
+
+        accounts.login("first@example.com", "password123");
+
+        assertTrue(store.isDarkMode());
+        assertFalse(store.isAutoSave());
+        assertTrue(store.isFavorite(15));
+    }
+
+    @Test
+    public void guestTransferMovesFavoritesAndResetsGuestScope() {
+        AccountStore accounts = AccountStore.get(context);
+        store.setReduceMotion(false);
+        assertTrue(store.toggleFavorite(29));
+
+        AccountStore.AuthResult registered = accounts.register("user@example.com", "password123", "password123");
+        store.transferGuestSettingsTo(registered.account.id);
+
+        assertFalse(store.isReduceMotion());
+        assertTrue(store.isFavorite(29));
+
+        accounts.useGuest();
+
+        assertTrue(store.isReduceMotion());
+        assertFalse(store.isFavorite(29));
     }
 }

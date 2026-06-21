@@ -33,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import fcu.app.i_ching.data.AccountStore;
 import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.DivinationRecord;
 import fcu.app.i_ching.data.IChingDatabase;
@@ -86,6 +87,59 @@ public class StableBetaWorkflowInstrumentedTest {
 
             waitFor(withText("早安，今天想安靜一下嗎？"));
             onView(withId(R.id.bottom_nav_daily)).check(matches(isDisplayed()));
+        }
+    }
+
+    @Test
+    public void onboardingStartShowsAuthAndSkipRoutesToDaily() {
+        try (ActivityScenario<MainActivity> ignored = ActivityScenario.launch(MainActivity.class)) {
+            waitFor(withId(R.id.onboarding_start_button));
+            onView(withId(R.id.onboarding_start_button)).perform(click());
+
+            waitForExists(withId(R.id.auth_skip_button));
+            onView(withId(R.id.auth_skip_button)).perform(scrollTo(), callOnClick());
+
+            waitFor(withText("早安，今天想安靜一下嗎？"));
+            assertTrue(AccountStore.get(context).isGuest());
+        }
+    }
+
+    @Test
+    public void registerTransfersGuestRecordsAndLoginRestoresAccountScope() {
+        SettingsStore settings = new SettingsStore(context);
+        settings.setOnboardingComplete(true);
+        seedRecord();
+
+        try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+            scenario.onActivity(MainActivity::showAuth);
+            waitFor(withId(R.id.auth_register_tab));
+            onView(withId(R.id.auth_register_tab)).perform(click());
+            onView(withId(R.id.auth_register_email)).perform(replaceText("local@example.com"));
+            onView(withId(R.id.auth_register_password)).perform(replaceText("password123"));
+            onView(withId(R.id.auth_register_confirm)).perform(replaceText("password123"));
+            closeSoftKeyboard();
+            onView(withId(R.id.auth_register_button)).perform(callOnClick());
+
+            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitForRecordsCount(1);
+            assertTrue(!AccountStore.get(context).isGuest());
+
+            scenario.onActivity(activity -> {
+                activity.accounts().useGuest();
+                activity.showRecords();
+            });
+            waitFor(withId(R.id.records_search_input));
+            waitForRecordsCount(0);
+
+            scenario.onActivity(MainActivity::showAuth);
+            waitFor(withId(R.id.auth_login_email));
+            onView(withId(R.id.auth_login_email)).perform(replaceText("local@example.com"));
+            onView(withId(R.id.auth_login_password)).perform(replaceText("password123"));
+            closeSoftKeyboard();
+            onView(withId(R.id.auth_login_button)).perform(callOnClick());
+
+            waitFor(withText("早安，今天想安靜一下嗎？"));
+            waitForRecordsCount(1);
         }
     }
 
@@ -381,8 +435,10 @@ public class StableBetaWorkflowInstrumentedTest {
     private void clearAppState() {
         IChingDatabase.get(context).recordDao().deleteAll();
         context.getSharedPreferences("i_ching_settings", Context.MODE_PRIVATE).edit().clear().commit();
+        context.getSharedPreferences(AccountStore.PREFS, Context.MODE_PRIVATE).edit().clear().commit();
         context.getSharedPreferences("i_ching_records", Context.MODE_PRIVATE).edit().clear().commit();
         context.getSharedPreferences("i_ching_record_migration", Context.MODE_PRIVATE).edit().clear().commit();
+        AccountStore.get(context).useGuest();
     }
 
     private void waitFor(Matcher<View> matcher) {

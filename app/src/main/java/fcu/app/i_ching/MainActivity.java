@@ -18,12 +18,15 @@ import fcu.app.i_ching.data.DivinationMethod;
 import fcu.app.i_ching.data.DivinationResult;
 import fcu.app.i_ching.data.RecordRepository;
 import fcu.app.i_ching.data.SettingsStore;
+import fcu.app.i_ching.data.AccountStore;
 
 public class MainActivity extends AppCompatActivity {
     private SettingsStore settingsStore;
+    private AccountStore accountStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        accountStore = AccountStore.get(this);
         settingsStore = new SettingsStore(this);
         AppCompatDelegate.setDefaultNightMode(settingsStore.isDarkMode()
                 ? AppCompatDelegate.MODE_NIGHT_YES
@@ -40,19 +43,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public SettingsStore settings() { return settingsStore; }
+    public AccountStore accounts() { return accountStore; }
 
     public void completeOnboarding() {
         settingsStore.setOnboardingComplete(true);
-        navigateClearingStack(R.id.localEntryFragment, null);
+        navigateClearingStack(R.id.authFragment, null);
     }
 
     public void enterLocalMode() {
+        accountStore.useGuest();
         settingsStore.setOnboardingComplete(true);
+        applyNightMode();
+        navigateClearingStack(R.id.dailyFragment, null);
+    }
+
+    public void enterAuthenticatedMode() {
+        settingsStore.setOnboardingComplete(true);
+        applyNightMode();
         navigateClearingStack(R.id.dailyFragment, null);
     }
 
     public void routeAfterSplash() {
         navigateClearingStack(settingsStore.isOnboardingComplete() ? R.id.dailyFragment : R.id.onboardingFragment, null);
+    }
+
+    public void showAuth() {
+        applyNightMode();
+        navigateClearingStack(R.id.authFragment, null);
     }
 
     public void showDaily(boolean addToBackStack) {
@@ -125,6 +142,12 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.nav_host_fragment);
         if (host == null) throw new IllegalStateException("NavHostFragment is not attached");
         return host.getNavController();
+    }
+
+    private void applyNightMode() {
+        AppCompatDelegate.setDefaultNightMode(settingsStore.isDarkMode()
+                ? AppCompatDelegate.MODE_NIGHT_YES
+                : AppCompatDelegate.MODE_NIGHT_NO);
     }
 
 }

@@ -16,6 +16,7 @@ public class BackupRulesTest {
     public void autoBackupExcludesSensitiveRecordStores() throws Exception {
         Document document = parse("src/main/res/xml/backup_rules.xml");
 
+        assertHasRule(document, "exclude", "sharedpref", "i_ching_accounts.xml");
         assertHasRule(document, "exclude", "sharedpref", "i_ching_records.xml");
         assertHasRule(document, "exclude", "database", "i_ching_records.db");
         assertHasRule(document, "exclude", "database", "i_ching_records.db-wal");
@@ -26,6 +27,7 @@ public class BackupRulesTest {
     public void cloudBackupExcludesRecordsAndDeviceTransferRemainsEnabled() throws Exception {
         Document document = parse("src/main/res/xml/data_extraction_rules.xml");
 
+        assertHasRule(document, "exclude", "sharedpref", "i_ching_accounts.xml");
         assertHasRule(document, "exclude", "sharedpref", "i_ching_records.xml");
         assertHasRule(document, "exclude", "database", "i_ching_records.db");
         assertHasRule(document, "exclude", "database", "i_ching_records.db-wal");

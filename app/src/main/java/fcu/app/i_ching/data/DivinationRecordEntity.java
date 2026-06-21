@@ -2,13 +2,14 @@ package fcu.app.i_ching.data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-@Entity(tableName = "divination_records")
+@Entity(tableName = "divination_records", primaryKeys = {"accountId", "id"})
 public class DivinationRecordEntity {
-    @PrimaryKey
+    @NonNull
+    public String accountId = AccountStore.GUEST_ACCOUNT_ID;
+
     public long id;
 
     @NonNull
@@ -34,7 +35,12 @@ public class DivinationRecordEntity {
     public DivinationRecordEntity() {}
 
     public static DivinationRecordEntity fromRecord(DivinationRecord record) {
+        return fromRecord(record, AccountStore.GUEST_ACCOUNT_ID);
+    }
+
+    public static DivinationRecordEntity fromRecord(DivinationRecord record, String accountId) {
         DivinationRecordEntity entity = new DivinationRecordEntity();
+        entity.accountId = accountId == null || accountId.isEmpty() ? AccountStore.GUEST_ACCOUNT_ID : accountId;
         entity.id = record.id;
         entity.question = record.question == null ? "" : record.question;
         entity.hexagramNumber = record.hexagramNumber;

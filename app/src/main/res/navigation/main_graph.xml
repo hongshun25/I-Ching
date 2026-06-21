@@ -20,6 +20,11 @@
         android:label="Local Entry" />
 
     <fragment
+        android:id="@+id/authFragment"
+        android:name="fcu.app.i_ching.ui.AuthFragment"
+        android:label="Auth" />
+
+    <fragment
         android:id="@+id/dailyFragment"
         android:name="fcu.app.i_ching.ui.DailyFragment"
         android:label="Daily" />

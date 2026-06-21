@@ -39,14 +39,24 @@ public class RecordDaoInstrumentedTest {
     public void upsertUpdateDeleteAllRecords() {
         DivinationRecord record = new DivinationRecord(1L, "測試問題", 15, 55, DivinationMethod.COINS,
                 new int[]{6, 8, 7, 6, 8, 8}, Arrays.asList(1, 4), 1L, "");
+        DivinationRecord accountRecord = new DivinationRecord(1L, "帳號測試問題", 29, 29, DivinationMethod.SIMPLE,
+                new int[]{8, 7, 8, 8, 7, 8}, Arrays.asList(), 2L, "");
 
-        dao.upsert(DivinationRecordEntity.fromRecord(record));
-        assertEquals(1, dao.recordsNow().size());
+        dao.upsert(DivinationRecordEntity.fromRecord(record, AccountStore.GUEST_ACCOUNT_ID));
+        dao.upsert(DivinationRecordEntity.fromRecord(accountRecord, "account-a"));
+        assertEquals(1, dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).size());
+        assertEquals(1, dao.recordsNow("account-a").size());
 
-        assertEquals(1, dao.updateNote(1L, "更新筆記"));
-        assertEquals("更新筆記", dao.find(1L).note);
+        assertEquals(1, dao.updateNote("account-a", 1L, "更新筆記"));
+        assertEquals("", dao.find(AccountStore.GUEST_ACCOUNT_ID, 1L).note);
+        assertEquals("更新筆記", dao.find("account-a", 1L).note);
 
-        dao.deleteAll();
-        assertTrue(dao.recordsNow().isEmpty());
+        assertEquals(1, dao.moveAccount(AccountStore.GUEST_ACCOUNT_ID, "account-b"));
+        assertTrue(dao.recordsNow(AccountStore.GUEST_ACCOUNT_ID).isEmpty());
+        assertEquals(1, dao.recordsNow("account-b").size());
+
+        dao.deleteAll("account-a");
+        assertTrue(dao.recordsNow("account-a").isEmpty());
+        assertEquals(1, dao.recordsNow("account-b").size());
     }
 }

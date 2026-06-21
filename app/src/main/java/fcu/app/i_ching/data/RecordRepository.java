@@ -21,6 +21,10 @@ public class RecordRepository {
         void onComplete(T result);
     }
 
+    interface AccountIdProvider {
+        String activeAccountId();
+    }
+
     private static final String LEGACY_PREFS = "i_ching_records";
     private static final String LEGACY_KEY_RECORDS = "records";
     private static final String MIGRATION_PREFS = "i_ching_record_migration";
@@ -32,6 +36,7 @@ public class RecordRepository {
     private final SharedPreferences legacyPrefs;
     private final SharedPreferences migrationPrefs;
     private final AppExecutors executors;
+    private final AccountIdProvider accountIdProvider;
 
     public static RecordRepository get(Context context) {
         if (instance == null) {
@@ -42,7 +47,8 @@ public class RecordRepository {
                             IChingDatabase.get(appContext).recordDao(),
                             appContext.getSharedPreferences(LEGACY_PREFS, Context.MODE_PRIVATE),
                             appContext.getSharedPreferences(MIGRATION_PREFS, Context.MODE_PRIVATE),
-                            AppExecutors.get()
+                            AppExecutors.get(),
+                            () -> AccountStore.get(appContext).activeAccountId()
                     );
                 }
             }
@@ -55,24 +61,40 @@ public class RecordRepository {
     }
 
     RecordRepository(DivinationRecordDao dao, SharedPreferences legacyPrefs, SharedPreferences migrationPrefs, AppExecutors executors) {
+        this(dao, legacyPrefs, migrationPrefs, executors, () -> AccountStore.GUEST_ACCOUNT_ID);
+    }
+
+    RecordRepository(DivinationRecordDao dao, SharedPreferences legacyPrefs, SharedPreferences migrationPrefs,
+                     AppExecutors executors, AccountIdProvider accountIdProvider) {
         this.dao = dao;
         this.legacyPrefs = legacyPrefs;
         this.migrationPrefs = migrationPrefs;
         this.executors = executors;
+        this.accountIdProvider = accountIdProvider == null ? () -> AccountStore.GUEST_ACCOUNT_ID : accountIdProvider;
     }
 
     public LiveData<List<DivinationRecord>> records() {
-        return Transformations.map(dao.records(), RecordRepository::entitiesToRecords);
+        return Transformations.map(dao.records(activeAccountId()), RecordRepository::entitiesToRecords);
     }
 
     @WorkerThread
     public List<DivinationRecord> recordsNow() {
-        return entitiesToRecords(dao.recordsNow());
+        return recordsNow(activeAccountId());
+    }
+
+    @WorkerThread
+    public List<DivinationRecord> recordsNow(String accountId) {
+        return entitiesToRecords(dao.recordsNow(resolveAccountId(accountId)));
     }
 
     @WorkerThread
     public void addOrUpdate(DivinationRecord record) {
-        dao.upsert(DivinationRecordEntity.fromRecord(record));
+        addOrUpdate(activeAccountId(), record);
+    }
+
+    @WorkerThread
+    public void addOrUpdate(String accountId, DivinationRecord record) {
+        dao.upsert(DivinationRecordEntity.fromRecord(record, resolveAccountId(accountId)));
     }
 
     public void addOrUpdate(DivinationRecord record, Callback<DivinationRecord> callback) {
@@ -84,7 +106,7 @@ public class RecordRepository {
 
     @WorkerThread
     public boolean updateNote(long id, String note) {
-        return dao.updateNote(id, note == null ? "" : note) > 0;
+        return dao.updateNote(activeAccountId(), id, note == null ? "" : note) > 0;
     }
 
     public void updateNote(long id, String note, Callback<Boolean> callback) {
@@ -93,7 +115,7 @@ public class RecordRepository {
 
     @WorkerThread
     public boolean delete(long id) {
-        return dao.deleteById(id) > 0;
+        return dao.deleteById(activeAccountId(), id) > 0;
     }
 
     public void delete(long id, Callback<Boolean> callback) {
@@ -102,7 +124,7 @@ public class RecordRepository {
 
     @WorkerThread
     public void deleteAll() {
-        dao.deleteAll();
+        dao.deleteAll(activeAccountId());
     }
 
     public void deleteAll(Callback<Boolean> callback) {
@@ -114,7 +136,7 @@ public class RecordRepository {
 
     @WorkerThread
     public DivinationRecord find(long id) {
-        DivinationRecordEntity entity = dao.find(id);
+        DivinationRecordEntity entity = dao.find(activeAccountId(), id);
         return entity == null ? null : entity.toRecord();
     }
 
@@ -155,13 +177,40 @@ public class RecordRepository {
         try {
             List<DivinationRecord> legacyRecords = parseLegacyRecords(json);
             for (DivinationRecord record : legacyRecords) {
-                addOrUpdate(record);
+                addOrUpdate(AccountStore.GUEST_ACCOUNT_ID, record);
             }
             migrationPrefs.edit().putBoolean(KEY_ROOM_MIGRATED, true).apply();
             return true;
         } catch (JSONException ignored) {
             return false;
         }
+    }
+
+    @WorkerThread
+    public void transferGuestRecordsTo(String accountId) {
+        String target = resolveAccountId(accountId);
+        if (!AccountStore.GUEST_ACCOUNT_ID.equals(target)) {
+            dao.moveAccount(AccountStore.GUEST_ACCOUNT_ID, target);
+        }
+    }
+
+    public void transferGuestRecordsTo(String accountId, Callback<Boolean> callback) {
+        execute(() -> {
+            transferGuestRecordsTo(accountId);
+            return true;
+        }, callback, false);
+    }
+
+    @WorkerThread
+    public void deleteAccountData(String accountId) {
+        dao.deleteAll(resolveAccountId(accountId));
+    }
+
+    public void deleteAccountData(String accountId, Callback<Boolean> callback) {
+        execute(() -> {
+            deleteAccountData(accountId);
+            return true;
+        }, callback, false);
     }
 
     public static List<DivinationRecord> parseLegacyRecords(String value) throws JSONException {
@@ -219,6 +268,14 @@ public class RecordRepository {
             records.add(entity.toRecord());
         }
         return records;
+    }
+
+    private String activeAccountId() {
+        return resolveAccountId(accountIdProvider.activeAccountId());
+    }
+
+    private String resolveAccountId(String accountId) {
+        return accountId == null || accountId.isEmpty() ? AccountStore.GUEST_ACCOUNT_ID : accountId;
     }
 
     private <T> void execute(Callable<T> task, Callback<T> callback, T fallback) {

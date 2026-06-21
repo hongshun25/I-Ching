@@ -59,6 +59,7 @@
                         android:text="使用模式" />
 
                     <TextView
+                        android:id="@id/profile_account_mode_value"
                         style="@style/SettingsRowValue"
                         android:text="本機模式" />
                 </LinearLayout>
@@ -67,11 +68,109 @@
 
                     <TextView
                         style="@style/SettingsRowLabel"
-                        android:text="帳號同步" />
+                        android:text="帳號" />
+
+                    <TextView
+                        android:id="@id/profile_account_email_value"
+                        style="@style/SettingsRowValue"
+                        android:text="未登入"
+                        tools:text="user@example.com" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_auth_entry"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="登入或註冊本機帳號"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="登入 / 註冊" />
 
                     <TextView
                         style="@style/SettingsRowValue"
-                        android:text="未啟用" />
+                        android:text="切換到本機帳號" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_change_password"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="更改本機帳號密碼"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="更改密碼" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="本機帳號" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_logout"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="登出本機帳號"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="登出" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="回到本機模式" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@id/profile_delete_account"
+                    style="@style/SettingsRow"
+                    android:clickable="true"
+                    android:contentDescription="刪除本機帳號"
+                    android:focusable="true">
+
+                    <TextView
+                        style="@style/SettingsRowLabel"
+                        android:text="刪除帳號" />
+
+                    <TextView
+                        style="@style/SettingsRowValue"
+                        android:text="含此帳號資料" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="6dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/ic_text_subtle" />
                 </LinearLayout>
             </LinearLayout>
 
