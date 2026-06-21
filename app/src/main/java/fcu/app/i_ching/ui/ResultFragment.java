@@ -47,6 +47,7 @@ public class ResultFragment extends Fragment {
         classicalExpanded = savedInstanceState != null && savedInstanceState.getBoolean(STATE_CLASSICAL_EXPANDED, false);
         viewModel = new ViewModelProvider(this).get(ResultViewModel.class);
         binding = FragmentResultBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenScrollInsets(binding.getRoot());
 
         bindResult(savedInstanceState);
         return binding.getRoot();

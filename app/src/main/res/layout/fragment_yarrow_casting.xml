@@ -47,7 +47,7 @@
                     android:id="@id/yarrow_step_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:textColor="@color/ic_ink"
                     android:textSize="24sp"
                     tools:text="第1爻・第1變" />
@@ -76,7 +76,7 @@
                 android:padding="@dimen/card_padding"
                 tools:text="第1爻 待定&#10;第2爻 待定&#10;第3爻 待定" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@id/yarrow_next_button"
                 style="@style/IChingPrimaryButton"
                 android:layout_marginTop="24dp"
@@ -85,7 +85,7 @@
                 android:drawableTint="@color/ic_background"
                 android:text="@string/yarrow_next" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@id/yarrow_quick_button"
                 style="@style/IChingSecondaryButton"
                 android:layout_marginTop="10dp"

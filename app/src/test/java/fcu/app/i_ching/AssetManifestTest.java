@@ -37,7 +37,7 @@ public class AssetManifestTest {
         }
 
         assertTrue(targets.contains("app/src/main/res/font/noto_sans_tc.ttf"));
-        assertTrue(targets.contains("app/src/main/res/font/noto_serif_cjk_tc_regular.otf"));
+        assertTrue(targets.contains("app/src/main/res/font/noto_serif_tc.ttf"));
         assertTrue(targets.contains("app/src/main/res/drawable-nodpi/bg_paper_texture_light.webp"));
         assertTrue(targets.contains("app/src/main/res/drawable-nodpi/art_scholar_waterfall.webp"));
     }

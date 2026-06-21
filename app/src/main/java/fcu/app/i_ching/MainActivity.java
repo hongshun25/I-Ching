@@ -9,9 +9,6 @@ import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,6 +18,7 @@ import fcu.app.i_ching.data.DivinationResult;
 import fcu.app.i_ching.data.RecordRepository;
 import fcu.app.i_ching.data.SettingsStore;
 import fcu.app.i_ching.data.AccountStore;
+import fcu.app.i_ching.ui.InsetsHelper;
 
 public class MainActivity extends AppCompatActivity {
     private SettingsStore settingsStore;
@@ -45,11 +43,7 @@ public class MainActivity extends AppCompatActivity {
         RecordRepository.get(this).migrateFromLegacyPrefsIfNeeded(null);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, 0, systemBars.right, 0);
-            return insets;
-        });
+        InsetsHelper.applyHorizontalInsets(findViewById(R.id.main));
     }
 
     public SettingsStore settings() { return settingsStore; }

@@ -9,13 +9,13 @@
     "checksumSha256": "864727d210d54f2537bbe23b3a839436c3992af72de9322af5270897246bd44f"
   },
   {
-    "name": "Noto Serif CJK TC Regular",
+    "name": "Noto Serif TC Variable",
     "type": "font",
-    "sourceUrl": "https://github.com/notofonts/noto-cjk/blob/main/Serif/OTF/TraditionalChinese/NotoSerifCJKtc-Regular.otf",
+    "sourceUrl": "https://github.com/google/fonts/blob/main/ofl/notoseriftc/NotoSerifTC%5Bwght%5D.ttf",
     "license": "SIL Open Font License 1.1",
-    "targetPath": "app/src/main/res/font/noto_serif_cjk_tc_regular.otf",
-    "transform": "Copied unchanged from upstream Noto CJK repository.",
-    "checksumSha256": "234301038e76e7c35c43113785024700c4e4fe7bdce1d1fbbc42fca7e6683798"
+    "targetPath": "app/src/main/res/font/noto_serif_tc.ttf",
+    "transform": "Copied unchanged from upstream Google Fonts repository.",
+    "checksumSha256": "0077e18f57c6908f4a000969880940bdb0dad057c0e8d98b49dc364c3d1b09c6"
   },
   {
     "name": "Paper001 Light Texture",

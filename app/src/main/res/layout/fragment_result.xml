@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="4dp"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:gravity="center"
                 android:textColor="@color/ic_ink"
                 android:textSize="36sp"
@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:gravity="center"
                 android:textColor="@color/ic_gold"
                 android:textSize="22sp"
@@ -99,7 +99,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:text="本卦與之卦"
                 android:textColor="@color/ic_ink"
                 android:textSize="18sp"
@@ -221,7 +221,7 @@
                 android:id="@id/result_classical_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:text="古典卦象解釋"
                 android:textColor="@color/ic_ink"
                 android:textSize="18sp"
@@ -243,7 +243,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:text="可分享文字"
                 android:textColor="@color/ic_ink"
                 android:textSize="18sp"
@@ -278,7 +278,7 @@
             android:minLines="3"
             tools:text="先把會議需求釐清，再回覆承諾。" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/result_save_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="22dp"
@@ -289,7 +289,7 @@
             android:drawableTint="@color/ic_background"
             android:text="@string/result_save_new" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/result_share_button"
             style="@style/IChingSecondaryButton"
             android:drawableStart="@drawable/ic_arrow_forward_24"

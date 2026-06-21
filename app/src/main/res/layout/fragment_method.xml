@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:text="簡易占法"
                     android:textColor="@color/ic_ink"
                     android:textSize="24sp" />
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:text="三枚銅錢"
                     android:textColor="@color/ic_ink"
                     android:textSize="24sp" />
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:text="蓍草靈感模式"
                     android:textColor="@color/ic_ink"
                     android:textSize="24sp" />
@@ -193,7 +193,7 @@
                 android:text="節奏較慢，十八變而成卦。適合重大決策前的深度提問與冥想沉澱。" />
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/method_next_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="10dp"

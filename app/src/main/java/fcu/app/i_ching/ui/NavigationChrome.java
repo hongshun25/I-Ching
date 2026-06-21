@@ -23,8 +23,6 @@ final class NavigationChrome {
     static final String TAB_RECORDS = "紀錄";
     static final String TAB_LEARN = "學習";
     static final String TAB_PROFILE = "我的";
-    private static final int TOP_BAR_HEIGHT_DP = 56;
-    private static final int BOTTOM_NAV_HEIGHT_DP = 64;
 
     private NavigationChrome() {}
 
@@ -37,7 +35,7 @@ final class NavigationChrome {
     static void applyTopBarInsets(MaterialToolbar toolbar) {
         ViewCompat.setOnApplyWindowInsetsListener(toolbar, (view, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            int height = dp(view, TOP_BAR_HEIGHT_DP) + systemBars.top;
+            int height = dimen(view, R.dimen.top_bar_height) + systemBars.top;
             ViewGroup.LayoutParams params = view.getLayoutParams();
             if (params != null && params.height != height) {
                 params.height = height;
@@ -75,6 +73,7 @@ final class NavigationChrome {
                                       String activeTab) {
         BottomNavigationView navigation = bottomNav.getRoot();
         applyBottomNavInsets(navigation);
+        navigation.setItemIconSize(dimen(navigation, R.dimen.bottom_nav_icon_size));
         navigation.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.bottom_nav_daily) {
@@ -105,14 +104,17 @@ final class NavigationChrome {
     private static void applyBottomNavInsets(BottomNavigationView navigation) {
         ViewCompat.setOnApplyWindowInsetsListener(navigation, (view, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            int height = dp(view, BOTTOM_NAV_HEIGHT_DP) + systemBars.bottom;
+            int height = dimen(view, R.dimen.bottom_nav_height) + systemBars.bottom;
             ViewGroup.LayoutParams params = view.getLayoutParams();
             if (params != null && params.height != height) {
                 params.height = height;
                 view.setLayoutParams(params);
             }
-            view.setPaddingRelative(dp(view, 6), dp(view, 4), dp(view, 6),
-                    dp(view, 6) + systemBars.bottom);
+            view.setPaddingRelative(
+                    dimen(view, R.dimen.bottom_nav_horizontal_padding),
+                    dimen(view, R.dimen.bottom_nav_top_padding),
+                    dimen(view, R.dimen.bottom_nav_horizontal_padding),
+                    dimen(view, R.dimen.bottom_nav_bottom_padding) + systemBars.bottom);
             return insets;
         });
         ViewCompat.requestApplyInsets(navigation);
@@ -128,5 +130,9 @@ final class NavigationChrome {
 
     private static int dp(View view, int value) {
         return Math.round(value * view.getResources().getDisplayMetrics().density);
+    }
+
+    private static int dimen(View view, int dimenRes) {
+        return view.getResources().getDimensionPixelSize(dimenRes);
     }
 }

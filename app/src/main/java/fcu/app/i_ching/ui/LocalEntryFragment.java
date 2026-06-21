@@ -21,6 +21,7 @@ public class LocalEntryFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
         binding = FragmentLocalEntryBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenScrollInsets(binding.getRoot());
         binding.localModeButton.setOnClickListener(v -> activity.enterLocalMode());
         binding.localEntryDailyPreviewButton.setOnClickListener(v -> activity.enterLocalMode());
         return binding.getRoot();

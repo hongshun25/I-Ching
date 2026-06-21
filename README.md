@@ -27,7 +27,7 @@ I Ching 是原生 Android 本機 Beta。它使用 Java、AndroidX Fragment、Nav
 - Filter、preset、trigram chips 改用 Material `Chip` / `ChipGroup` 或 `item_filter_chip.xml` inflation。
 - 收藏、底部導覽、toolbar、狀態、ritual focus、empty state 等 icon-like UI 改為 VectorDrawable / ImageView / ImageButton。
 - `Ui.java` 已移除；`HexagramView` 內聚 dp/color 與 XML attrs。
-- 打包 Noto Sans TC / Noto Serif CJK TC 字體與紙張紋理、Open Access 圖像。
+- 打包 Noto Sans TC / Noto Serif TC variable fonts，並透過 font-family XML 統一引用，避免畫面直接綁 raw font files；同時保留紙張紋理與 Open Access 圖像。
 
 Production assets 皆 commit 到 repo，build 不依賴網路。來源、授權、轉檔規則與 checksum 記錄於：
 

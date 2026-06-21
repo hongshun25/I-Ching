@@ -16,7 +16,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="72dp"
         android:layout_marginEnd="24dp"
-        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+        android:fontFamily="@font/noto_serif_tc_family"
         android:gravity="center"
         android:text="@string/ritual_header"
         android:textColor="@color/ic_ink"
@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:contentDescription="@string/ritual_focus_description" />
 
-    <TextView
+    <com.google.android.material.button.MaterialButton
         android:id="@id/ritual_skip_button"
         style="@style/IChingSecondaryButton"
         android:layout_gravity="bottom"

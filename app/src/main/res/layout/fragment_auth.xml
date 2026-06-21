@@ -21,12 +21,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_serif_cjk_tc_regular"
+            android:fontFamily="@font/noto_serif_tc_family"
             android:gravity="center"
-            android:letterSpacing="0.14"
             android:text="@string/auth_title"
             android:textColor="@color/ic_ink"
-            android:textSize="40sp"
+            android:textSize="38sp"
             android:textStyle="bold" />
 
         <TextView
@@ -34,7 +33,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="36dp"
             android:gravity="center"
-            android:letterSpacing="0.08"
             android:text="@string/splash_tagline" />
 
         <LinearLayout
@@ -114,13 +112,13 @@
                     android:inputType="textPassword"
                     android:singleLine="true" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@id/auth_login_button"
                     style="@style/IChingPrimaryButton"
                     android:layout_marginTop="24dp"
                     android:text="@string/auth_login" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@id/auth_switch_register_button"
                     style="@style/IChingSecondaryButton"
                     android:layout_marginTop="12dp"
@@ -185,13 +183,13 @@
                     android:inputType="textPassword"
                     android:singleLine="true" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@id/auth_register_button"
                     style="@style/IChingPrimaryButton"
                     android:layout_marginTop="24dp"
                     android:text="@string/auth_register" />
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@id/auth_switch_login_button"
                     style="@style/IChingSecondaryButton"
                     android:layout_marginTop="12dp"

@@ -34,6 +34,7 @@ public class MethodFragment extends Fragment {
         question = NavigationArgs.question(getArguments());
         selected = readSelected(savedInstanceState, activity.settings().defaultMethod());
         binding = FragmentMethodBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenScrollInsets(binding.getRoot());
         bindMethodCards();
         binding.methodNextButton.setOnClickListener(v ->
                 activity.showRitual(question, selected));

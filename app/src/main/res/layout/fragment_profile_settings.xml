@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:gravity="center"
                 android:text="我的"
                 android:textColor="@color/ic_ink"

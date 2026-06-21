@@ -13,10 +13,12 @@
 - Lists：`RecordsFragment` / `LearnCenterFragment` 移除 nested scrolling list 結構。
 - Chips：records filters、learn filters、question presets、daily trigram chips、hexagram detail chips 改用 Material `Chip`/`ChipGroup` 或 shared chip inflation。
 - Icons：toolbar、bottom nav、favorite、method cards、empty state、ritual focus、button prefix/arrow affordances 改為 VectorDrawable/ImageView/ImageButton。
-- Typography：打包 Noto Sans TC / Noto Serif CJK TC，theme/styles 使用 committed font resources。
+- Typography：打包 Noto Sans TC / Noto Serif TC variable fonts，theme/styles 使用 family resources，不再從 UI 直接引用 raw font files。
 - Texture/image：打包 light/night paper texture 與 Met Open Access artwork；build 不依賴網路。
 - Stitch alignment pass：補上 project-owned onboarding ink-wash assets、較平的 paper card radius、wrap chips、question/result pill hierarchy、result blind-spot card、daily 宜忌卡、日期驅動每日一卦、原生 ritual focus view 與蓍草十八變步進畫面。
 - Native UX refinement pass：`NavigationChrome` 統一 system inset padding，top-level toolbar 移除無功能 hamburger，bottom nav active item 改用 tint-only state，Daily 的「今日想問」成為 Step 1 提問草稿。
+- Safe areas：fullscreen splash/onboarding/auth/local-entry/question/method/ritual/result flows use a shared `InsetsHelper`; bottom nav height/icon/label sizing moved to `dimens.xml`.
+- Controls：CTA/action rows using app button styles are now `MaterialButton`; guards block styled clickable TextView controls from returning.
 - `Ui.java`：已刪除。`HexagramView` 保留，並內聚 dp/color behavior 與 XML attrs。
 - Dialog：record note edit 改用 `dialog_edit_note.xml`。
 - Guards：新增 `UiDebtGuardTest` 與 `AssetManifestTest`。

@@ -115,7 +115,7 @@
                     android:text="決策" />
         </com.google.android.material.chip.ChipGroup>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/question_next_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="36dp"

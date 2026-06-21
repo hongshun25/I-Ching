@@ -24,7 +24,8 @@ public class SplashFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentSplashBinding.inflate(inflater, container, false);
-        binding.splashHexagram.configure(HexagramRepository.get(15), 92, 9, false);
+        binding.splashHexagram.configure(HexagramRepository.get(15), 108, 10, false);
+        InsetsHelper.applyFullscreenInsets(binding.getRoot());
         handler.postDelayed(() -> {
             if (isAdded()) ((MainActivity) requireActivity()).routeAfterSplash();
         }, 3500);

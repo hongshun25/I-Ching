@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_serif_cjk_tc_regular"
+            android:fontFamily="@font/noto_serif_tc_family"
             android:text="占卜紀錄"
             android:textColor="@color/ic_ink"
             android:textSize="30sp" />

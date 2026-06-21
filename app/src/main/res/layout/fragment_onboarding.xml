@@ -55,14 +55,14 @@
                 android:background="@drawable/bg_onboarding_indicator_dot" />
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/onboarding_start_button"
             style="@style/IChingPrimaryButton"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/onboarding_start" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/local_mode_button"
             style="@style/IChingSecondaryButton"
             android:text="@string/onboarding_local_mode" />

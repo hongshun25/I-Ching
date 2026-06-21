@@ -37,6 +37,7 @@ public class RitualFragment extends Fragment {
         readArguments();
         presentation = RitualPresentation.from(activity.settings().isReduceMotion());
         binding = FragmentRitualBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenInsets(binding.getRoot());
         bindRitual(activity);
         return binding.getRoot();
     }

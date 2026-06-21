@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/noto_serif_cjk_tc_regular"
+            android:fontFamily="@font/noto_serif_tc_family"
             android:textColor="@color/ic_ink"
             android:textSize="22sp"
             tools:text="第十五卦｜地山謙" />
@@ -83,7 +83,7 @@
         android:layout_marginTop="16dp"
         android:orientation="horizontal">
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/record_item_edit"
             style="@style/IChingSecondaryButton"
             android:layout_width="0dp"
@@ -91,7 +91,7 @@
             android:layout_weight="1"
             android:text="@string/record_edit_note" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/record_item_delete"
             style="@style/IChingSecondaryButton"
             android:layout_width="0dp"

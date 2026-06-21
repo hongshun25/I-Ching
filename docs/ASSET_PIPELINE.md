@@ -1,6 +1,6 @@
 # Asset Pipeline
 
-更新日期：2026-06-21
+更新日期：2026-06-22
 
 ## Policy
 
@@ -36,7 +36,7 @@ Every production font/icon/image/texture must be listed in `tools/assets/asset_m
 
 - Fonts:
   - `app/src/main/res/font/noto_sans_tc.ttf`
-  - `app/src/main/res/font/noto_serif_cjk_tc_regular.otf`
+  - `app/src/main/res/font/noto_serif_tc.ttf`
 - Textures:
   - `app/src/main/res/drawable-nodpi/bg_paper_texture_light.webp`
   - `app/src/main/res/drawable-nodpi/bg_paper_texture_dark.webp`
@@ -58,9 +58,14 @@ Fonts were copied unchanged from upstream:
 curl -L --fail -o /tmp/iching_assets/noto_sans_tc.ttf \
   https://raw.githubusercontent.com/google/fonts/main/ofl/notosanstc/NotoSansTC%5Bwght%5D.ttf
 
-curl -L --fail -o /tmp/iching_assets/noto_serif_cjk_tc_regular.otf \
-  https://raw.githubusercontent.com/notofonts/noto-cjk/main/Serif/OTF/TraditionalChinese/NotoSerifCJKtc-Regular.otf
+curl -L --fail -o /tmp/iching_assets/noto_serif_tc.ttf \
+  https://raw.githubusercontent.com/google/fonts/main/ofl/notoseriftc/NotoSerifTC%5Bwght%5D.ttf
 ```
+
+Android font-family XML resources centralize UI references to the committed variable fonts. They intentionally keep a single mapping per family so Android does not allocate the same full CJK variable font multiple times while inflating repeated instrumentation screens:
+
+- `app/src/main/res/font/noto_sans_tc_family.xml`
+- `app/src/main/res/font/noto_serif_tc_family.xml`
 
 Paper texture was extracted from ambientCG `Paper001_1K-JPG.zip`:
 

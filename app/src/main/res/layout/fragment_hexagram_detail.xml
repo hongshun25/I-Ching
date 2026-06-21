@@ -80,7 +80,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="卦象組成"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -98,7 +98,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="主旨核心"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -116,7 +116,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="適宜情境"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -134,7 +134,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="《易經》原文"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -152,7 +152,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="六爻爻辭"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />
@@ -170,7 +170,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                        android:fontFamily="@font/noto_serif_tc_family"
                         android:text="現代解析"
                         android:textColor="@color/ic_ink"
                         android:textSize="22sp" />

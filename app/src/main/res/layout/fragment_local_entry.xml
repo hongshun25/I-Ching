@@ -20,12 +20,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/noto_serif_cjk_tc_regular"
+            android:fontFamily="@font/noto_serif_tc_family"
             android:gravity="center"
-            android:letterSpacing="0.14"
             android:text="@string/brand_title"
             android:textColor="@color/ic_ink"
-            android:textSize="40sp"
+            android:textSize="38sp"
             android:textStyle="bold" />
 
         <TextView
@@ -33,7 +32,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="36dp"
             android:gravity="center"
-            android:letterSpacing="0.08"
             android:text="@string/splash_tagline" />
 
         <LinearLayout
@@ -44,7 +42,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                android:fontFamily="@font/noto_serif_tc_family"
                 android:gravity="center"
                 android:text="@string/local_entry_title"
                 android:textColor="@color/ic_ink"
@@ -70,13 +68,13 @@
                 android:text="@string/local_entry_body" />
         </LinearLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/local_mode_button"
             style="@style/IChingPrimaryButton"
             android:contentDescription="@string/local_entry_primary"
             android:text="@string/local_entry_primary" />
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@id/local_entry_daily_preview_button"
             style="@style/IChingSecondaryButton"
             android:layout_marginTop="12dp"

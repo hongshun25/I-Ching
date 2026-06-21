@@ -38,9 +38,11 @@
 - Ritual focus、empty state、toolbar、bottom nav、button arrow/prefix affordances 均改為 drawable-backed UI。
 - `dialog_edit_note.xml` 取代 programmatic bottom input。
 - `Ui.java` 已刪除；`HexagramView` 內聚 dp/color helper 並支援 XML attrs。
-- Bundled typography 已導入 Noto Sans TC 與 Noto Serif CJK TC。
+- Bundled typography 已導入 Noto Sans TC / Noto Serif TC variable fonts，並以 font-family XML 統一引用；production UI 不再直接引用 raw font files，且避免同一大型 CJK font file 在 family XML 中重複映射造成 instrumentation heap pressure。
 - Light/night paper page background 已導入 committed WebP texture。
 - Splash / onboarding / local entry / daily / ritual / result / records / profile 已進一步對齊 Stitch 的品牌層級、紙張卡片、pill、wrap chips、宜忌 cards、question bubble、changing-line highlight 與 settings row rhythm。
+- Fullscreen splash/onboarding/auth/local-entry/question/method/ritual/result flows use a shared inset helper so content avoids status bars, cutouts, and gesture navigation.
+- CTA controls now use `MaterialButton` styles instead of clickable `TextView` button shapes; bottom navigation height/icon/label sizing is resource-driven.
 - Daily 「今日想問」改為占卜提問草稿，點「開始占卜」會帶入 Step 1；空白草稿仍保持 Step 1 空白，不新增每日筆記資料模型。
 - Daily / Result 的行動建議保持精簡層級；Result 的盲點提醒由 presentation 產生，古典文字可收合。
 
@@ -76,7 +78,7 @@ JVM tests 覆蓋：
 - Record search/filter 與 learning-center filters。
 - Presentation mappers：result、record card、favorite icon state、daily、question presets、method options、ritual reduce-motion、hexagram list/detail。
 - `AssetManifestTest`：manifest target、license/source/checksum 與 committed file 一致性。
-- `UiDebtGuardTest`：production UI Java/XML/value resources 禁止回歸 icon-like text symbols，並守住 top-level toolbar 無 dead menu、bottom nav 無 selected background contract。
+- `UiDebtGuardTest`：production UI Java/XML/value resources 禁止回歸 icon-like text symbols、raw font-file UI refs、TextView-styled command buttons，並守住 top-level toolbar 無 dead menu、bottom nav 無 selected background contract 與 fullscreen inset helper usage。
 
 Instrumentation tests 覆蓋：
 

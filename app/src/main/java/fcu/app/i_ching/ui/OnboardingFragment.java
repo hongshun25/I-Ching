@@ -32,6 +32,7 @@ public class OnboardingFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
         binding = FragmentOnboardingBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenInsets(binding.getRoot());
         binding.onboardingRecycler.setLayoutManager(
                 new LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false));
         binding.onboardingRecycler.setAdapter(new Adapter(

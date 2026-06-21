@@ -1,6 +1,6 @@
 # Asset Licenses
 
-更新日期：2026-06-21
+更新日期：2026-06-22
 
 This document summarizes production asset sources. The machine-checked target list and checksums live in `tools/assets/asset_manifest.json`.
 
@@ -13,12 +13,12 @@ This document summarizes production asset sources. The machine-checked target li
 - License: SIL Open Font License 1.1
 - Use: default body/UI font.
 
-### Noto Serif CJK TC Regular
+### Noto Serif TC
 
-- Target: `app/src/main/res/font/noto_serif_cjk_tc_regular.otf`
-- Source: Noto CJK repository, `Serif/OTF/TraditionalChinese/NotoSerifCJKtc-Regular.otf`
+- Target: `app/src/main/res/font/noto_serif_tc.ttf`
+- Source: Google Fonts repository, `ofl/notoseriftc/NotoSerifTC[wght].ttf`
 - License: SIL Open Font License 1.1
-- Use: headings, brand-like titles, classical text emphasis.
+- Use: headings, brand-like titles, classical text emphasis through `noto_serif_tc_family.xml`.
 
 ## Icons
 

@@ -1,14 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.IChing" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:colorAccent">@color/ic_gold</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:navigationBarColor">@color/ic_surface</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@drawable/bg_page</item>
         <item name="colorPrimary">@color/ic_ink</item>
         <item name="colorSecondary">@color/ic_gold</item>
         <item name="colorSurface">@color/ic_surface</item>
-        <item name="fontFamily">@font/noto_sans_tc</item>
+        <item name="colorSurfaceVariant">@color/ic_surface_container</item>
+        <item name="colorOnSurface">@color/ic_ink</item>
+        <item name="colorOnSurfaceVariant">@color/ic_text_muted</item>
+        <item name="colorOutline">@color/ic_outline</item>
+        <item name="colorError">@color/ic_error</item>
+        <item name="materialButtonStyle">@style/IChingPrimaryButton</item>
+        <item name="fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 
@@ -87,53 +93,73 @@
     </style>
 
     <style name="TextAppearance.IChing.TopBarTitle" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:fontFamily">@font/noto_serif_tc_family</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/ic_ink</item>
-        <item name="android:textSize">24sp</item>
-        <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:textSize">22sp</item>
+        <item name="fontFamily">@font/noto_serif_tc_family</item>
+    </style>
+
+    <style name="TextAppearance.IChing.BottomNav" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/noto_sans_tc_family</item>
+    </style>
+
+    <style name="TextAppearance.IChing.Display" parent="TextAppearance.Material3.DisplaySmall">
+        <item name="android:fontFamily">@font/noto_serif_tc_family</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/ic_ink</item>
+        <item name="android:textSize">40sp</item>
+        <item name="fontFamily">@font/noto_serif_tc_family</item>
     </style>
 
     <style name="TextAppearance.IChing.Headline" parent="TextAppearance.Material3.HeadlineMedium">
-        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:fontFamily">@font/noto_serif_tc_family</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:letterSpacing">0</item>
-        <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="fontFamily">@font/noto_serif_tc_family</item>
     </style>
 
     <style name="TextAppearance.IChing.Title" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:fontFamily">@font/noto_serif_tc_family</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">24sp</item>
-        <item name="fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="fontFamily">@font/noto_serif_tc_family</item>
     </style>
 
     <style name="TextAppearance.IChing.Body" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
-        <item name="android:textColor">@color/ic_text_muted</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
+        <item name="android:lineSpacingExtra">4dp</item>
+        <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">16sp</item>
-        <item name="fontFamily">@font/noto_sans_tc</item>
+        <item name="fontFamily">@font/noto_sans_tc_family</item>
+    </style>
+
+    <style name="TextAppearance.IChing.BodyMuted" parent="TextAppearance.IChing.Body">
+        <item name="android:textColor">@color/ic_text_muted</item>
     </style>
 
     <style name="TextAppearance.IChing.Label" parent="TextAppearance.Material3.LabelMedium">
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:textColor">@color/ic_text_muted</item>
         <item name="android:textStyle">bold</item>
-        <item name="fontFamily">@font/noto_sans_tc</item>
+        <item name="fontFamily">@font/noto_sans_tc_family</item>
     </style>
 
     <style name="TextAppearance.IChing.Caption" parent="TextAppearance.Material3.BodySmall">
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:textColor">@color/ic_text_subtle</item>
         <item name="android:textSize">12sp</item>
-        <item name="fontFamily">@font/noto_sans_tc</item>
+        <item name="fontFamily">@font/noto_sans_tc_family</item>
     </style>
 
     <style name="IChingPageTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/noto_serif_cjk_tc_regular</item>
+        <item name="android:fontFamily">@font/noto_serif_tc_family</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">36sp</item>
@@ -142,10 +168,14 @@
     <style name="IChingBodyText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:lineSpacingExtra">4dp</item>
-        <item name="android:textColor">@color/ic_text_muted</item>
+        <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="IChingBodyText.Muted" parent="IChingBodyText">
+        <item name="android:textColor">@color/ic_text_muted</item>
     </style>
 
     <style name="IChingCard">
@@ -164,7 +194,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">@drawable/bg_input_underline</item>
         <item name="android:gravity">top|start</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingTop">10dp</item>
         <item name="android:paddingEnd">12dp</item>
@@ -175,50 +205,54 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="IChingPrimaryButton">
+    <style name="IChingPrimaryButton" parent="Widget.Material3.Button">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/control_height</item>
-        <item name="android:background">@drawable/bg_pill_primary</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
-        <item name="android:includeFontPadding">true</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/ic_background</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/ic_ink</item>
+        <item name="cornerRadius">@dimen/corner_pill</item>
+        <item name="elevation">0dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTint">@color/ic_background</item>
+        <item name="rippleColor">@color/ic_gold_container</item>
+        <item name="strokeWidth">0dp</item>
     </style>
 
-    <style name="IChingTertiaryButton">
+    <style name="IChingTertiaryButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/control_height</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
-        <item name="android:gravity">center</item>
-        <item name="android:includeFontPadding">true</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/ic_text_muted</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">@dimen/corner_pill</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTint">@color/ic_text_muted</item>
     </style>
 
-    <style name="IChingSecondaryButton">
+    <style name="IChingSecondaryButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/control_height</item>
-        <item name="android:background">@drawable/bg_pill_secondary</item>
-        <item name="android:clickable">true</item>
-        <item name="android:focusable">true</item>
-        <item name="android:fontFamily">@font/noto_sans_tc</item>
-        <item name="android:gravity">center</item>
-        <item name="android:includeFontPadding">true</item>
+        <item name="android:fontFamily">@font/noto_sans_tc_family</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">@color/ic_ink</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/ic_background</item>
+        <item name="cornerRadius">@dimen/corner_pill</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+        <item name="iconTint">@color/ic_ink</item>
+        <item name="strokeColor">@color/ic_outline</item>
+        <item name="strokeWidth">1dp</item>
     </style>
 
     <style name="ResultCard">

@@ -30,6 +30,7 @@ public class AuthFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentAuthBinding.inflate(inflater, container, false);
         accountStore = AccountStore.get(requireContext());
+        InsetsHelper.applyFullscreenScrollInsets(binding.getRoot());
         bindActions((MainActivity) requireActivity());
         showLogin();
         return binding.getRoot();

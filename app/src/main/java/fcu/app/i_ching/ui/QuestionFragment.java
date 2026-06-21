@@ -32,6 +32,7 @@ public class QuestionFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         MainActivity activity = (MainActivity) requireActivity();
         binding = FragmentQuestionBinding.inflate(inflater, container, false);
+        InsetsHelper.applyFullscreenScrollInsets(binding.getRoot());
         setupQuestion(savedInstanceState);
         binding.questionNextButton.setOnClickListener(v ->
                 activity.showMethod(binding.questionInput.getText().toString()));

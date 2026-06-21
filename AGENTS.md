@@ -60,6 +60,9 @@ Prefer existing local patterns before adding new ones:
 - Use XML/ViewBinding and Material components for shared UI. Do not reintroduce the removed `Ui` helper. Keep small reusable rendering logic inside focused classes such as `HexagramView` or shared XML layouts.
 - Use `MaterialToolbar` / `BottomNavigationView` through `NavigationChrome` for app chrome. Do not add new hand-built TextView icon bars.
 - Use Material `Chip`/`ChipGroup` or `item_filter_chip.xml` for chips. Do not create TextView chips by hand.
+- Use `MaterialButton` for command controls that use app button styles. Do not create clickable TextView buttons by hand.
+- Use `@font/noto_sans_tc_family` and `@font/noto_serif_tc_family` from UI/theme resources. Raw font files should only be referenced by font-family XML resources; do not map the same large CJK font file repeatedly across weights because managed-device tests can exhaust app heap while inflating screens.
+- Use the shared inset helper for fullscreen fragments/scroll containers that are not already protected by `NavigationChrome`.
 - Do not use icon-like text glyphs for UI controls, including `☰`, `⚙`, `◎`, `✦`, `↺`, `♡`, `♥`, `✓`, `◯`, `◌`, or `●`. Use VectorDrawable, ImageView/ImageButton, selectors, or custom views instead. Semantic reading text such as 「本卦 → 之卦」 may remain when it is content, not an icon.
 - New production icon/font/image/texture assets must be committed under `res/`, listed in `tools/assets/asset_manifest.json`, and documented in `docs/ASSET_LICENSES.md` / `docs/ASSET_PIPELINE.md`. Include source URL, license, transform notes, target path, and SHA-256 checksum.
 - Project-owned Stitch-assisted artwork is allowed only when generated or authored for this repository, committed under `res/`, listed in the asset manifest, documented in the asset docs, and checksummed.

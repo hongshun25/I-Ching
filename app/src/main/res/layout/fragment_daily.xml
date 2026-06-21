@@ -70,7 +70,7 @@
                     android:id="@id/daily_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:gravity="center"
                     android:textColor="@color/ic_ink"
                     android:textSize="26sp"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="12dp"
-                    android:fontFamily="@font/noto_serif_cjk_tc_regular"
+                    android:fontFamily="@font/noto_serif_tc_family"
                     android:gravity="center"
                     android:textColor="@color/ic_gold"
                     android:textSize="24sp"
@@ -161,7 +161,7 @@
                 android:maxLength="120"
                 android:minLines="3" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@id/daily_cast_button"
                 style="@style/IChingPrimaryButton"
                 android:layout_marginTop="28dp"
@@ -171,7 +171,7 @@
                 android:drawableTint="@color/ic_background"
                 android:text="@string/daily_cast" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@id/daily_learn_button"
                 style="@style/IChingSecondaryButton"
                 android:layout_marginBottom="10dp"
@@ -180,7 +180,7 @@
                 android:drawableTint="@color/ic_ink"
                 android:text="@string/daily_learn" />
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@id/daily_records_button"
                 style="@style/IChingTertiaryButton"
                 android:drawableStart="@drawable/ic_history_24"
